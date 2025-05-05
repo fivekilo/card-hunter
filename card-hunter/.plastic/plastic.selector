@@ -1,0 +1,4 @@
+repository "地图@tj_fivekilogram@cloud.cn"
+  path "/"
+    br "/main"
+    co "/main"
