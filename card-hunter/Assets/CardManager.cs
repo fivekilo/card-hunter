@@ -18,7 +18,10 @@ public class CardManager : MonoBehaviour
     }
         void Start()
     {
-        CreateCard(1, transform);
+       // CreateCard(0, transform);
+        //CreateCard(1,transform);
+        CreateCard(2, transform);
+       // Debug.Log("Card clicked: ");
     }
 
     // Update is called once per frame
