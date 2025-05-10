@@ -1,13 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
     public GameObject Hex;
-    private GameObject [,]Hexs;
+    private Map map=new Map();
     private const double ObstacleRate = GameConfig.ObstacleRate;//障碍物生成概率
     private const int ObstacleSup = GameConfig.ObstacleSup;//障碍物生成上限
     int size = GameConfig.size;//地图尺寸
@@ -15,7 +17,7 @@ public class MapManager : MonoBehaviour
 
     public void spawn()//地图初始化
     {
-        Hexs=new GameObject[size,size];
+        GameObject[,] Hexs=new GameObject[size,size];
         for(int x=0;x<size;x++){
             for(int y=0;y<size;y++){
                 Vector3 pos=new Vector3(3*(x+y)/2.0f,math.sqrt(3)*(y-x)/2,0);
@@ -24,6 +26,7 @@ public class MapManager : MonoBehaviour
                 Hexs[x,y]=GO;
             }
         }
+        map.Initialize(Hexs);
     }
     public List<Vector2Int> GetNearby(Vector2Int v)//返回邻接的六边形坐标
     {
@@ -55,15 +58,12 @@ public class MapManager : MonoBehaviour
     }
     public void AddImage(string image,Vector2Int pos)//在指定格子添加图像
     {
-        int x=pos.x;int y = pos.y;
-        SpriteRenderer spriteRenderer = Hexs[x,y].GetComponent<SpriteRenderer>();
+        SpriteRenderer spriteRenderer = map.GetHex(pos).GetComponent<SpriteRenderer>();
         spriteRenderer.sprite=Resources.Load<Sprite>(image);
     } 
     public void ChangeColor(Color color,Vector2Int pos)//改变指定格子颜色
     {
-        int x, y;
-        x=pos.x; y=pos.y;
-        Renderer renderer = Hexs[x,y].GetComponent<Renderer>();
+        Renderer renderer = map.GetHex(pos).GetComponent<Renderer>();
         renderer.material.color = color;
     }
     private void ObstacleGenerate()//障碍物生成
@@ -75,6 +75,7 @@ public class MapManager : MonoBehaviour
         {
             for (int y = 0; y < size; y++)
             {
+                Vector2Int pos= new Vector2Int(x, y);
                 if (count >= ObstacleSup)
                 {
                     return;
@@ -82,7 +83,8 @@ public class MapManager : MonoBehaviour
                 double r = random.NextDouble();
                 if (r < ObstacleRate)
                 {
-                    Hexs[x, y].tag = "Obstacle";
+                    map.GetHex(pos).tag = "Obstacle";
+                    map.AddObstacle(pos);
                     ChangeColor(Color.grey, new Vector2Int(x, y));//目前为变色效果
                     count++;
                 }
@@ -91,6 +93,38 @@ public class MapManager : MonoBehaviour
         if (count < 3)//太少障碍物重新生成
         {
             goto restart;
+        }
+    }
+    private void ContentGenerate()//要素生成
+    {
+        System.Random rnd = new System.Random();
+        List<int> ContentCount = Enumerable.Repeat(0, GameConfig.ContentAmount.Count()).ToList();//已经生成的要素数量
+        for (int x = 0;x < size;x++) 
+        {
+            for(int y = 0; y < size; y++)
+            {
+                Vector2Int pos = new Vector2Int(x, y);
+                double r=rnd.NextDouble();//判定是否生成的随机数
+                if (r < GameConfig.ContentRate)
+                {
+                    int sum = GameConfig.ContentAmount.Sum() - ContentCount.Sum();
+                    double _r = rnd.NextDouble();//判定种类的随机数
+                    foreach (GameConfig.Content content in Enum.GetValues(typeof(GameConfig.Content)))
+                    {
+                        double rate = (GameConfig.ContentAmount[(int)content]-ContentCount[(int)content])/(double)sum;
+                        if (_r < rate)
+                        {
+                            ContentCount[(int)content] += 1;
+                            Hexagon hexagon= map.GetHex(pos).GetComponent<Hexagon>();
+                            hexagon.ContentChange(content);
+                        }
+                        else
+                        {
+                            _r -= rate;
+                        }
+                    }
+                }
+            }
         }
     }
     private bool CheckConnectivity()
@@ -102,7 +136,8 @@ public class MapManager : MonoBehaviour
         {
             for (int y = 0; y < size; y++)
             {
-                if (Hexs[x, y].tag == "Obstacle" || visited.Contains(new Vector2Int(x, y)))
+                Vector2Int pos = new Vector2Int(x, y);
+                if (map.GetHex(pos).tag == "Obstacle" || visited.Contains(new Vector2Int(x, y)))
                 {
                     continue;
                 }
@@ -121,7 +156,7 @@ public class MapManager : MonoBehaviour
                         Vector2Int v=Q.Dequeue();
                         List<Vector2Int> near=GetNearby(v);
                         near.ForEach(x => {
-                            if (Hexs[x.x, x.y].tag != "Obstacle")
+                            if (map.GetHex(x).tag != "Obstacle")
                             {
                                 if (!visited.Contains(x))
                                 {
@@ -136,6 +171,10 @@ public class MapManager : MonoBehaviour
         }
         return true;
     }
+    public Vector2Int MoveCommand(List<Vector2Int> directions, int length)//移动指令
+    {
+        return Vector2Int.zero;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -143,6 +182,7 @@ public class MapManager : MonoBehaviour
         size = 7;
         spawn();
         ObstacleGenerate();
+        ContentGenerate();
         Debug.Log(CheckConnectivity());
     }
 
