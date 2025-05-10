@@ -6,13 +6,22 @@ public class Hexagon : MonoBehaviour
 {
     // Start is called before the first frame update
     Vector2Int pos { get; set; }
-    List<Color>ContentColor= new List<Color> {Color.blue,Color.red,Color.green,Color.yellow,Color.cyan};
     public GameConfig.Content content { get; set; }
+    public void AddImage(string image)//添加图像
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = Resources.Load<Sprite>(image);
+    }
+    public void ChangeColor(Color color)//改变颜色
+    {
+        SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+        renderer.color = color;
+    }
     public void ContentChange(GameConfig.Content content)
     {
         this.content = content;
-        SpriteRenderer render= this.GetComponent<SpriteRenderer>();
-        render.material.color = ContentColor[(int)content];
+        AddImage(content.ToString());
+        this.tag = "Content";
     }
     void Start()
     {

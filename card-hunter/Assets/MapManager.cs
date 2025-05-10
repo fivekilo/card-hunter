@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
@@ -56,16 +55,6 @@ public class MapManager : MonoBehaviour
         }
         return vectors;
     }
-    public void AddImage(string image,Vector2Int pos)//在指定格子添加图像
-    {
-        SpriteRenderer spriteRenderer = map.GetHex(pos).GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite=Resources.Load<Sprite>(image);
-    } 
-    public void ChangeColor(Color color,Vector2Int pos)//改变指定格子颜色
-    {
-        Renderer renderer = map.GetHex(pos).GetComponent<Renderer>();
-        renderer.material.color = color;
-    }
     private void ObstacleGenerate()//障碍物生成
     {
         System.Random random = new System.Random();
@@ -85,7 +74,7 @@ public class MapManager : MonoBehaviour
                 {
                     map.GetHex(pos).tag = "Obstacle";
                     map.AddObstacle(pos);
-                    ChangeColor(Color.grey, new Vector2Int(x, y));//目前为变色效果
+                    map.GetHex(pos).GetComponent<Hexagon>().ChangeColor(Color.grey);//目前为变色效果
                     count++;
                 }
             }
@@ -104,6 +93,10 @@ public class MapManager : MonoBehaviour
             for(int y = 0; y < size; y++)
             {
                 Vector2Int pos = new Vector2Int(x, y);
+                if (map.GetHex(pos).tag == "Obstacle")
+                {
+                    continue;
+                }
                 double r=rnd.NextDouble();//判定是否生成的随机数
                 if (r < GameConfig.ContentRate)
                 {
@@ -123,6 +116,22 @@ public class MapManager : MonoBehaviour
                             _r -= rate;
                         }
                     }
+                }
+            }
+        }
+    }
+    private void BackgroundGenerate()//背景颜色生成
+    {
+        for(int x = 0; x < size; x++)
+        {
+            for(int y = 0; y < size; y++)
+            {
+                Vector2Int pos = new Vector2Int(x, y);
+                GameObject hex = map.GetHex(pos);
+                if (hex.tag != "Obstacle" && hex.tag!="Content")
+                {
+                    ColorUtility.TryParseHtmlString("#aaa58f", out Color color);
+                    hex.GetComponent<Hexagon>().ChangeColor(color);
                 }
             }
         }
@@ -183,6 +192,7 @@ public class MapManager : MonoBehaviour
         spawn();
         ObstacleGenerate();
         ContentGenerate();
+        BackgroundGenerate();
         Debug.Log(CheckConnectivity());
     }
 
