@@ -45,6 +45,16 @@ public class PlayerInfo : MonoBehaviour
     {
         Mathf.Clamp(curBladeNum + amount, 0, GameConfig.MaxBladeLevel);
     }
+    public void ModifyPos(Vector2Int newPos)
+    {
+        if(newPos.x < 0 || newPos.x >= GameConfig.size || newPos.y < 0 || newPos.y >= GameConfig.size)
+        {
+            Debug.Log("错误！新位置超出地图");
+            return;
+        }
+        PlayerGridPos.x = newPos.x;
+        PlayerGridPos.y = newPos.y;
+    }
     void Start()
     {
         curHealth = MaxHealth;
