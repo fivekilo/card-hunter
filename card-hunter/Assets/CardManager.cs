@@ -19,7 +19,7 @@ public class CardManager : MonoBehaviour
         void Start()
     {
        // CreateCard(0, transform);
-        //CreateCard(1,transform);
+        CreateCard(1,transform);
         CreateCard(2, transform);
        // Debug.Log("Card clicked: ");
     }

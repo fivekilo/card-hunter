@@ -43,9 +43,9 @@ public class Card : MonoBehaviour, IPointerClickHandler
 
     private bool isDragging = false;
     private Vector3 originalPosition;
-    private TextMeshProUGUI cardTextBox;
-    private TextMeshProUGUI cardNameBox;
-    private TextMeshProUGUI cardTypeBox;
+    //private TextMeshProUGUI cardTextBox;
+    //private TextMeshProUGUI cardNameBox;
+    //private TextMeshProUGUI cardTypeBox;
     void FindText(int cardNum,ref string cardName,ref string cardText,ref string cardType)
     
     {
@@ -54,19 +54,13 @@ public class Card : MonoBehaviour, IPointerClickHandler
         cardType = "¿‡1";
     }
      void cardTextsInit (int cardNum){
-       
+        TextMeshProUGUI cardTypeBox = GetComponentsInChildren<TextMeshProUGUI>()[0];
+        TextMeshProUGUI cardTextBox = GetComponentsInChildren<TextMeshProUGUI>()[1];
+        TextMeshProUGUI cardNameBox = GetComponentsInChildren<TextMeshProUGUI>()[2];
         FindText(cardNum, ref cardName,ref cardText,ref cardType);
-        GameObject Target = GameObject.Find("cardText");
-        cardTextBox = Target.GetComponent<TextMeshProUGUI>();
-        Target = GameObject.Find("cardName");
-        cardNameBox= Target.GetComponent<TextMeshProUGUI>();
-        Target = GameObject.Find("cardType");
-        cardTypeBox= Target.GetComponent<TextMeshProUGUI>();
         cardTypeBox.text = cardType;
         cardTextBox.text = cardText;
         cardNameBox.text = cardName;
-        Target = GameObject.Find("Canvas");
-        parentCanvas = Target.GetComponent<Canvas>();
     }
     int GetcardRarity(int cardNum)
     {

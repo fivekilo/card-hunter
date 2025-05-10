@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
+using UnityEngine.UI;
 
 public class PlayerInfo : MonoBehaviour
 {
@@ -15,11 +14,11 @@ public class PlayerInfo : MonoBehaviour
     public int curBladeLevel = 0; //气刃等级
     public Vector2Int PlayerGridPos = new (0 , 0); //玩家位置
 
-    public delegate void CharacterEvent(PlayerInfo Player);
-    public event CharacterEvent OnHealthChanged;
-    public event CharacterEvent OnEnergyChanged;
-    public event CharacterEvent OnBladeNumChanged;
-    public event CharacterEvent OnBladeLevelChanged;
+   // public delegate void CharacterEvent(PlayerInfo Player);
+    //public event CharacterEvent OnHealthChanged;
+    //public event CharacterEvent OnEnergyChanged;
+    //public event CharacterEvent OnBladeNumChanged;
+    //public event CharacterEvent OnBladeLevelChanged;
 
     public void Initialize()
     {
