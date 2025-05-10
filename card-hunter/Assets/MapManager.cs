@@ -98,7 +98,7 @@ public class MapManager : MonoBehaviour
     private void ContentGenerate()//要素生成
     {
         System.Random rnd = new System.Random();
-        List<int> ContentCount = Enumerable.Repeat(0, GameConfig.ForestAmount.Count()).ToList();//已经生成的要素数量
+        List<int> ContentCount = Enumerable.Repeat(0, GameConfig.ContentAmount.Count()).ToList();//已经生成的要素数量
         for (int x = 0;x < size;x++) 
         {
             for(int y = 0; y < size; y++)
@@ -107,14 +107,20 @@ public class MapManager : MonoBehaviour
                 double r=rnd.NextDouble();//判定是否生成的随机数
                 if (r < GameConfig.ContentRate)
                 {
-                    int sum = GameConfig.ForestAmount.Sum() - ContentCount.Sum();
-                    foreach (GameConfig.ForestContent content in Enum.GetValues(typeof(GameConfig.ForestContent)))
+                    int sum = GameConfig.ContentAmount.Sum() - ContentCount.Sum();
+                    double _r = rnd.NextDouble();//判定种类的随机数
+                    foreach (GameConfig.Content content in Enum.GetValues(typeof(GameConfig.Content)))
                     {
-                        double _r=rnd.NextDouble();//判定种类的随机数
-                        double rate = GameConfig.ForestAmount[(int)content]/sum;
+                        double rate = (GameConfig.ContentAmount[(int)content]-ContentCount[(int)content])/(double)sum;
                         if (_r < rate)
                         {
                             ContentCount[(int)content] += 1;
+                            Hexagon hexagon= map.GetHex(pos).GetComponent<Hexagon>();
+                            hexagon.ContentChange(content);
+                        }
+                        else
+                        {
+                            _r -= rate;
                         }
                     }
                 }
@@ -176,6 +182,7 @@ public class MapManager : MonoBehaviour
         size = 7;
         spawn();
         ObstacleGenerate();
+        ContentGenerate();
         Debug.Log(CheckConnectivity());
     }
 

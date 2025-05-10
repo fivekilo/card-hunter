@@ -15,7 +15,7 @@ public class GameConfig : ScriptableObject
     public const int MaxBladeLevel = 2; //最大气刃等级
     public const int MaxBladeNum = 50;//最大气刃值
     //地图要素
-    public enum ForestContent
+    public enum Content
     {
         LuCao,
         Trap,
@@ -23,5 +23,5 @@ public class GameConfig : ScriptableObject
         DuCao,
         NaiLiBug
     }
-    public static IReadOnlyList<int> ForestAmount = new List<int> {1,1,2,2,1}.AsReadOnly();
+    public static IReadOnlyList<int> ContentAmount = new List<int> {1,1,2,2,1}.AsReadOnly();
 }
