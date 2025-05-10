@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
+using UnityEngine.UI;
 
 public class PlayerInfo : MonoBehaviour
 {
@@ -15,11 +14,14 @@ public class PlayerInfo : MonoBehaviour
     public int curBladeLevel = 0; //气刃等级
     public Vector2Int PlayerGridPos = new (0 , 0); //玩家位置
 
-    public delegate void CharacterEvent(PlayerInfo Player);
-    public event CharacterEvent OnHealthChanged;
-    public event CharacterEvent OnEnergyChanged;
-    public event CharacterEvent OnBladeNumChanged;
-    public event CharacterEvent OnBladeLevelChanged;
+    // public delegate void CharacterEvent(PlayerInfo Player);
+    //public event CharacterEvent OnHealthChanged;
+    //public event CharacterEvent OnEnergyChanged;
+    //public event CharacterEvent OnBladeNumChanged;
+    //public event CharacterEvent OnBladeLevelChanged;
+
+    public Slider BladegasSlot;
+    private BattleManager _BattleManager;
 
     public void Initialize()
     {
@@ -60,11 +62,29 @@ public class PlayerInfo : MonoBehaviour
         curHealth = MaxHealth;
         curCost = MaxCost;
         Initialize();
+        _BattleManager.OnBladeGasChange+= ChangeBladegas;
+        _BattleManager.OnBladeLevelChange += ChangeBladeLevel;
+        // 设置初始
     }
+    private void ChangeBladeLevel(object sender)
+    {
 
+    }
+    private void ChangeBladegas(object sender)
+    {
+        BladegasSlot.value = curBladeNum;
+        //_healthSlider.value = normalizedHealth;
+
+    }
     // Update is called once per frame
     void Update()
     {
         
+    }
+    private void OnDestroy()
+    {
+        // 取消订阅以避免内存泄漏
+        if (_BattleManager != null)
+            _BattleManager.OnBladeLevelChange-= ChangeBladegas;
     }
 }

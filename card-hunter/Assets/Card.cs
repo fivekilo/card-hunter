@@ -25,27 +25,12 @@ public class Card : MonoBehaviour, IPointerClickHandler
     public int DeltaBladeNum;//引发的气刃槽改变
     public int DeltaBladeLevel; //引发的气刃等级改变
     public int DeltaHealth; //引发的血量变化
-    public Card(string cardText, string cardName, string cardType, int cardNum, Vector2Int move, int cost, int attack, int defence, int deltaCost, int deltaBladeNum, int deltaBladeLevel, int deltaHealth)
-    {
-        this.cardText = cardText;
-        this.cardName = cardName;
-        this.cardType = cardType;
-        this.cardNum = cardNum;
-        Move = move;
-        Cost = cost;
-        Attack = attack;
-        Defence = defence;
-        DeltaCost = deltaCost;
-        DeltaBladeNum = deltaBladeNum;
-        DeltaBladeLevel = deltaBladeLevel;
-        DeltaHealth = deltaHealth;
-    }
 
     private bool isDragging = false;
     private Vector3 originalPosition;
-    private TextMeshProUGUI cardTextBox;
-    private TextMeshProUGUI cardNameBox;
-    private TextMeshProUGUI cardTypeBox;
+    //private TextMeshProUGUI cardTextBox;
+    //private TextMeshProUGUI cardNameBox;
+    //private TextMeshProUGUI cardTypeBox;
     void FindText(int cardNum,ref string cardName,ref string cardText,ref string cardType)
     
     {
@@ -54,19 +39,13 @@ public class Card : MonoBehaviour, IPointerClickHandler
         cardType = "类1";
     }
      void cardTextsInit (int cardNum){
-       
+        TextMeshProUGUI cardTypeBox = GetComponentsInChildren<TextMeshProUGUI>()[0];
+        TextMeshProUGUI cardTextBox = GetComponentsInChildren<TextMeshProUGUI>()[1];
+        TextMeshProUGUI cardNameBox = GetComponentsInChildren<TextMeshProUGUI>()[2];
         FindText(cardNum, ref cardName,ref cardText,ref cardType);
-        GameObject Target = GameObject.Find("cardText");
-        cardTextBox = Target.GetComponent<TextMeshProUGUI>();
-        Target = GameObject.Find("cardName");
-        cardNameBox= Target.GetComponent<TextMeshProUGUI>();
-        Target = GameObject.Find("cardType");
-        cardTypeBox= Target.GetComponent<TextMeshProUGUI>();
         cardTypeBox.text = cardType;
         cardTextBox.text = cardText;
         cardNameBox.text = cardName;
-        Target = GameObject.Find("Canvas");
-        parentCanvas = Target.GetComponent<Canvas>();
     }
     int GetcardRarity(int cardNum)
     {
