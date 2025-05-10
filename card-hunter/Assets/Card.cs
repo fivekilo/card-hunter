@@ -17,7 +17,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
 
     //卡片基本属性
     public int cardNum { get; set; }
-    public Vector2Int Move; //引发的位移
+    public List<int> Move; //引发的位移
     public int Cost;
     public int Attack;
     public int Defence;

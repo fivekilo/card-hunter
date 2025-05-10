@@ -13,6 +13,7 @@ public class PlayerInfo : MonoBehaviour
     public int curBladeNum = 0; //气刃值
     public int curBladeLevel = 0; //气刃等级
     public Vector2Int PlayerGridPos = new (0 , 0); //玩家位置
+    public Vector2Int Direction = new Vector2Int(1, 0);
 
     // public delegate void CharacterEvent(PlayerInfo Player);
     //public event CharacterEvent OnHealthChanged;

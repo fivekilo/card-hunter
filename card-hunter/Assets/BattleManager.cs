@@ -25,6 +25,7 @@ public class BattleManager : MonoBehaviour
 {
     public BattleState currentState = BattleState.NotBegin;
     public PlayerInfo Player;
+    public GameObject mapmanager;
 
     private List<Card> InitialDeck = new(); //初始卡组
     private List<Card> deck = new ();      // 牌库
@@ -50,7 +51,6 @@ public class BattleManager : MonoBehaviour
     public UnityEvent EndTurnClicked; //回合结束按钮按下
     private void Start()
     {
-
         InitializeBattle();
     }
 
@@ -173,11 +173,12 @@ public class BattleManager : MonoBehaviour
     public bool PlayCard(Card card)
     {
         if (currentState != BattleState.PlayerTurn || isWaitingForPlayerAction == false) return false;
-        //       if(Player.curCost <= card.cost)return false; 费用不够的话
+        if(Player.curCost <= card.Cost)return false; 
 
-        //如果移动不为0
+        if(card.Move.Count != 0)
         {
-            OnPositionChange?.Invoke(this, new PlayerWantMoveEventArgs(GetAdjacent() , /*card.MoveDistance*/1));
+          //  OnPositionChange?.Invoke(this, new PlayerWantMoveEventArgs(GetAdjacent(card.Move) , /*card.MoveDistance*/1));
+
         }
 
 
@@ -192,16 +193,22 @@ public class BattleManager : MonoBehaviour
         if (v.x < 0 || v.x >= GameConfig.size || v.y < 0 || v.y >= GameConfig.size) return false;
         return true;
     }
-    public List<Vector2Int> GetAdjacent()
+    public List<Vector2Int> GetAdjacent(List<int> Dir)
     {
         List<Vector2Int> res = new();
-        int[] dx = { 1, -1, 0, 0, -1, 1 };
-        int[] dy = { 0, 0, 1, -1, 1, -1 };
+        int[] dx = { 1, 1, -1, -1, -1, 1 };
+        int[] dy = { 0, 1, 1, 0, -1, -1 };
         int x = Player.PlayerGridPos.x;
         int y = Player.PlayerGridPos.y;
+        int dir_id = 0;
         for(int i = 0;i < 6;i ++)
         {
-            if (CheckPosIsValid(new Vector2Int(x + dx[i], y + dy[i])))res.Add(new Vector2Int(x + dx[i], y + dy[i]));
+            if (Player.Direction == new Vector2Int(dx[i], dy[i])) dir_id = i;
+        }
+        for (int i = 0; i < Dir.Count; i++)
+        {
+            int newDir = (dir_id + Dir[i]) % 6;
+            if (CheckPosIsValid(new Vector2Int(x + dx[newDir] , y + dy[newDir]))) res.Add(new Vector2Int(x + dx[newDir], y + dy[newDir]));
         }
         return res;
     }
