@@ -40,8 +40,11 @@ public class BattleManager : MonoBehaviour
     public delegate void PositionChangedHandler(object sender, Vector2Int newPos); //位置已经发生改变
     public event PositionChangedHandler OnPositionChanged;
 
-    public delegate void BladeLevelUpHandler(object sender);
-    public event BladeLevelUpHandler OnBladeLevelUp; //气刃等级提升
+    public delegate void BladeLevelChangeHandler(object sender);
+    public event BladeLevelChangeHandler OnBladeLevelChange; //气刃等级改变
+
+    public delegate void BladeGasChangeHandler(object sender);
+    public event BladeGasChangeHandler OnBladeGasChange; //气改变
 
     private bool isWaitingForPlayerAction = false; //等待玩家操作
     public UnityEvent EndTurnClicked; //回合结束按钮按下
@@ -208,6 +211,6 @@ public class BattleManager : MonoBehaviour
     void Update()
     {
         if (Player.curBladeNum >= GameConfig.MaxBladeNum)
-            OnBladeLevelUp?.Invoke(this);
+            OnBladeLevelChange?.Invoke(this);
     }
 }

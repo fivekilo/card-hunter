@@ -7,13 +7,16 @@ using static UnityEditor.PlayerSettings;
 public class CardManager : MonoBehaviour
 {
     public GameObject card;
-    private List<Card> cards;
+    //private List<Card> cards;
     public void CreateCard(int cardNum, Transform parent)
     {
         GameObject newCard = Instantiate(card, parent);
-        cards.Add( newCard.GetComponent<Card>());
-        cards[cards.Count].cardNum = cardNum;
-        cards[cards.Count].cardInit();
+        Card newcard = card.GetComponent<Card>();
+        newcard.cardNum = cardNum;
+        newcard.cardInit();
+        //cards.Add( newCard.GetComponent<Card>());
+        //cards[cards.Count].cardNum = cardNum;
+        //cards[cards.Count].cardInit();
         // Start is called before the first frame update
     }
         void Start()

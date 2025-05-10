@@ -25,21 +25,6 @@ public class Card : MonoBehaviour, IPointerClickHandler
     public int DeltaBladeNum;//引发的气刃槽改变
     public int DeltaBladeLevel; //引发的气刃等级改变
     public int DeltaHealth; //引发的血量变化
-    public Card(string cardText, string cardName, string cardType, int cardNum, Vector2Int move, int cost, int attack, int defence, int deltaCost, int deltaBladeNum, int deltaBladeLevel, int deltaHealth)
-    {
-        this.cardText = cardText;
-        this.cardName = cardName;
-        this.cardType = cardType;
-        this.cardNum = cardNum;
-        Move = move;
-        Cost = cost;
-        Attack = attack;
-        Defence = defence;
-        DeltaCost = deltaCost;
-        DeltaBladeNum = deltaBladeNum;
-        DeltaBladeLevel = deltaBladeLevel;
-        DeltaHealth = deltaHealth;
-    }
 
     private bool isDragging = false;
     private Vector3 originalPosition;
