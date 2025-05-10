@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -15,16 +16,29 @@ public class Card : MonoBehaviour, IPointerClickHandler
     public string cardName;
     public string cardType;
 
-    //¿¨Æ¬»ù±¾ÊôÐÔ
+    //ï¿½ï¿½Æ¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public int cardNum { get; set; }
-    public Vector2Int Move; //Òý·¢µÄÎ»ÒÆ
-    public int Cost;
-    public int Attack;
-    public int Defence;
-    public int DeltaCost;//¿¨ÅÆµÄ»Ø·ÑÐ§¹û
-    public int DeltaBladeNum;//Òý·¢µÄÆøÈÐ²Û¸Ä±ä
-    public int DeltaBladeLevel; //Òý·¢µÄÆøÈÐµÈ¼¶¸Ä±ä
-    public int DeltaHealth; //Òý·¢µÄÑªÁ¿±ä»¯
+    public List<int> Move; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+    public Vector2Int MoveLength;//Î»ï¿½ÆµÄ¾ï¿½ï¿½ï¿½,0ï¿½ï¿½ï¿½Ç²ï¿½ï¿½Æ¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public int Derivation;//ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Æ±ï¿½ï¿½
+    public bool MoveTurn;//ï¿½Æ¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½×ªï¿½ï¿½
+    public bool Consumption;//ï¿½ï¿½ï¿½ï¿½
+    public int DrawCard;//ï¿½é¼¸ï¿½ï¿½ï¿½ï¿½
+    public bool Nothingness;//ï¿½ï¿½ï¿½ï¿½
+    public int OnlyLState;//0:ï¿½ï¿½ï¿½ï¿½ 1:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬ 2:ï¿½ï¿½ï¿½ï¿½Ð¯Ì¬
+    public int EnterState;//1:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬ 2:ï¿½ï¿½ï¿½ï¿½Ð¯Ì¬
+    public List<int> Buff;//ï¿½ï¿½Ãµï¿½Buffï¿½ï¿½ï¿½ï¿½ï¿½Ü¶ï¿½ï¿½ï¿½ï¿½
+    public List<int> DeBuff;//ï¿½ï¿½Ãµï¿½DeBuff
+    public List<int> AttackDirection; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public int AttackLength;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public int Cost;//ï¿½ï¿½ï¿½ï¿½
+    public List<int> Attack;//ï¿½Ëºï¿½
+    public int Defence;//ï¿½ï¿½
+    public int DeltaWound;
+    public int DeltaCost;//ï¿½ï¿½ï¿½ÆµÄ»Ø·ï¿½Ð§ï¿½ï¿½
+    public int DeltaBladeNum;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²Û¸Ä±ï¿½
+    public int DeltaBladeLevel; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÐµÈ¼ï¿½ï¿½Ä±ï¿½
+    public int DeltaHealth; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñªï¿½ï¿½ï¿½ä»¯
 
     private bool isDragging = false;
     private Vector3 originalPosition;
@@ -34,9 +48,9 @@ public class Card : MonoBehaviour, IPointerClickHandler
     void FindText(int cardNum,ref string cardName,ref string cardText,ref string cardType)
     
     {
-        cardName = "²âÊÔÖÐ¿¨Ãû";
-        cardText = "²âÊÔÖÐ¿¨ÅÆÃèÊö";
-        cardType = "Àà1";
+        cardName = "ï¿½ï¿½ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½";
+        cardText = "ï¿½ï¿½ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+        cardType = "ï¿½ï¿½1";
     }
      void cardTextsInit (int cardNum){
         TextMeshProUGUI cardTypeBox = GetComponentsInChildren<TextMeshProUGUI>()[0];
@@ -83,7 +97,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("Card clicked: " + cardNum);
-        // ¿¨ÅÆ±»µã»÷Ê±µÄÂß¼­
+        // ï¿½ï¿½ï¿½Æ±ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ß¼ï¿½
     }
 
 
