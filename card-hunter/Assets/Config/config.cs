@@ -37,11 +37,24 @@ public class GameConfig : ScriptableObject
     public static IReadOnlyList<string> CardImageName=new List<string> 
     {"",//卡图名称
         "Direct slash" ,
-        "cardbottom"}.AsReadOnly();
+        "Step slash",
+        "Bladegas slash1",
+        "Bladegas slash2",
+        "Bladegas big spin",
+        "Roll",
+        "Mind's Eye Slash",
+        "Block"
+        }.AsReadOnly();
     public static IReadOnlyList<string> CardText = new List<string>
     { "", //卡牌描述
-        "造成6点伤害" , 
-        "向前移动一格，造成4点伤害，回复1格气刃槽" 
+        "造成6点伤害，回复2格气刃槽" , 
+        "向前移动一格，造成4点伤害，回复1格气刃槽" ,
+        "消耗1格气刃槽,造成7点伤害,转向",
+        "消耗2格气刃槽，造成两次4点伤害，转向，消耗，虚无",
+        "消耗2格气刃槽,对前方三格范围内的敌人造成10点伤害，提升气刃等级，转向，消耗，虚无",
+        "向任意方向移动一格,进入自由态",
+        "从后方三格中选择移动一格，获得一层免伤buff，若下回合开始时角色所处地块或发动见切前角色所处地块被攻击，则获得【气刃大回旋】，回满气刃槽。",
+        "获得3点格挡"
     }.AsReadOnly();
     public static IReadOnlyList<int> CardType = new List<int> 
     { 3,//卡牌类型
