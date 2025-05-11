@@ -24,4 +24,8 @@ public class GameConfig : ScriptableObject
         NaiLiBug
     }
     public static IReadOnlyList<int> ContentAmount = new List<int> {1,1,2,2,1}.AsReadOnly();
+    public static IReadOnlyList<string> CardName = new List<string> {"", "直斩" ,"踏步斩" }.AsReadOnly();
+    public static IReadOnlyList<string> CardImageName=new List<string> {"", "Direct slash" ,"cardbottom"}.AsReadOnly();
+    public static IReadOnlyList<string> CardText = new List<string> { "", "造成6点伤害" , "向前移动一格 4点 1格气人槽" }.AsReadOnly();
+    public static IReadOnlyList<int> CardType = new List<int> { 3, 0, 0, 0, 0 }.AsReadOnly();//0 攻击 1防御 2移动 3能力
 }

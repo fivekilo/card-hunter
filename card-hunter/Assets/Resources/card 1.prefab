@@ -165,6 +165,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8730228046835953617}
   - component: {fileID: 865655554541102355}
+  - component: {fileID: 3026157631039736765}
   m_Layer: 0
   m_Name: card 1
   m_TagString: Untagged
@@ -208,6 +209,39 @@ MonoBehaviour:
   cardText: 
   cardName: 
   cardType: 
+  Move: 
+  MoveLength: {x: 0, y: 0}
+  Derivation: 0
+  MoveTurn: 0
+  Consumption: 0
+  DrawCard: 0
+  Nothingness: 0
+  OnlyLState: 0
+  EnterState: 0
+  Buff: 
+  DeBuff: 
+  AttackDirection: 
+  AttackLength: 0
+  Cost: 0
+  Attack: 
+  Defence: 0
+  DeltaWound: 0
+  DeltaCost: 0
+  DeltaBladeNum: 0
+  DeltaBladeLevel: 0
+  DeltaHealth: 0
+--- !u!114 &3026157631039736765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2974870984592191552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0a8add0f61b21945ad8b0d99b1c6503, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3113918849913551848
 GameObject:
   m_ObjectHideFlags: 0
