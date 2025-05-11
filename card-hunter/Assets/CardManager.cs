@@ -11,9 +11,9 @@ public class CardManager : MonoBehaviour
     public void CreateCard(int cardNum, Transform parent)
     {
         GameObject newCard = Instantiate(card, parent);
-        Card newcard = card.GetComponent<Card>();
-        newcard.cardNum = cardNum;
-        newcard.cardInit();
+        Card carddata = newCard.GetComponent<Card>();
+        carddata.cardNum = cardNum;
+        carddata.cardInit();
         //cards.Add( newCard.GetComponent<Card>());
         //cards[cards.Count].cardNum = cardNum;
         //cards[cards.Count].cardInit();
