@@ -27,6 +27,7 @@ public class BattleManager : MonoBehaviour
     public BattleState currentState = BattleState.NotBegin;
     public PlayerInfo Player;
     public MapManager mapmanager;
+    public BladegasSlotController BladeLevelSlot;
 
     private List<Card> InitialDeck = new(); //初始卡组
     private List<Card> deck = new ();      // 牌库
@@ -60,7 +61,11 @@ public class BattleManager : MonoBehaviour
         mapmanager = GetComponentInChildren<MapManager>();
         //初始事件订阅:
         OnBladeGasChange += Player.ModifyBladeNum;
+        OnBladeGasChange += BladeLevelSlot.ShowBladeGas;
+
+        OnBladeLevelChange += BladeLevelSlot.ShowBladeLevel;
         OnBladeLevelChange += Player.ModifyBladeLevel;
+
         OnPositionChanged += Player.ModifyPos;
         OnDirectionChanged += Player.GetComponent<PlayerShow>().ModifyDirection;
         InitializeBattle();
@@ -69,7 +74,8 @@ public class BattleManager : MonoBehaviour
     // 初始化战斗
     private void InitializeBattle()
     {
-        
+        OnBladeGasChange?.Invoke(5);
+        OnBladeLevelChange?.Invoke(2);
         // 初始化玩家和敌人
         InitializeDeck();
         // 开始玩家回合

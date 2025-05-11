@@ -11,8 +11,7 @@ public class PlayerShow : MonoBehaviour
         BattleManager battleManager = GetComponentInParent<BattleManager>();
         MapManager mapManager = battleManager.mapmanager;
         Vector2Int v = Player.PlayerGridPos;
-        print(v);
-        mapManager.ModifyHex(v , "PlayerDir1");
+        Vector2Int InitialPos = mapManager.
     }
     public void ModifyDirection(Vector2Int newDir)
     {
