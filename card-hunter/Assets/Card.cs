@@ -21,27 +21,27 @@ public class Card : MonoBehaviour
     //private bool isDragging = false;
     //private Vector2 originalPosition;
     public int cardNum { get; set; }
-    public List<int> Move; //������λ��
-    public Vector2Int MoveLength;//λ�Ƶľ���,0���ǲ��ƶ� ������
-    public int Derivation;//�����Ŀ��Ʊ��
-    public bool MoveTurn;//�ƶ��Ƿ���ת��
-    public bool Consumption;//����
-    public int DrawCard;//�鼸����
-    public bool Nothingness;//����
-    public int OnlyLState;//0:���� 1:������̬ 2:����Я̬
-    public int EnterState;//1:������̬ 2:����Я̬
-    public List<int> Buff;//��õ�Buff�����ܶ����
-    public List<int> DeBuff;//��õ�DeBuff
-    public List<int> AttackDirection; //��������
-    public int AttackLength;//��������
-    public int Cost;//����
-    public List<int> Attack;//�˺�
-    public int Defence;//��
+    public List<int> Move; //移动方向
+    public Vector2Int MoveLength;//移动长度 下上限
+    public int Derivation;//派生卡牌
+    public bool MoveTurn;//移动是否导致转向
+    public bool Consumption;//消耗
+    public int DrawCard;//抽牌
+    public bool Nothingness;//虚无
+    public int OnlyLState;//0:不限 1:限自由态 2:限连携态
+    public int EnterState;//1:进入自由态 2:进入连携态
+    public List<int> Buff;//Buff
+    public List<int> DeBuff;//DeBuff
+    public List<int> AttackDirection; //攻击方向
+    public int AttackLength;//攻击长度
+    public int Cost;//费用
+    public List<int> Attack;//攻击
+    public int Defence;//格挡
     public int DeltaWound;
-    public int DeltaCost;//���ƵĻط�Ч��
-    public int DeltaBladeNum;//���������в۸ı�
-    public int DeltaBladeLevel; //���������еȼ��ı�
-    public int DeltaHealth; //������Ѫ���仯
+    public int DeltaCost;//回费
+    public int DeltaBladeNum;//回气刃槽
+    public int DeltaBladeLevel; //提升气刃等级
+    public int DeltaHealth; //生命值变化
 
     //private TextMeshProUGUI cardTextBox;
     //private TextMeshProUGUI cardNameBox;
