@@ -5,6 +5,7 @@ using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
+
 public class MapManager : MonoBehaviour
 {
     public GameObject Hex;
@@ -185,6 +186,11 @@ public class MapManager : MonoBehaviour
         return Vector2Int.zero;
     }
 
+    public void ModifyHex(Vector2Int Pos , string content) //修改格子的接口
+    {
+        Hexagon hex = map.GetHex(Pos).GetComponent<Hexagon>();
+        hex.AddImage(content);
+    }
     // Start is called before the first frame update
     void Start()
     {

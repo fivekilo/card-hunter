@@ -22,7 +22,7 @@ public class PlayerInfo : MonoBehaviour
     //public event CharacterEvent OnBladeLevelChanged;
 
     public Slider BladegasSlot;
-    private BattleManager _BattleManager;
+   // private BattleManager _BattleManager;
 
     public void Initialize()
     {
@@ -34,19 +34,19 @@ public class PlayerInfo : MonoBehaviour
     }
     public void ModifyHealth(int amount)
     {
-        Mathf.Clamp(curHealth + amount, 0, MaxHealth);
+        Mathf.Clamp(amount, 0, MaxHealth);
     }
     public void ModifyCost(int amount)
     {
-        Mathf.Clamp(curCost + amount, 0, MaxCost);
+        Mathf.Clamp(amount, 0, MaxCost);
     }
     public void ModifyBladeNum(int amount)
     {
-        Mathf.Clamp(curBladeNum + amount, 0, GameConfig.MaxBladeNum);
+        Mathf.Clamp(amount, 0, GameConfig.MaxBladeNum);
     }
     public void ModifyBladeLevel(int amount)
     {
-        Mathf.Clamp(curBladeNum + amount, 0, GameConfig.MaxBladeLevel);
+        Mathf.Clamp(amount, 0, GameConfig.MaxBladeLevel);
     }
     public void ModifyPos(Vector2Int newPos)
     {
@@ -63,19 +63,7 @@ public class PlayerInfo : MonoBehaviour
         curHealth = MaxHealth;
         curCost = MaxCost;
         Initialize();
-        _BattleManager.OnBladeGasChange+= ChangeBladegas;
-        _BattleManager.OnBladeLevelChange += ChangeBladeLevel;
         // 设置初始
-    }
-    private void ChangeBladeLevel(object sender)
-    {
-
-    }
-    private void ChangeBladegas(object sender)
-    {
-        BladegasSlot.value = curBladeNum;
-        //_healthSlider.value = normalizedHealth;
-
     }
     // Update is called once per frame
     void Update()
@@ -85,7 +73,5 @@ public class PlayerInfo : MonoBehaviour
     private void OnDestroy()
     {
         // 取消订阅以避免内存泄漏
-        if (_BattleManager != null)
-            _BattleManager.OnBladeLevelChange-= ChangeBladegas;
     }
 }

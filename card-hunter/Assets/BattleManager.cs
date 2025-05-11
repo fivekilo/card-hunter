@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 public enum BattleState
@@ -25,7 +26,7 @@ public class BattleManager : MonoBehaviour
 {
     public BattleState currentState = BattleState.NotBegin;
     public PlayerInfo Player;
-    public GameObject mapmanager;
+    public MapManager mapmanager;
 
     private List<Card> InitialDeck = new(); //初始卡组
     private List<Card> deck = new ();      // 牌库
@@ -35,30 +36,41 @@ public class BattleManager : MonoBehaviour
     public delegate void BattleEvent(BattleState state);
     public event BattleEvent OnBattleStateChanged; //状态改变
 
-    public delegate void PositionChangeHandler(object sender, PlayerWantMoveEventArgs e); //将要改变位置
-    public event PositionChangeHandler OnPositionChange;  //玩家移动时让地图显示可移动的区域
+    //public delegate void PositionChangeHandler(object sender, PlayerWantMoveEventArgs e); //将要改变位置
+    //public event PositionChangeHandler OnPositionChange;  //玩家移动时让地图显示可移动的区域
 
-    public delegate void PositionChangedHandler(object sender, Vector2Int newPos); //位置已经发生改变
+    public delegate void PositionChangedHandler(Vector2Int newPos); //位置已经发生改变
     public event PositionChangedHandler OnPositionChanged;
 
-    public delegate void BladeLevelChangeHandler(object sender);
+    public delegate void BladeLevelChangeHandler(int NewBladeLevel);
     public event BladeLevelChangeHandler OnBladeLevelChange; //气刃等级改变
 
-    public delegate void BladeGasChangeHandler(object sender);
+    public delegate void BladeGasChangeHandler(int NewBladeNum);
     public event BladeGasChangeHandler OnBladeGasChange; //气改变
+
+    public delegate void DirectionChangedHandler(Vector2Int newDir);
+    public event DirectionChangedHandler OnDirectionChanged; //气改变
 
     private bool isWaitingForPlayerAction = false; //等待玩家操作
     public UnityEvent EndTurnClicked; //回合结束按钮按下
     private void Start()
     {
+
+        Player = GetComponentInChildren<PlayerInfo>();
+        mapmanager = GetComponentInChildren<MapManager>();
+        //初始事件订阅:
+        OnBladeGasChange += Player.ModifyBladeNum;
+        OnBladeLevelChange += Player.ModifyBladeLevel;
+        OnPositionChanged += Player.ModifyPos;
+        OnDirectionChanged += Player.GetComponent<PlayerShow>().ModifyDirection;
         InitializeBattle();
     }
 
     // 初始化战斗
     private void InitializeBattle()
     {
+        
         // 初始化玩家和敌人
-        Player.Initialize();
         InitializeDeck();
         // 开始玩家回合
         ChangeState(BattleState.PlayerDraw);
@@ -138,7 +150,7 @@ public class BattleManager : MonoBehaviour
     private void StartPlayerTurn()
     {
         // 重置玩家能量
-        Player.ModifyCost(Player.MaxCost - Player.curCost);
+        Player.ModifyCost(Player.GetComponent<PlayerInfo>().MaxCost - Player.GetComponent<PlayerInfo>().curCost);
 
         Debug.Log("玩家回合开始 - 等待操作");
 
@@ -177,8 +189,10 @@ public class BattleManager : MonoBehaviour
 
         if(card.Move.Count != 0)
         {
-          //  OnPositionChange?.Invoke(this, new PlayerWantMoveEventArgs(GetAdjacent(card.Move) , /*card.MoveDistance*/1));
-
+            //  OnPositionChange?.Invoke(this, new PlayerWantMoveEventArgs(GetAdjacent(card.Move) , /*card.MoveDistance*/1));
+            //传入getadj，调用mapmanager的显示函数
+            Vector2Int v = new(0 , 0);
+            OnPositionChanged?.Invoke(v);
         }
 
 
@@ -217,7 +231,6 @@ public class BattleManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Player.curBladeNum >= GameConfig.MaxBladeNum)
-            OnBladeLevelChange?.Invoke(this);
+       
     }
 }

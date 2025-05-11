@@ -595,12 +595,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1151624063}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.403909, y: -2.1414514, z: 3.3820798}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 49.581688, y: -245.25824, z: 4.0303726}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1923255098}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1673011721
 GameObject:
@@ -612,8 +612,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1673011723}
   - component: {fileID: 1673011722}
+  - component: {fileID: 1673011724}
   m_Layer: 5
-  m_Name: playerinfo
+  m_Name: player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -648,17 +649,29 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1673011721}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.648293}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1923255098}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 599.25, y: 224.5}
+  m_AnchoredPosition: {x: 655.2356, y: -18.61679}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1673011724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673011721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5ec0446046df8e4d97922eae03e32d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1923255096
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,7 +703,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   Player: {fileID: 1673011722}
-  mapmanager: {fileID: 1151624063}
+  mapmanager: {fileID: 1151624064}
   EndTurnClicked:
     m_PersistentCalls:
       m_Calls: []
@@ -706,7 +719,9 @@ Transform:
   m_LocalPosition: {x: -55.985596, y: 243.11679, z: -0.648293}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1673011723}
+  - {fileID: 1151624065}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1964720477
@@ -891,7 +906,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 1923255098}
-  - {fileID: 1151624065}
-  - {fileID: 1673011723}
   - {fileID: 1964720481}
   - {fileID: 531813746}
