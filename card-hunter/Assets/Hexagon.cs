@@ -5,8 +5,14 @@ using UnityEngine;
 public class Hexagon : MonoBehaviour
 {
     // Start is called before the first frame update
-    Vector2Int pos { get; set; }
+    public Vector2Int pos { get; set; }
     public GameConfig.Content content { get; set; }
+    private void OnMouseDown()
+    {
+        GameObject parent = transform.parent.gameObject;
+        MapManager manager=parent.GetComponent<MapManager>();
+        manager.ClickedPos = pos;
+    }
     public void AddImage(string image)//Ìí¼ÓÍ¼Ïñ
     {
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();

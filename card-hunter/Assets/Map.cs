@@ -19,4 +19,17 @@ public class Map
     {
         return Hexs[pos.x, pos.y];
     }
+    public void ChangeColor(Vector2Int pos,Color color)
+    {
+        GetHex(pos).GetComponent<Hexagon>().ChangeColor(color);
+    }
+    public List<Vector2Int> GetObstacles()
+    {
+        List<Vector2Int> res=new List<Vector2Int>();
+        foreach(var i in Obstacles)
+        {
+            res.Add(i.GetComponent<Hexagon>().pos);
+        }
+        return res;
+    }
 }

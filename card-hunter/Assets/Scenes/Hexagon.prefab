@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4963162003726920688}
   - component: {fileID: 6129397868834469998}
   - component: {fileID: -4250474210042660264}
-  - component: {fileID: 392174227746154074}
+  - component: {fileID: 4571959194919212807}
   m_Layer: 0
   m_Name: Hexagon
   m_TagString: Untagged
@@ -98,8 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5318f9ac42d83149aada51538f86583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!61 &392174227746154074
-BoxCollider2D:
+--- !u!60 &4571959194919212807
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -140,6 +140,12 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 0.8828125}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.25, y: 0.43359375}
+      - {x: -0.5, y: 0}
+      - {x: -0.25, y: -0.43359375}
+      - {x: 0.25, y: -0.43359375}
+      - {x: 0.5, y: 0}
+      - {x: 0.25, y: 0.43359375}
+  m_UseDelaunayMesh: 0

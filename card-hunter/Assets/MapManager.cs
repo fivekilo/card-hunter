@@ -9,6 +9,7 @@ using UnityEngine;
 public class MapManager : MonoBehaviour
 {
     public GameObject Hex;
+    public Vector2Int ClickedPos;
     private Map map=new Map();
     private const double ObstacleRate = GameConfig.ObstacleRate;//障碍物生成概率
     private const int ObstacleSup = GameConfig.ObstacleSup;//障碍物生成上限
@@ -181,9 +182,39 @@ public class MapManager : MonoBehaviour
         }
         return true;
     }
-    public Vector2Int MoveCommand(List<Vector2Int> directions, int length)//移动指令
+    public Vector2Int MoveCommand(List<Vector2Int> directions, Vector2Int player,int length)//移动指令
     {
-        return Vector2Int.zero;
+        List<Vector2Int> ObPosition = map.GetObstacles();
+        foreach (Vector2Int pos in ObPosition)
+        {
+            if (directions.Contains(pos))
+            {
+                directions.Remove(pos);
+            }
+        }
+        foreach (Vector2Int direction in directions)
+        {
+            map.ChangeColor(direction, Color.blue);
+        }
+        ClickedPos = new Vector2Int(-1, -1);
+        while (!directions.Contains(ClickedPos)) ;
+        Vector2Int D=ClickedPos-player;
+        for(int i = 0; i < length; i++)
+        {
+            if (!ObPosition.Contains(player + D))
+            {
+                player += D;
+            }
+            else
+            {
+                break;
+            }
+        }
+        return player;
+    }
+    public Vector3 GetVector3(Vector2Int pos)
+    {
+        return map.GetHex(pos).transform.position;
     }
 
     // Start is called before the first frame update
