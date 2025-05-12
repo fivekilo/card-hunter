@@ -67,6 +67,7 @@ public class BattleManager : MonoBehaviour
         OnBladeLevelChange += Player.ModifyBladeLevel;
 
         OnPositionChanged += Player.ModifyPos;
+        OnPositionChanged += Player.GetComponent<PlayerShow>().ModifyPos;
         OnDirectionChanged += Player.GetComponent<PlayerShow>().ModifyDirection;
         InitializeBattle();
     }
@@ -146,8 +147,13 @@ public class BattleManager : MonoBehaviour
     private IEnumerator PlayerDrawPhase()
     {
         // ≥È≈∆∂Øª≠ªÚ—”≥Ÿ
-        yield return new WaitForSeconds(0.5f);
+        Debug.Log("Ω¯»Î≥È≈∆Ω◊∂Œ");
+        yield return new WaitForSeconds(5f);
+     //   OnPositionChanged?.Invoke(new(3, 4));
+        Debug.Log("≥È≈∆«∞µ»¥˝ÕÍ±œ");
 
+        Vector2Int newPos = mapmanager.MoveCommand(GetAdjacent(new List<int> {0 , 1 , 2 , 3 , 4 , 5 }) , Player.PlayerGridPos , new Vector2Int(1 , 1));
+        OnPositionChanged?.Invoke(newPos);
         DrawCard(GameConfig.InitialHandCardNum);
         ChangeState(BattleState.PlayerTurn);
     }
@@ -225,11 +231,12 @@ public class BattleManager : MonoBehaviour
         {
             if (Player.Direction == new Vector2Int(dx[i], dy[i])) dir_id = i;
         }
-        for (int i = 0; i < Dir.Count; i++)
-        {
-            int newDir = (dir_id + Dir[i]) % 6;
-            if (CheckPosIsValid(new Vector2Int(x + dx[newDir] , y + dy[newDir]))) res.Add(new Vector2Int(x + dx[newDir], y + dy[newDir]));
-        }
+        
+            for (int i = 0; i < Dir.Count; i++)
+            {
+                int newDir = (dir_id + Dir[i]) % 6;
+                if (CheckPosIsValid(new Vector2Int(x +  dx[newDir], y +  dy[newDir]))) res.Add(new Vector2Int(x +  dx[newDir], y + dy[newDir]));
+            }
         return res;
     }
 

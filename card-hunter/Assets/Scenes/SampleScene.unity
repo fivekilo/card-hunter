@@ -603,6 +603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Hex: {fileID: 2644310219022200402, guid: 5184b9cca886f1348bf858d9764074e6, type: 3}
+  ClickedPos: {x: 0, y: 0}
 --- !u!4 &1151624065
 Transform:
   m_ObjectHideFlags: 0
@@ -667,7 +668,7 @@ RectTransform:
   m_GameObject: {fileID: 1673011721}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.648293}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.9, y: 1.83, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1923255098}
