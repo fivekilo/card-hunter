@@ -151,7 +151,8 @@ public class BattleManager : MonoBehaviour
         yield return new WaitForSeconds(5f);
      //   OnPositionChanged?.Invoke(new(3, 4));
         Debug.Log("³éÅÆÇ°µÈ´ýÍê±Ï");
-
+        Action<Vector2Int> callback = OnPositionChanged.Invoke;
+        StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1, 1) , callback));
        // Vector2Int newPos = mapmanager.MoveCommand(GetAdjacent(new List<int> {0 , 1 , 2 , 3 , 4 , 5 }) , Player.PlayerGridPos , new Vector2Int(1 , 1));
        // OnPositionChanged?.Invoke(newPos);
         DrawCard(GameConfig.InitialHandCardNum);
@@ -222,7 +223,7 @@ public class BattleManager : MonoBehaviour
     public List<Vector2Int> GetAdjacent(List<int> Dir)
     {
         List<Vector2Int> res = new();
-        int[] dx = { 1, 1, -1, -1, -1, 1 };
+        int[] dx = { 1, 0, -1, -1, 0, 1 };
         int[] dy = { 0, 1, 1, 0, -1, -1 };
         int x = Player.PlayerGridPos.x;
         int y = Player.PlayerGridPos.y;
@@ -232,11 +233,11 @@ public class BattleManager : MonoBehaviour
             if (Player.Direction == new Vector2Int(dx[i], dy[i])) dir_id = i;
         }
         
-            for (int i = 0; i < Dir.Count; i++)
-            {
-                int newDir = (dir_id + Dir[i]) % 6;
-                if (CheckPosIsValid(new Vector2Int(x +  dx[newDir], y +  dy[newDir]))) res.Add(new Vector2Int(x +  dx[newDir], y + dy[newDir]));
-            }
+        for (int i = 0; i < Dir.Count; i++)
+        {
+            int newDir = (dir_id + Dir[i]) % 6;
+            if (CheckPosIsValid(new Vector2Int(x +  dx[newDir], y +  dy[newDir]))) res.Add(new Vector2Int(x +  dx[newDir], y + dy[newDir]));
+        }
         return res;
     }
 
