@@ -182,9 +182,12 @@ public class MapManager : MonoBehaviour
         }
         return true;
     }
-    public Vector2Int MoveCommand(List<Vector2Int> directions, Vector2Int player,int length)//移动指令
+    public Vector2Int MoveCommand(List<Vector2Int> directions, Vector2Int player,Vector2Int length)//移动指令
     {
+        //还没添加越过障碍物功能
         List<Vector2Int> ObPosition = map.GetObstacles();
+        Vector2Int D = new Vector2Int();
+        List<Vector2Int>accessible = new List<Vector2Int>();
         foreach (Vector2Int pos in ObPosition)
         {
             if (directions.Contains(pos))
@@ -192,25 +195,31 @@ public class MapManager : MonoBehaviour
                 directions.Remove(pos);
             }
         }
+        //计算可达的格子
         foreach (Vector2Int direction in directions)
         {
-            map.ChangeColor(direction, Color.blue);
+            D = direction - player;
+            for(int i = length[0]; i <= length[1]; i++)
+            {
+                if (ObPosition.Contains(player + D *i))
+                {
+                    break;
+                }
+                else
+                {
+                    accessible.Add(player + D * i);
+                }
+            }
         }
-        ClickedPos = new Vector2Int(-1, -1);
-        while (!directions.Contains(ClickedPos)) ;
-        Vector2Int D=ClickedPos-player;
-        for(int i = 0; i < length; i++)
+
+        foreach(Vector2Int pos in accessible)
         {
-            if (!ObPosition.Contains(player + D))
-            {
-                player += D;
-            }
-            else
-            {
-                break;
-            }
+            map.ChangeColor(pos, Color.blue);
         }
-        return player;
+
+        ClickedPos = new Vector2Int(-1, -1);
+        while (!accessible.Contains(ClickedPos)) ;
+        return ClickedPos;
     }
     public Vector3 GetVector3(Vector2Int pos)
     {
@@ -231,6 +240,6 @@ public class MapManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
