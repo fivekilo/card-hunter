@@ -152,8 +152,8 @@ public class BattleManager : MonoBehaviour
      //   OnPositionChanged?.Invoke(new(3, 4));
         Debug.Log("³éÅÆÇ°µÈ´ýÍê±Ï");
 
-        Vector2Int newPos = mapmanager.MoveCommand(GetAdjacent(new List<int> {0 , 1 , 2 , 3 , 4 , 5 }) , Player.PlayerGridPos , new Vector2Int(1 , 1));
-        OnPositionChanged?.Invoke(newPos);
+       // Vector2Int newPos = mapmanager.MoveCommand(GetAdjacent(new List<int> {0 , 1 , 2 , 3 , 4 , 5 }) , Player.PlayerGridPos , new Vector2Int(1 , 1));
+       // OnPositionChanged?.Invoke(newPos);
         DrawCard(GameConfig.InitialHandCardNum);
         ChangeState(BattleState.PlayerTurn);
     }
