@@ -10,7 +10,9 @@ public class PlayerShow : MonoBehaviour
         PlayerInfo Player = GetComponent<PlayerInfo>();
         BattleManager battleManager = GetComponentInParent<BattleManager>();
         MapManager mapManager = battleManager.mapmanager;
-        Vector2Int v = Player.PlayerGridPos;
+        Vector3 InitialPos = mapManager.GetVector3(new Vector2Int(0 , 0));
+        InitialPos.z = -5;
+        Player.transform.position = InitialPos;
     }
     public void ModifyDirection(Vector2Int newDir)
     {
@@ -22,8 +24,9 @@ public class PlayerShow : MonoBehaviour
         PlayerInfo Player = GetComponent<PlayerInfo>();
         BattleManager battleManager = GetComponentInParent<BattleManager>();
         MapManager mapManager = battleManager.mapmanager;
-        Vector2Int v = Player.PlayerGridPos;
-        
+        Vector3 Pos = mapManager.GetVector3(newPos);
+        Pos.z = -5;
+        Player.transform.position = Pos;
     }
     // Update is called once per frame
     void Update()
