@@ -182,7 +182,7 @@ public class MapManager : MonoBehaviour
         }
         return true;
     }
-    public Vector2Int MoveCommand(List<Vector2Int> directions, Vector2Int player,Vector2Int length)//移动指令
+    public IEnumerable MoveCommand(List<Vector2Int> directions, Vector2Int player,Vector2Int length)//移动指令
     {
         //还没添加越过障碍物功能
         List<Vector2Int> ObPosition = map.GetObstacles();
@@ -218,8 +218,7 @@ public class MapManager : MonoBehaviour
         }
 
         ClickedPos = new Vector2Int(-1, -1);
-        while (!accessible.Contains(ClickedPos)) ;
-        return ClickedPos;
+        yield return new WaitUntil(()=>accessible.Contains(ClickedPos));
     }
     public Vector3 GetVector3(Vector2Int pos)
     {
