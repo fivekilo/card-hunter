@@ -14,15 +14,12 @@ public class CardManager : MonoBehaviour
         Card carddata = newCard.GetComponent<Card>();
         carddata.cardNum = cardNum;
         carddata.cardInit();
-        //cards.Add( newCard.GetComponent<Card>());
-        //cards[cards.Count].cardNum = cardNum;
-        //cards[cards.Count].cardInit();
         // Start is called before the first frame update
     }
         void Start()
     {
         CreateCard(1, transform);
-        CreateCard(2, transform);
+        CreateCard(5, transform);
     }
 
     // Update is called once per frame

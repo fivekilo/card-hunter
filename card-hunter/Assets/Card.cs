@@ -21,10 +21,9 @@ public class Card : MonoBehaviour
     //private bool isDragging = false;
     //private Vector2 originalPosition;
     public int cardNum { get; set; }
-    public List<int> Move; //移动方向
+    public List<int> Move; //移动方向 正前方0 逆时针标号 不移动为null
     public Vector2Int MoveLength;//移动长度 下上限
     public int Derivation;//派生卡牌
-    public bool MoveTurn;//移动是否导致转向
     public bool Consumption;//消耗
     public int DrawCard;//抽牌
     public bool Nothingness;//虚无
@@ -37,7 +36,6 @@ public class Card : MonoBehaviour
     public int Cost;//费用
     public List<int> Attack;//攻击
     public int Defence;//格挡
-    public int DeltaWound;
     public int DeltaCost;//回费
     public int DeltaBladeNum;//回气刃槽
     public int DeltaBladeLevel; //提升气刃等级
@@ -46,7 +44,7 @@ public class Card : MonoBehaviour
     //private TextMeshProUGUI cardTextBox;
     //private TextMeshProUGUI cardNameBox;
     //private TextMeshProUGUI cardTypeBox;
-    void FindText(int cardNum,ref string cardName,ref string cardText,ref string cardType)
+    private void FindText(int cardNum,ref string cardName,ref string cardText,ref string cardType)
     
     {
         cardName = GameConfig.CardName[cardNum];
@@ -67,7 +65,7 @@ public class Card : MonoBehaviour
                 break;
         }
     }
-     void cardTextsInit (int cardNum){
+     private void cardTextsInit (int cardNum){
         TextMeshProUGUI cardTypeBox = GetComponentsInChildren<TextMeshProUGUI>()[0];
         TextMeshProUGUI cardTextBox = GetComponentsInChildren<TextMeshProUGUI>()[1];
         TextMeshProUGUI cardNameBox = GetComponentsInChildren<TextMeshProUGUI>()[2];
@@ -76,7 +74,7 @@ public class Card : MonoBehaviour
         cardTextBox.text = cardText;
         cardNameBox.text = cardName;
     }
-    void cardFrameworkInit(int cardNum)
+    private void cardFrameworkInit(int cardNum)
     {
         Sprite newSprite;
         //SpriteRenderer cardFramework= GetComponentsInChildren<SpriteRenderer>()[0];
@@ -84,11 +82,35 @@ public class Card : MonoBehaviour
         newSprite = Resources.Load<Sprite>(GameConfig.CardImageName[cardNum]);
         cardFramework.sprite = newSprite;
     }
+    private void cardPropertyInit(int cardNum)
+    {
+        Move=GameConfig.Move[cardNum]; //移动方向
+        MoveLength = GameConfig.MoveLength[cardNum];//移动长度 下上限
+        Derivation = GameConfig.Derivation[cardNum];//派生卡牌 0为不派生
+        Consumption = GameConfig.Consumption[cardNum];//消耗
+        DrawCard = GameConfig.DrawCard[cardNum];//抽牌
+        Nothingness = GameConfig.Nothingness[cardNum];//虚无
+        OnlyLState = GameConfig.OnlyLState[cardNum];//0:不限 1:限自由态 2:限连携态
+        EnterState = GameConfig.EnterState[cardNum];//1:进入自由态 2:进入连携态
+        Buff = GameConfig.Buff[cardNum];//Buff
+        DeBuff = GameConfig.DeBuff[cardNum];//DeBuff
+        AttackDirection = GameConfig.AttackDirection[cardNum]; //攻击方向
+        AttackLength = GameConfig.AttackLength[cardNum];//攻击长度
+        Cost = GameConfig.Cost[cardNum];//费用
+        Attack = GameConfig.Attack[cardNum];//攻击
+        Defence = GameConfig.Defence[cardNum];//格挡
+        DeltaCost = GameConfig.DeltaCost[cardNum];//回费
+        DeltaBladeNum = GameConfig.DeltaBladeNum[cardNum];//回气刃槽
+        DeltaBladeLevel = GameConfig.DeltaBladeLevel[cardNum]; //提升气刃等级
+        DeltaHealth = GameConfig.DeltaHealth[cardNum]; //生命值变化
+    }
     public void cardInit()
     {
         cardTextsInit(cardNum);
         cardFrameworkInit(cardNum);
+        cardPropertyInit(cardNum);
     }
+    
     //public void OnPointerClick(PointerEventData eventData)
     //{
     //    Debug.Log("Card clicked: " + cardNum);

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
+//using UnityEngine.UIElements;
+
 public enum BattleState
 {
     NotBegin,        //战斗未开始时
@@ -28,6 +31,7 @@ public class BattleManager : MonoBehaviour
     public PlayerInfo Player;
     public MapManager mapmanager;
     public BladegasSlotController BladeLevelSlot;
+    public Button Endbutton;
 
     private List<Card> InitialDeck = new(); //初始卡组
     private List<Card> deck = new ();      // 牌库
@@ -70,6 +74,10 @@ public class BattleManager : MonoBehaviour
         OnPositionChanged += Player.GetComponent<PlayerShow>().ModifyPos;
         OnDirectionChanged += Player.GetComponent<PlayerShow>().ModifyDirection;
         InitializeBattle();
+
+        Endbutton.onClick.AddListener(() => {
+            Debug.Log("按钮被点击了！");
+        });
     }
 
     // 初始化战斗

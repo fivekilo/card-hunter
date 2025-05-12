@@ -78,16 +78,221 @@ public class GameConfig : ScriptableObject
         2,
         0
     }.AsReadOnly();
-    public static IReadOnlyList<List<int>> Attack = new List<List<int>>
-    {null,//造成伤害
-        new List<int>{6},
-        new List<int>{4},
-        new List<int>{7},
-        new List<int>{4,4},
-        new List<int>{10},
-        null,
-        null
+    public static IReadOnlyList<List<int>> Move = new List<List<int>>
+    {null,//移动方向
+        null,//1
+        new List<int>{0},//2
+        null,//3
+        null,//4
+        null,//5
+        new List<int>{0,1,2,3,4,5},//6
+        null//7
 
     }.AsReadOnly();
 
+    public static IReadOnlyList<Vector2Int> MoveLength = new List<Vector2Int>
+    {
+        new Vector2Int(0,0),//移动长度 下上限
+        new Vector2Int(0,0),//1
+        new Vector2Int(1,1),//2
+        new Vector2Int(0,0),//3
+        new Vector2Int(0,0),//4
+        new Vector2Int(0,0),//5
+        new Vector2Int(1,1),//6
+        new Vector2Int(0,0)//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<int> Derivation = new List<int>
+    {0,//派生卡牌
+        0,//1
+        0,//2
+        4,//3
+        5,//4
+        6,//5
+        0,//6
+        0//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<bool> Consumption = new List<bool>
+    {true,//消耗属性
+        false,//1
+        false,//2
+        false,//3
+        true,//4
+        true,//5
+        false,//6
+        false//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<int> DrawCard = new List<int>
+    {0,//牌效抽卡
+        0,//1
+        0,//2
+        0,//3
+        0,//4
+        0,//5
+        0,//6
+        0//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<bool> Nothingness = new List<bool>
+    {true,//虚无属性
+        false,//1
+        false,//2
+        false,//3
+        true,//4
+        true,//5
+        false,//6
+        false//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<int> OnlyLState = new List<int>
+    {0,//限制形态使用 0不限 1限自由 2限制连携
+        0,//1
+        0,//2
+        0,//3
+        0,//4
+        0,//5
+        0,//6
+        0//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<int> EnterState = new List<int>
+    {0,//1:进入自由态 2:进入连携态
+        2,//1
+        2,//2
+        2,//3
+        2,//4
+        2,//5
+        1,//6
+        0//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<List<int>> Buff = new List<List<int>>
+    {null,//Buff列表
+        null,//1
+        null,//2
+        null,//3
+        null,//4
+        null,//5
+        null,//6
+        null//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<List<int>> DeBuff = new List<List<int>>
+    {null,//施加deBuff列表
+        null,//1
+        null,//2
+        null,//3
+        null,//4
+        null,//5
+        null,//6
+        null//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<List<int>> AttackDirection = new List<List<int>>
+    {null,//攻击方向
+        new List<int>{0},//1
+        new List<int>{0},//2
+        new List<int>{0,1,5},//3
+        new List<int>{0,1,5},//4
+        new List<int>{0,1,5},//5
+        null,//6
+        null//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<int> AttackLength = new List<int>
+    {0,//攻击长度
+        1,//1
+        1,//2
+        1,//3
+        1,//4
+        1,//5
+        0,//6
+        0//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<List<int>> Attack = new List<List<int>>
+    {null,//造成伤害
+        new List<int>{6},//1
+        new List<int>{4},//2
+        new List<int>{7},//3
+        new List<int>{4,4},//4
+        new List<int>{10},//5
+        null,//6
+        null//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<int> Defence = new List<int>
+    {0,//格挡
+        0,//1
+        0,//2
+        0,//3
+        0,//4
+        0,//5
+        0,//6
+        3//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<int> DeltaCost = new List<int>
+    {0,//回费
+        0,//1
+        0,//2
+        0,//3
+        0,//4
+        0,//5
+        0,//6
+        0//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<int> DeltaBladeNum = new List<int>
+    {0,//改变气刃槽 正增负减
+        2,//1
+        1,//2
+        -1,//3
+        -2,//4
+        -2,//5
+        0,//6
+        0//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<int> DeltaBladeLevel = new List<int>
+    {0,//改变气刃等级 正增负减
+        0,//1
+        0,//2
+        0,//3
+        0,//4
+        1,//5
+        0,//6
+        0//7
+
+    }.AsReadOnly();
+
+    public static IReadOnlyList<int> DeltaHealth = new List<int>
+    {0,//改变血量
+        0,//1
+        0,//2
+        0,//3
+        0,//4
+        0,//5
+        0,//6
+        0//7
+
+    }.AsReadOnly();
+    
 }
