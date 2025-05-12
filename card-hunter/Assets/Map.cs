@@ -5,6 +5,7 @@ using UnityEngine;
 public class Map
 {
     private GameObject[,] Hexs;
+    private int size = GameConfig.size;
     public List<GameObject> Obstacles { get; set; }
     public void AddObstacle(Vector2Int pos)
     {
@@ -14,6 +15,14 @@ public class Map
     {
         this.Hexs = Hexs;
         Obstacles = new List<GameObject>();
+        for(int x=0; x < size; x++)
+        {
+            for(int y=0; y<size; y++)
+            {
+                Vector2Int pos = new Vector2Int(x, y);
+                GetHex(pos).GetComponent<Hexagon>().pos = pos;
+            }
+        }
     }
     public GameObject GetHex(Vector2Int pos)
     {

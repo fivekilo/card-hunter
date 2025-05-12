@@ -132,7 +132,7 @@ public class MapManager : MonoBehaviour
                 GameObject hex = map.GetHex(pos);
                 if (hex.tag != "Obstacle" && hex.tag!="Content")
                 {
-                    ColorUtility.TryParseHtmlString("#aaa58f", out Color color);
+                    ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
                     hex.GetComponent<Hexagon>().ChangeColor(color);
                 }
             }
@@ -219,7 +219,11 @@ public class MapManager : MonoBehaviour
 
         ClickedPos = new Vector2Int(-1, -1);
         yield return new WaitUntil(()=>accessible.Contains(ClickedPos));
-        Debug.Log(ClickedPos);
+        foreach(Vector2Int pos in accessible)
+        {
+            ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
+            map.ChangeColor(pos, color);
+        }
         callback(ClickedPos);
     }
     public Vector3 GetVector3(Vector2Int pos)

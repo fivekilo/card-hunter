@@ -14,6 +14,7 @@ public class GameConfig : ScriptableObject
     public const int MaxHandCardNum = 8;
     public const int MaxBladeLevel = 3; //最大气刃等级
     public const int MaxBladeNum = 50;//最大气刃值
+    public const string BackgroundColor = "#aaa58f";//背景颜色
     //地图要素
     public enum Content
     {
