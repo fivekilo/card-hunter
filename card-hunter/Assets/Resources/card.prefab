@@ -221,6 +221,25 @@ MonoBehaviour:
   cardText: 
   cardName: 
   cardType: 
+  Move: 
+  MoveLength: {x: 0, y: 0}
+  Derivation: 0
+  Consumption: 0
+  DrawCard: 0
+  Nothingness: 0
+  OnlyLState: 0
+  EnterState: 0
+  Buff: 
+  DeBuff: 
+  AttackDirection: 
+  AttackLength: 0
+  Cost: 0
+  Attack: 
+  Defence: 0
+  DeltaCost: 0
+  DeltaBladeNum: 0
+  DeltaBladeLevel: 0
+  DeltaHealth: 0
 --- !u!1 &3113918849913551848
 GameObject:
   m_ObjectHideFlags: 0
