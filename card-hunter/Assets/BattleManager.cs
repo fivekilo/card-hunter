@@ -9,15 +9,15 @@ using UnityEngine.UI;
 
 public enum BattleState
 {
-    NotBegin,        //Õ½¶·Î´¿ªÊ¼Ê±
-    PlayerTurn,     // Íæ¼Ò³öÅÆ½×¶Î
-    PlayerDraw,      // Íæ¼Ò³éÅÆ½×¶Î
-    EnemyTurn        // µÐÈËÐÐ¶¯½×¶Î
+    NotBegin,        //Õ½ï¿½ï¿½Î´ï¿½ï¿½Ê¼Ê±
+    PlayerTurn,     // ï¿½ï¿½Ò³ï¿½ï¿½Æ½×¶ï¿½
+    PlayerDraw,      // ï¿½ï¿½Ò³ï¿½ï¿½Æ½×¶ï¿½
+    EnemyTurn        // ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½×¶ï¿½
 }
 public class PlayerWantMoveEventArgs : EventArgs
 {
-    public int Length{ get; }  // Î»ÒÆ³¤¶È
-    public List<Vector2Int> Adjacent { get; }  // ÏàÁÚÎ»ÖÃ
+    public int Length{ get; }  // Î»ï¿½Æ³ï¿½ï¿½ï¿½
+    public List<Vector2Int> Adjacent { get; }  // ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
 
     public PlayerWantMoveEventArgs(List<Vector2Int>v , int _Length)
     {
@@ -32,38 +32,41 @@ public class BattleManager : MonoBehaviour
     public MapManager mapmanager;
     public BladegasSlotController BladeLevelSlot;
     public Button Endbutton;
-
-    private List<Card> InitialDeck = new(); //³õÊ¼¿¨×é
-    private List<Card> deck = new ();      // ÅÆ¿â
-    private List<Card> discardPile = new (); // ÆúÅÆ¶Ñ
-    private List<Card> hand = new ();      // ÊÖÅÆ
+    public CardManager cardManager;
+    public int i = 1;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    private List<Card> InitialDeck = new(); //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½
+    private List<Card> deck = new ();      // ï¿½Æ¿ï¿½
+    private List<Card> discardPile = new (); // ï¿½ï¿½ï¿½Æ¶ï¿½
+    private List<Card> hand = new ();      // ï¿½ï¿½ï¿½ï¿½
+    
+    private List<EnemyAIController> _enemies = new ();//ï¿½ï¿½ï¿½ï¿½
 
     public delegate void BattleEvent(BattleState state);
-    public event BattleEvent OnBattleStateChanged; //×´Ì¬¸Ä±ä
+    public event BattleEvent OnBattleStateChanged; //×´Ì¬ï¿½Ä±ï¿½
 
-    //public delegate void PositionChangeHandler(object sender, PlayerWantMoveEventArgs e); //½«Òª¸Ä±äÎ»ÖÃ
-    //public event PositionChangeHandler OnPositionChange;  //Íæ¼ÒÒÆ¶¯Ê±ÈÃµØÍ¼ÏÔÊ¾¿ÉÒÆ¶¯µÄÇøÓò
+    //public delegate void PositionChangeHandler(object sender, PlayerWantMoveEventArgs e); //ï¿½ï¿½Òªï¿½Ä±ï¿½Î»ï¿½ï¿½
+    //public event PositionChangeHandler OnPositionChange;  //ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½Ê±ï¿½Ãµï¿½Í¼ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    public delegate void PositionChangedHandler(Vector2Int newPos); //Î»ÖÃÒÑ¾­·¢Éú¸Ä±ä
+    public delegate void PositionChangedHandler(Vector2Int newPos); //Î»ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½
     public event PositionChangedHandler OnPositionChanged;
 
     public delegate void BladeLevelChangeHandler(int NewBladeLevel);
-    public event BladeLevelChangeHandler OnBladeLevelChange; //ÆøÈÐµÈ¼¶¸Ä±ä
+    public event BladeLevelChangeHandler OnBladeLevelChange; //ï¿½ï¿½ï¿½ÐµÈ¼ï¿½ï¿½Ä±ï¿½
 
     public delegate void BladeGasChangeHandler(int NewBladeNum);
-    public event BladeGasChangeHandler OnBladeGasChange; //Æø¸Ä±ä
+    public event BladeGasChangeHandler OnBladeGasChange; //ï¿½ï¿½ï¿½Ä±ï¿½
 
     public delegate void DirectionChangedHandler(Vector2Int newDir);
-    public event DirectionChangedHandler OnDirectionChanged; //·½Ïò¸Ä±ä
+    public event DirectionChangedHandler OnDirectionChanged; //ï¿½ï¿½ï¿½ï¿½Ä±ï¿½
 
-    private bool isWaitingForPlayerAction = false; //µÈ´ýÍæ¼ÒÑ¡ÔñÎ»ÖÃ
-    public UnityEvent EndTurnClicked; //»ØºÏ½áÊø°´Å¥°´ÏÂ
+    private bool isWaitingForPlayerAction = false; //ï¿½È´ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½Î»ï¿½ï¿½
+    public UnityEvent EndTurnClicked; //ï¿½ØºÏ½ï¿½ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½
     private void Start()
     {
 
         Player = GetComponentInChildren<PlayerInfo>();
         mapmanager = GetComponentInChildren<MapManager>();
-        //³õÊ¼ÊÂ¼þ¶©ÔÄ:
+        //ï¿½ï¿½Ê¼ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½:
         OnBladeGasChange += Player.ModifyBladeNum;
         OnBladeGasChange += BladeLevelSlot.ShowBladeGas;
 
@@ -74,33 +77,42 @@ public class BattleManager : MonoBehaviour
         OnPositionChanged += Player.GetComponent<PlayerShow>().ModifyPos;
         OnDirectionChanged += Player.GetComponent<PlayerShow>().ModifyDirection;
         Endbutton.onClick.AddListener(() => {
-            Debug.Log("°´Å¥±»µã»÷ÁË£¡");
+           Card newcard= cardManager.CreateCard(i, cardManager.transform);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¿ï¿½ï¿½ï¿½
+            cardManager.AddCardToHand(newcard);
+            i = i % 8 + 1;
         });
         InitializeBattle();
 
 
     }
 
-    // ³õÊ¼»¯Õ½¶·
+    // ï¿½ï¿½Ê¼ï¿½ï¿½Õ½ï¿½ï¿½
     private void InitializeBattle()
     {
         OnBladeGasChange?.Invoke(5);
         OnBladeLevelChange?.Invoke(2);
-        // ³õÊ¼»¯Íæ¼ÒºÍµÐÈË
+        // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ÒºÍµï¿½ï¿½ï¿½
         InitializeDeck();
-        // ¿ªÊ¼Íæ¼Ò»ØºÏ
+        FindAllEnemies();
+        // ï¿½ï¿½Ê¼ï¿½ï¿½Ò»Øºï¿½
         ChangeState(BattleState.PlayerDraw);
     }
 
     public void InitializeDeck()
     {
-        //Ìí¼Ó¿¨ÅÆ£¬ÔÙÏ´ÅÆ
+        //ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½Æ£ï¿½ï¿½ï¿½Ï´ï¿½ï¿½
         ShuffleDeck();
-
     }
-    public IEnumerator DrawCard(int num)
+
+    public void FindAllEnemies()
     {
-        //³éÅÆ¶¯»­´¦Àí tbd
+        //ï¿½ï¿½ï¿½Ø¹ï¿½ï¿½ï¿½
+        _enemies = new List<EnemyAIController>(FindObjectsOfType<EnemyAIController>());
+    }
+
+    public void DrawCard(int num)
+    {
+        //ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ tbd
         for(int i = 0;i < num;i ++)
         {
 
@@ -128,7 +140,7 @@ public class BattleManager : MonoBehaviour
             deck[randomIndex] = temp;
         }
     }
-    // ¸Ä±äÕ½¶·×´Ì¬
+    // ï¿½Ä±ï¿½Õ½ï¿½ï¿½×´Ì¬
     private void ChangeState(BattleState newState)
     {
         currentState = newState;
@@ -145,7 +157,7 @@ public class BattleManager : MonoBehaviour
                 break;
 
             case BattleState.EnemyTurn:
-                //¹ÖÎïÐÐ¶¯
+                //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
                 break;
 
             case BattleState.NotBegin:
@@ -154,14 +166,14 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    // Íæ¼Ò³éÅÆ½×¶Î
+    // ï¿½ï¿½Ò³ï¿½ï¿½Æ½×¶ï¿½
     private IEnumerator PlayerDrawPhase()
     {
-        // ³éÅÆ¶¯»­»òÑÓ³Ù
-        Debug.Log("½øÈë³éÅÆ½×¶Î");
+        // ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ½×¶ï¿½");
         yield return new WaitForSeconds(5f);
      //   OnPositionChanged?.Invoke(new(3, 4));
-        Debug.Log("³éÅÆÇ°µÈ´ýÍê±Ï");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½Ç°ï¿½È´ï¿½ï¿½ï¿½ï¿½");
         Action<Vector2Int> callback = OnPositionChanged.Invoke;
         StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1, 1) , callback));
        
@@ -169,31 +181,31 @@ public class BattleManager : MonoBehaviour
         ChangeState(BattleState.PlayerTurn);
     }
 
-    // Íæ¼Ò»ØºÏ¿ªÊ¼
+    // ï¿½ï¿½Ò»ØºÏ¿ï¿½Ê¼
     private void StartPlayerTurn()
     {
-        // ÖØÖÃÍæ¼ÒÄÜÁ¿
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         Player.ModifyCost(Player.GetComponent<PlayerInfo>().MaxCost - Player.GetComponent<PlayerInfo>().curCost);
 
-        Debug.Log("Íæ¼Ò»ØºÏ¿ªÊ¼ - µÈ´ý²Ù×÷");
+        Debug.Log("ï¿½ï¿½Ò»ØºÏ¿ï¿½Ê¼ - ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½");
        
         ChangeState(BattleState.EnemyTurn);
     }
     public void OnEndTurnButtonClicked()
     {
-        //¼ì²âµã»÷ÊÇ·ñºÏ·¨
-        Debug.Log("Íæ¼Ò½áÊø»ØºÏ");
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Ï·ï¿½
+        Debug.Log("ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ï¿½Øºï¿½");
 
 
 
     }
 
-    // Íæ¼Ò½áÊø»ØºÏ
+    // ï¿½ï¿½Ò½ï¿½ï¿½ï¿½ï¿½Øºï¿½
     public void EndPlayerTurn()
     {
         if (currentState != BattleState.PlayerTurn) return;
 
-        //ÔÚÕâÀï½áËã»ØºÏ
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øºï¿½
 
         ChangeState(BattleState.EnemyTurn);
     }
@@ -205,15 +217,15 @@ public class BattleManager : MonoBehaviour
         if(card.Move.Count != 0)
         {
             Action<Vector2Int> callback = OnPositionChanged.Invoke;
-            isWaitingForPlayerAction = true; //¿ªÊ¼µÈ´ýÍæ¼ÒÑ¡ÔñÎ»ÖÃ
+            isWaitingForPlayerAction = true; //ï¿½ï¿½Ê¼ï¿½È´ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½Î»ï¿½ï¿½
             StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback));
-            isWaitingForPlayerAction = false; //Íæ¼ÒÑ¡ÔñÎ»ÖÃ½áÊø
+            isWaitingForPlayerAction = false; //ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½Î»ï¿½Ã½ï¿½ï¿½ï¿½
         }
         return true;
     } 
     public void EndBattle()
     {
-        //¹ÖÎïËÀÍö½øÈëÕ½¶·½áËã
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     }
     public bool CheckPosIsValid(Vector2Int v)
     {

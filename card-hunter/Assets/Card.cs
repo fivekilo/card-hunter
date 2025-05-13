@@ -44,6 +44,7 @@ public class Card : MonoBehaviour
     //private TextMeshProUGUI cardTextBox;
     //private TextMeshProUGUI cardNameBox;
     //private TextMeshProUGUI cardTypeBox;
+    public bool CBuse;//能否被使用 默认否
     private void FindText(int cardNum,ref string cardName,ref string cardText,ref string cardType)
     
     {
@@ -109,6 +110,7 @@ public class Card : MonoBehaviour
         cardTextsInit(cardNum);
         cardFrameworkInit(cardNum);
         cardPropertyInit(cardNum);
+        CBuse = true;
     }
     
     //public void OnPointerClick(PointerEventData eventData)
