@@ -17,6 +17,16 @@ public class PlayerShow : MonoBehaviour
     public void ModifyDirection(Vector2Int newDir)
     {
         //改变贴图
+        PlayerInfo Player = GetComponent<PlayerInfo>();
+        Vector2Int Dir = Player.Direction;
+        int[] dx = { 1, 0, -1, -1, 0, 1 };
+        int[] dy = { 0, 1, 1, 0, -1, -1 };
+        int Dir_id = 0;
+        for(int i = 0;i < 6;i ++)
+        {
+            if (newDir == new Vector2Int(dx[i], dy[i])) Dir_id = i;
+        }
+        //选择新的图片名称
     }
     public void ModifyPos(Vector2Int newPos)
     {
@@ -27,6 +37,11 @@ public class PlayerShow : MonoBehaviour
         Vector3 Pos = mapManager.GetVector3(newPos);
         Pos.z = -5;
         Player.transform.position = Pos;
+    }
+    public void ModifyPlayerImage(string newImage)
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = Resources.Load<Sprite>(newImage);
     }
     // Update is called once per frame
     void Update()

@@ -54,9 +54,9 @@ public class BattleManager : MonoBehaviour
     public event BladeGasChangeHandler OnBladeGasChange; //气改变
 
     public delegate void DirectionChangedHandler(Vector2Int newDir);
-    public event DirectionChangedHandler OnDirectionChanged; //气改变
+    public event DirectionChangedHandler OnDirectionChanged; //方向改变
 
-    private bool isWaitingForPlayerAction = false; //等待玩家操作
+    private bool isWaitingForPlayerAction = false; //等待玩家选择位置
     public UnityEvent EndTurnClicked; //回合结束按钮按下
     private void Start()
     {
@@ -73,11 +73,12 @@ public class BattleManager : MonoBehaviour
         OnPositionChanged += Player.ModifyPos;
         OnPositionChanged += Player.GetComponent<PlayerShow>().ModifyPos;
         OnDirectionChanged += Player.GetComponent<PlayerShow>().ModifyDirection;
-        InitializeBattle();
-
         Endbutton.onClick.AddListener(() => {
             Debug.Log("按钮被点击了！");
         });
+        InitializeBattle();
+
+
     }
 
     // 初始化战斗
@@ -97,11 +98,12 @@ public class BattleManager : MonoBehaviour
         ShuffleDeck();
 
     }
-    public void DrawCard(int num)
+    public IEnumerator DrawCard(int num)
     {
         //抽牌动画处理 tbd
         for(int i = 0;i < num;i ++)
         {
+
             if(deck.Count == 0)
             {
                 if (discardPile.Count == 0) break;
@@ -113,6 +115,7 @@ public class BattleManager : MonoBehaviour
             Card drawnCard = deck[0];
             deck.RemoveAt(0);
             hand.Add(drawnCard);
+            yield return new WaitForSeconds(0.5f);
         }
     }
     public void ShuffleDeck()
@@ -161,9 +164,8 @@ public class BattleManager : MonoBehaviour
         Debug.Log("抽牌前等待完毕");
         Action<Vector2Int> callback = OnPositionChanged.Invoke;
         StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1, 1) , callback));
-       // Vector2Int newPos = mapmanager.MoveCommand(GetAdjacent(new List<int> {0 , 1 , 2 , 3 , 4 , 5 }) , Player.PlayerGridPos , new Vector2Int(1 , 1));
-       // OnPositionChanged?.Invoke(newPos);
-        DrawCard(GameConfig.InitialHandCardNum);
+       
+        yield return StartCoroutine(DrawCard(GameConfig.InitialHandCardNum));
         ChangeState(BattleState.PlayerTurn);
     }
 
@@ -174,24 +176,16 @@ public class BattleManager : MonoBehaviour
         Player.ModifyCost(Player.GetComponent<PlayerInfo>().MaxCost - Player.GetComponent<PlayerInfo>().curCost);
 
         Debug.Log("玩家回合开始 - 等待操作");
-
-        // 设置等待标志
-        isWaitingForPlayerAction = true;
-
-        // 这里可以启用玩家交互UI
-       // UIManager.Instance.SetEndTurnButtonActive(true);
+       
+        ChangeState(BattleState.EnemyTurn);
     }
     public void OnEndTurnButtonClicked()
     {
-        if (!isWaitingForPlayerAction) return;
-
+        //检测点击是否合法
         Debug.Log("玩家结束回合");
 
-        // 清除等待标志
-        isWaitingForPlayerAction = false;
 
-        // 切换到敌人回合
-        ChangeState(BattleState.EnemyTurn);
+
     }
 
     // 玩家结束回合
@@ -205,18 +199,16 @@ public class BattleManager : MonoBehaviour
     }
     public bool PlayCard(Card card)
     {
-        if (currentState != BattleState.PlayerTurn || isWaitingForPlayerAction == false) return false;
+        if (currentState != BattleState.PlayerTurn) return false;
         if(Player.curCost <= card.Cost)return false; 
 
         if(card.Move.Count != 0)
         {
-            //  OnPositionChange?.Invoke(this, new PlayerWantMoveEventArgs(GetAdjacent(card.Move) , /*card.MoveDistance*/1));
-            //传入getadj，调用mapmanager的显示函数
-            Vector2Int v = new(0 , 0);
-            OnPositionChanged?.Invoke(v);
+            Action<Vector2Int> callback = OnPositionChanged.Invoke;
+            isWaitingForPlayerAction = true; //开始等待玩家选择位置
+            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback));
+            isWaitingForPlayerAction = false; //玩家选择位置结束
         }
-
-
         return true;
     } 
     public void EndBattle()
