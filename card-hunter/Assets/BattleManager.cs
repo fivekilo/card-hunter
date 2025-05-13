@@ -127,7 +127,6 @@ public class BattleManager : MonoBehaviour
             Card drawnCard = deck[0];
             deck.RemoveAt(0);
             hand.Add(drawnCard);
-            yield return new WaitForSeconds(0.5f);
         }
     }
     public void ShuffleDeck()
@@ -176,8 +175,6 @@ public class BattleManager : MonoBehaviour
         Debug.Log("����ǰ�ȴ����");
         Action<Vector2Int> callback = OnPositionChanged.Invoke;
         StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1, 1) , callback));
-       
-        yield return StartCoroutine(DrawCard(GameConfig.InitialHandCardNum));
         ChangeState(BattleState.PlayerTurn);
     }
 
