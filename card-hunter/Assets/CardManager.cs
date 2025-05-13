@@ -12,7 +12,6 @@ public class CardManager : MonoBehaviour
    // public float moveDuration = 0.3f; // 移动动画时间
     public GameObject card;
     //private List<Card> cards;
-    private List<Card> cardsInHand = new List<Card>();
     public Card CreateCard(int cardNum, Transform parent)
     {
         GameObject newCard = Instantiate(card, parent);
@@ -22,25 +21,25 @@ public class CardManager : MonoBehaviour
         return carddata;
         // Start is called before the first frame update
     }
-    public void AddCardToHand(Card card)
+    public void AddCardToHand(Card card,List<Card> cardsInHand)
     {
         if (!cardsInHand.Contains(card))
         {
             cardsInHand.Add(card);
             //card.transform.SetParent(transform);
-            UpdateCardPositions();
+            UpdateCardPositions(cardsInHand);
         }
     }
-    public void RemoveCardFromHand(Card card)
+    public void RemoveCardFromHand(Card card, List<Card> cardsInHand)
     {
         if (cardsInHand.Contains(card))
         {
             cardsInHand.Remove(card);
-            UpdateCardPositions();
+            UpdateCardPositions(cardsInHand);
         }
     }
 
-    private void UpdateCardPositions()
+    private void UpdateCardPositions(List<Card> cardsInHand)
     {
         float totalWidth = (cardsInHand.Count - 1) * cardSpacing;
         float startX = -totalWidth / 2f;

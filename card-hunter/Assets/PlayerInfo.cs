@@ -34,19 +34,19 @@ public class PlayerInfo : MonoBehaviour
     }
     public void ModifyHealth(int amount)
     {
-        Mathf.Clamp(amount, 0, MaxHealth);
+        curHealth = Mathf.Clamp(amount, 0, MaxHealth);
     }
     public void ModifyCost(int amount)
     {
-        Mathf.Clamp(amount, 0, MaxCost);
+        curCost = Mathf.Clamp(amount, 0, MaxCost);
     }
     public void ModifyBladeNum(int amount)
     {
-        Mathf.Clamp(amount, 0, GameConfig.MaxBladeNum);
+        curBladeNum = Mathf.Clamp(amount, 0, GameConfig.MaxBladeNum);
     }
     public void ModifyBladeLevel(int amount)
     {
-        Mathf.Clamp(amount, 0, GameConfig.MaxBladeLevel);
+        curBladeLevel = Mathf.Clamp(amount, 0, GameConfig.MaxBladeLevel);
     }
     public void ModifyPos(Vector2Int newPos)
     {

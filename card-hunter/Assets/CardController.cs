@@ -14,6 +14,9 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     private Vector2 originalPosition;
     private bool isDragging=false;
     public Card card;
+
+    public delegate void CardUsedHandler(Card card);
+    public event CardUsedHandler OnCardUsed; //卡牌被使用
     // Start is called before the first frame update
     void Awake()
     {
@@ -64,6 +67,7 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         }
         else
         {
+            OnCardUsed?.Invoke(card);
             Debug.Log("卡牌被使用了");
         }
         
