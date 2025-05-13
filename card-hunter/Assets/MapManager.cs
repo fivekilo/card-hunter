@@ -226,9 +226,25 @@ public class MapManager : MonoBehaviour
         }
         callback(ClickedPos);
     }
+
     public Vector3 GetVector3(Vector2Int pos)
     {
         return map.GetHex(pos).transform.position;
+    }
+
+    public bool IsPositionOccupied(Vector2Int pos)//检测地图某一格是否被占用
+    {
+        //检测玩家位置
+        PlayerInfo player = FindObjectOfType<PlayerInfo>();
+        if (player != null && player.PlayerGridPos == pos) return true;
+        //检测其他敌人
+        foreach(EnemyAIController enemy in FindObjectsOfType<EnemyAIController>())
+        {
+            if (enemy.GetCurrentGridPos() == pos) return true;
+        }
+        //检测墙体
+        if(map.GetHex(pos).tag == "Obstacle")return true;
+        return false;
     }
 
     // Start is called before the first frame update
