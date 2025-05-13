@@ -66,7 +66,6 @@ public class BattleManager : MonoBehaviour
 
         Player = GetComponentInChildren<PlayerInfo>();
         mapmanager = GetComponentInChildren<MapManager>();
-
         OnBladeGasChange += Player.ModifyBladeNum;
         OnBladeGasChange += BladeLevelSlot.ShowBladeGas;
 
@@ -145,7 +144,6 @@ public class BattleManager : MonoBehaviour
             cards[randomIndex] = temp;
         }
     }
-
     private void ChangeState(BattleState newState)
     {
         currentState = newState;
@@ -199,6 +197,7 @@ public class BattleManager : MonoBehaviour
     {
         if (!isWaitingForPlayerAction) return;
 
+        Debug.Log("玩家结束回合");
 
         isWaitingForPlayerAction = false;
 
@@ -209,7 +208,6 @@ public class BattleManager : MonoBehaviour
     public void EndPlayerTurn()
     {
         if (currentState != BattleState.PlayerTurn) return;
-
 
 
         ChangeState(BattleState.EnemyTurn);
