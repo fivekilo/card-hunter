@@ -87,7 +87,8 @@ public class GameConfig : ScriptableObject
         null,//4
         null,//5
         new List<int>{0,1,2,3,4,5},//6
-        null//7
+        new List<int>{2,3,4},//7
+        null//8
 
     }.AsReadOnly();
 
@@ -100,7 +101,8 @@ public class GameConfig : ScriptableObject
         new Vector2Int(0,0),//4
         new Vector2Int(0,0),//5
         new Vector2Int(1,1),//6
-        new Vector2Int(0,0)//7
+        new Vector2Int(1,1),//7
+        new Vector2Int(0,0)//8
 
     }.AsReadOnly();
 
@@ -110,10 +112,10 @@ public class GameConfig : ScriptableObject
         0,//2
         4,//3
         5,//4
-        6,//5
+        0,//5
         0,//6
-        0//7
-
+        5,//7
+        0
     }.AsReadOnly();
 
     public static IReadOnlyList<bool> Consumption = new List<bool>
@@ -124,8 +126,8 @@ public class GameConfig : ScriptableObject
         true,//4
         true,//5
         false,//6
-        false//7
-
+        false,//7
+        false//8
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DrawCard = new List<int>
@@ -136,8 +138,8 @@ public class GameConfig : ScriptableObject
         0,//4
         0,//5
         0,//6
-        0//7
-
+        0,//7
+        0//8
     }.AsReadOnly();
 
     public static IReadOnlyList<bool> Nothingness = new List<bool>
@@ -148,8 +150,8 @@ public class GameConfig : ScriptableObject
         true,//4
         true,//5
         false,//6
-        false//7
-
+        false,//7
+        false
     }.AsReadOnly();
 
     public static IReadOnlyList<int> OnlyLState = new List<int>
@@ -160,8 +162,8 @@ public class GameConfig : ScriptableObject
         0,//4
         0,//5
         0,//6
-        0//7
-
+        0,//7
+        0
     }.AsReadOnly();
 
     public static IReadOnlyList<int> EnterState = new List<int>
@@ -172,20 +174,20 @@ public class GameConfig : ScriptableObject
         2,//4
         2,//5
         1,//6
-        0//7
-
+        0,//7
+        0
     }.AsReadOnly();
 
     public static IReadOnlyList<List<int>> Buff = new List<List<int>>
-    {null,//Buff列表
+    {null,//Buff列表 1 见切
         null,//1
         null,//2
         null,//3
         null,//4
         null,//5
         null,//6
-        null//7
-
+        new List<int>{1 },//7
+        null//8
     }.AsReadOnly();
 
     public static IReadOnlyList<List<int>> DeBuff = new List<List<int>>
@@ -196,8 +198,8 @@ public class GameConfig : ScriptableObject
         null,//4
         null,//5
         null,//6
-        null//7
-
+        null,//7
+        null
     }.AsReadOnly();
 
     public static IReadOnlyList<List<int>> AttackDirection = new List<List<int>>
@@ -208,8 +210,8 @@ public class GameConfig : ScriptableObject
         new List<int>{0,1,5},//4
         new List<int>{0,1,5},//5
         null,//6
-        null//7
-
+        null,//7
+        null
     }.AsReadOnly();
 
     public static IReadOnlyList<int> AttackLength = new List<int>
@@ -220,8 +222,8 @@ public class GameConfig : ScriptableObject
         1,//4
         1,//5
         0,//6
-        0//7
-
+        0,//7
+        0
     }.AsReadOnly();
 
     public static IReadOnlyList<List<int>> Attack = new List<List<int>>
@@ -232,8 +234,8 @@ public class GameConfig : ScriptableObject
         new List<int>{4,4},//4
         new List<int>{10},//5
         null,//6
-        null//7
-
+        null,//7
+        null
     }.AsReadOnly();
 
     public static IReadOnlyList<int> Defence = new List<int>
@@ -244,8 +246,8 @@ public class GameConfig : ScriptableObject
         0,//4
         0,//5
         0,//6
-        3//7
-
+        3,//7
+        0
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DeltaCost = new List<int>
@@ -256,8 +258,8 @@ public class GameConfig : ScriptableObject
         0,//4
         0,//5
         0,//6
-        0//7
-
+        0,//7
+        0
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DeltaBladeNum = new List<int>
@@ -268,8 +270,8 @@ public class GameConfig : ScriptableObject
         -2,//4
         -2,//5
         0,//6
-        0//7
-
+        -1,//7
+        0
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DeltaBladeLevel = new List<int>
@@ -280,8 +282,8 @@ public class GameConfig : ScriptableObject
         0,//4
         1,//5
         0,//6
-        0//7
-
+        0,//7
+        0
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DeltaHealth = new List<int>
@@ -292,8 +294,8 @@ public class GameConfig : ScriptableObject
         0,//4
         0,//5
         0,//6
-        0//7
-
+        0,//7
+        0
     }.AsReadOnly();
     
 }

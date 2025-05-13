@@ -1208,6 +1208,8 @@ MonoBehaviour:
   mapmanager: {fileID: 1151624064}
   BladeLevelSlot: {fileID: 589125591}
   Endbutton: {fileID: 1255822434}
+  cardManager: {fileID: 2051032136}
+  i: 1
   EndTurnClicked:
     m_PersistentCalls:
       m_Calls: []

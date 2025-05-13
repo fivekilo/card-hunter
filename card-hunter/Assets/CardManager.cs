@@ -68,9 +68,9 @@ public class CardManager : MonoBehaviour
     }
     void Start()
     {
-        AddCardToHand(CreateCard(1, transform));
-        AddCardToHand(CreateCard(2, transform));
-        AddCardToHand(CreateCard(3, transform));
+       // AddCardToHand(CreateCard(1, transform));
+        //AddCardToHand(CreateCard(2, transform));
+       // AddCardToHand(CreateCard(3, transform));
         //AddCardToHand(CreateCard(4, transform));
         //AddCardToHand(CreateCard(5, transform));
     }

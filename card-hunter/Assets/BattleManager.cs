@@ -32,7 +32,8 @@ public class BattleManager : MonoBehaviour
     public MapManager mapmanager;
     public BladegasSlotController BladeLevelSlot;
     public Button Endbutton;
-
+    public CardManager cardManager;
+    public int i = 1;//测试用
     private List<Card> InitialDeck = new(); //初始卡组
     private List<Card> deck = new ();      // 牌库
     private List<Card> discardPile = new (); // 弃牌堆
@@ -78,7 +79,9 @@ public class BattleManager : MonoBehaviour
         InitializeBattle();
 
         Endbutton.onClick.AddListener(() => {
-            Debug.Log("按钮被点击了！");
+           Card newcard= cardManager.CreateCard(i, cardManager.transform);//测试用生成卡牌
+            cardManager.AddCardToHand(newcard);
+            i = i % 7 + 1;
         });
     }
 

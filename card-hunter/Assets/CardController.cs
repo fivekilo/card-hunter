@@ -19,7 +19,6 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
         canvasGroup = GetComponent<CanvasGroup>();
-
         if (canvasGroup == null)
         {
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
@@ -28,11 +27,10 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     public void OnBeginDrag(PointerEventData eventData)
     {
         originalPosition = rectTransform.anchoredPosition;
-        canvasGroup.alpha = 0.6f;
+        canvasGroup.alpha = 1.0f;//虚化程度
         canvasGroup.blocksRaycasts = false;
         isDragging = true;
-        // 置顶显示
-        transform.SetAsLastSibling();
+        //transform.SetAsLastSibling();
     }
     public void OnDrag(PointerEventData eventData)
     {
@@ -43,7 +41,6 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     {
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
-
         // 如果没有有效放置，返回原位
         if (!IsDroppedInValidZone(eventData))
         {
