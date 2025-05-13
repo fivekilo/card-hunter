@@ -37,6 +37,8 @@ public class BattleManager : MonoBehaviour
     private List<Card> deck = new ();      // 牌库
     private List<Card> discardPile = new (); // 弃牌堆
     private List<Card> hand = new ();      // 手牌
+    
+    private List<EnemyAIController> _enemies = new ();//怪物
 
     public delegate void BattleEvent(BattleState state);
     public event BattleEvent OnBattleStateChanged; //状态改变
@@ -87,6 +89,7 @@ public class BattleManager : MonoBehaviour
         OnBladeLevelChange?.Invoke(2);
         // 初始化玩家和敌人
         InitializeDeck();
+        FindAllEnemies();
         // 开始玩家回合
         ChangeState(BattleState.PlayerDraw);
     }
@@ -95,8 +98,14 @@ public class BattleManager : MonoBehaviour
     {
         //添加卡牌，再洗牌
         ShuffleDeck();
-
     }
+
+    public void FindAllEnemies()
+    {
+        //加载怪物
+        _enemies = new List<EnemyAIController>(FindObjectsOfType<EnemyAIController>());
+    }
+
     public void DrawCard(int num)
     {
         //抽牌动画处理 tbd
