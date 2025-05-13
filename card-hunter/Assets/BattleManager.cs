@@ -16,7 +16,7 @@ public enum BattleState
 }
 public class PlayerWantMoveEventArgs : EventArgs
 {
-    public int Length{ get; }  // λ�Ƴ���
+    public int Length{ get; }  
     public List<Vector2Int> Adjacent { get; } 
     public PlayerWantMoveEventArgs(List<Vector2Int> v, int _Length)
     {
@@ -217,8 +217,9 @@ public class BattleManager : MonoBehaviour
 
         if (currentState != BattleState.PlayerTurn || isWaitingForPlayerAction == false) return;
        // Debug.Log(card.Cost);
-        if (Player.curCost <= card.Cost)return;
+        if (Player.curCost < card.Cost)return;
         Player.ModifyCost(Player.curCost - card.Cost);
+        Debug.Log("还剩" + Player.curCost.ToString() + "费！");
         if(card.Move != null)
         {
             //  OnPositionChange?.Invoke(this, new PlayerWantMoveEventArgs(GetAdjacent(card.Move) , /*card.MoveDistance*/1));
@@ -232,6 +233,7 @@ public class BattleManager : MonoBehaviour
     {
         foreach(Card card in hand)
         {
+            Debug.Log("1");
             if(Player.curCost < card.Cost || Player.curBladeNum < -card.DeltaBladeNum || Player.curBladeLevel < -card.DeltaBladeLevel)
             {
                 card.CBuse = false;
