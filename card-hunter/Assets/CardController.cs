@@ -13,6 +13,7 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     private CanvasGroup canvasGroup;
     private Vector2 originalPosition;
     private bool isDragging=false;
+    public Card card;
     // Start is called before the first frame update
     void Awake()
     {
@@ -26,6 +27,12 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (!card.CBuse)
+        {
+            Debug.Log(card.CBuse);
+            eventData.pointerDrag = null;
+            return;
+        }
         originalPosition = rectTransform.anchoredPosition;
         canvasGroup.alpha = 1.0f;//虚化程度
         canvasGroup.blocksRaycasts = false;
@@ -35,10 +42,19 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     public void OnDrag(PointerEventData eventData)
     {
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+        if (rectTransform.anchoredPosition[1] > 100)
+        {
+            canvasGroup.alpha = 0.8f;
+        }
+        else
+        {
+            canvasGroup.alpha = 1f;
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        isDragging = false;
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
         // 如果没有有效放置，返回原位
@@ -46,12 +62,16 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         {
             ReturnToOriginalPosition();
         }
-        isDragging = false;
+        else
+        {
+            Debug.Log("卡牌被使用了");
+        }
+        
     }
     private bool IsDroppedInValidZone(PointerEventData eventData)
     {
         return eventData.pointerEnter != null &&
-               eventData.pointerEnter.CompareTag("DropZone");
+               rectTransform.anchoredPosition[1] > 100;
     }
 
     private void ReturnToOriginalPosition()

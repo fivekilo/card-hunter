@@ -81,7 +81,7 @@ public class BattleManager : MonoBehaviour
         Endbutton.onClick.AddListener(() => {
            Card newcard= cardManager.CreateCard(i, cardManager.transform);//²âÊÔÓÃÉú³É¿¨ÅÆ
             cardManager.AddCardToHand(newcard);
-            i = i % 7 + 1;
+            i = i % 8 + 1;
         });
     }
 

@@ -33,7 +33,7 @@ public class GameConfig : ScriptableObject
         "气刃大回旋" ,
         "翻滚",
         "见切",
-        "格挡"
+        "格当"
     }.AsReadOnly();
     public static IReadOnlyList<string> CardImageName=new List<string> 
     {"",//卡图名称
@@ -55,7 +55,7 @@ public class GameConfig : ScriptableObject
         "消耗2格气刃槽,对前方三格范围内的敌人造成10点伤害，提升气刃等级，转向，消耗，虚无",
         "向任意方向移动一格,进入自由态",
         "从后方三格中选择移动一格，获得一层免伤buff，若下回合开始时角色所处地块或发动见切前角色所处地块被攻击，则获得【气刃大回旋】，回满气刃槽。",
-        "获得3点格挡"
+        "获得3点格当"
     }.AsReadOnly();
     public static IReadOnlyList<int> CardType = new List<int> 
     { 3,//卡牌类型

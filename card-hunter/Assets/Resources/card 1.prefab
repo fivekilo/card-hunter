@@ -241,6 +241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas2: {fileID: 1364704252028906692}
+  card: {fileID: 865655554541102355}
 --- !u!1 &3113918849913551848
 GameObject:
   m_ObjectHideFlags: 0
