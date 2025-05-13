@@ -9,17 +9,17 @@ using UnityEngine.UI;
 
 public enum BattleState
 {
-    NotBegin,        //ս��δ��ʼʱ
-    PlayerTurn,     // ��ҳ��ƽ׶�
-    PlayerDraw,      // ��ҳ��ƽ׶�
-    EnemyTurn        // �����ж��׶�
+    NotBegin,        //战斗未开始时
+    PlayerTurn,     // 玩家出牌阶段
+    PlayerDraw,      // 玩家抽牌阶段
+    EnemyTurn        // 敌人行动阶段
 }
 public class PlayerWantMoveEventArgs : EventArgs
 {
-    public int Length{ get; }  // λ�Ƴ���
-    public List<Vector2Int> Adjacent { get; }  // ����λ��
+    public int Length { get; }  // 位移长度
+    public List<Vector2Int> Adjacent { get; }  // 相邻位置
 
-    public PlayerWantMoveEventArgs(List<Vector2Int>v , int _Length)
+    public PlayerWantMoveEventArgs(List<Vector2Int> v, int _Length)
     {
         Adjacent = v;
         Length = _Length;
@@ -33,40 +33,40 @@ public class BattleManager : MonoBehaviour
     public BladegasSlotController BladeLevelSlot;
     public Button Endbutton;
     public CardManager cardManager;
-    public int i = 1;//������
-    private List<Card> InitialDeck = new(); //��ʼ����
-    private List<Card> deck = new ();      // �ƿ�
-    private List<Card> discardPile = new (); // ���ƶ�
-    private List<Card> hand = new ();      // ����
-    
-    private List<EnemyAIController> _enemies = new ();//����
+    public int i = 1;//测试用
+    private List<Card> InitialDeck = new(); //初始卡组
+    private List<Card> deck = new();      // 牌库
+    private List<Card> discardPile = new(); // 弃牌堆
+    private List<Card> hand = new();      // 手牌
+
+    private List<EnemyAIController> _enemies = new();//怪物
 
     public delegate void BattleEvent(BattleState state);
-    public event BattleEvent OnBattleStateChanged; //״̬�ı�
+    public event BattleEvent OnBattleStateChanged; //状态改变
 
-    //public delegate void PositionChangeHandler(object sender, PlayerWantMoveEventArgs e); //��Ҫ�ı�λ��
-    //public event PositionChangeHandler OnPositionChange;  //����ƶ�ʱ�õ�ͼ��ʾ���ƶ�������
+    //public delegate void PositionChangeHandler(object sender, PlayerWantMoveEventArgs e); //将要改变位置
+    //public event PositionChangeHandler OnPositionChange;  //玩家移动时让地图显示可移动的区域
 
-    public delegate void PositionChangedHandler(Vector2Int newPos); //λ���Ѿ������ı�
+    public delegate void PositionChangedHandler(Vector2Int newPos); //位置已经发生改变
     public event PositionChangedHandler OnPositionChanged;
 
     public delegate void BladeLevelChangeHandler(int NewBladeLevel);
-    public event BladeLevelChangeHandler OnBladeLevelChange; //���еȼ��ı�
+    public event BladeLevelChangeHandler OnBladeLevelChange; //气刃等级改变
 
     public delegate void BladeGasChangeHandler(int NewBladeNum);
-    public event BladeGasChangeHandler OnBladeGasChange; //���ı�
+    public event BladeGasChangeHandler OnBladeGasChange; //气改变
 
     public delegate void DirectionChangedHandler(Vector2Int newDir);
-    public event DirectionChangedHandler OnDirectionChanged; //����ı�
+    public event DirectionChangedHandler OnDirectionChanged; //气改变
 
-    private bool isWaitingForPlayerAction = false; //�ȴ����ѡ��λ��
-    public UnityEvent EndTurnClicked; //�غϽ�����ť����
+    private bool isWaitingForPlayerAction = false; //等待玩家操作
+    public UnityEvent EndTurnClicked; //回合结束按钮按下
     private void Start()
     {
 
         Player = GetComponentInChildren<PlayerInfo>();
         mapmanager = GetComponentInChildren<MapManager>();
-        //��ʼ�¼�����:
+        //初始事件订阅:
         OnBladeGasChange += Player.ModifyBladeNum;
         OnBladeGasChange += BladeLevelSlot.ShowBladeGas;
 
@@ -76,47 +76,45 @@ public class BattleManager : MonoBehaviour
         OnPositionChanged += Player.ModifyPos;
         OnPositionChanged += Player.GetComponent<PlayerShow>().ModifyPos;
         OnDirectionChanged += Player.GetComponent<PlayerShow>().ModifyDirection;
+        InitializeBattle();
+
         Endbutton.onClick.AddListener(() => {
-           Card newcard= cardManager.CreateCard(i, cardManager.transform);//���������ɿ���
+            Card newcard = cardManager.CreateCard(i, cardManager.transform);//测试用生成卡牌
             cardManager.AddCardToHand(newcard);
             i = i % 8 + 1;
         });
-        InitializeBattle();
-
-
     }
 
-    // ��ʼ��ս��
+    // 初始化战斗
     private void InitializeBattle()
     {
         OnBladeGasChange?.Invoke(5);
         OnBladeLevelChange?.Invoke(2);
-        // ��ʼ����Һ͵���
+        // 初始化玩家和敌人
         InitializeDeck();
         FindAllEnemies();
-        // ��ʼ��һغ�
+        // 开始玩家回合
         ChangeState(BattleState.PlayerDraw);
     }
 
     public void InitializeDeck()
     {
-        //���ӿ��ƣ���ϴ��
+        //添加卡牌，再洗牌
         ShuffleDeck();
     }
 
     public void FindAllEnemies()
     {
-        //���ع���
+        //加载怪物
         _enemies = new List<EnemyAIController>(FindObjectsOfType<EnemyAIController>());
     }
 
     public void DrawCard(int num)
     {
-        //���ƶ������� tbd
-        for(int i = 0;i < num;i ++)
+        //抽牌动画处理 tbd
+        for (int i = 0; i < num; i++)
         {
-
-            if(deck.Count == 0)
+            if (deck.Count == 0)
             {
                 if (discardPile.Count == 0) break;
                 deck.AddRange(discardPile);
@@ -131,7 +129,7 @@ public class BattleManager : MonoBehaviour
     }
     public void ShuffleDeck()
     {
-        for(int i = 0;i < deck.Count;i ++)
+        for (int i = 0; i < deck.Count; i++)
         {
             int randomIndex = UnityEngine.Random.Range(i, deck.Count);
             Card temp = deck[i];
@@ -139,7 +137,7 @@ public class BattleManager : MonoBehaviour
             deck[randomIndex] = temp;
         }
     }
-    // �ı�ս��״̬
+    // 改变战斗状态
     private void ChangeState(BattleState newState)
     {
         currentState = newState;
@@ -156,7 +154,7 @@ public class BattleManager : MonoBehaviour
                 break;
 
             case BattleState.EnemyTurn:
-                //�����ж�
+                //怪物行动
                 break;
 
             case BattleState.NotBegin:
@@ -165,64 +163,77 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    // ��ҳ��ƽ׶�
+    // 玩家抽牌阶段
     private IEnumerator PlayerDrawPhase()
     {
-        // ���ƶ������ӳ�
-        Debug.Log("������ƽ׶�");
+        // 抽牌动画或延迟
+        Debug.Log("进入抽牌阶段");
         yield return new WaitForSeconds(5f);
-     //   OnPositionChanged?.Invoke(new(3, 4));
-        Debug.Log("����ǰ�ȴ����");
+        //   OnPositionChanged?.Invoke(new(3, 4));
+        Debug.Log("抽牌前等待完毕");
         Action<Vector2Int> callback = OnPositionChanged.Invoke;
-        StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1, 1) , callback));
+        StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1, 1), callback));
+        // Vector2Int newPos = mapmanager.MoveCommand(GetAdjacent(new List<int> {0 , 1 , 2 , 3 , 4 , 5 }) , Player.PlayerGridPos , new Vector2Int(1 , 1));
+        // OnPositionChanged?.Invoke(newPos);
+        DrawCard(GameConfig.InitialHandCardNum);
         ChangeState(BattleState.PlayerTurn);
     }
 
-    // ��һغϿ�ʼ
+    // 玩家回合开始
     private void StartPlayerTurn()
     {
-        // �����������
+        // 重置玩家能量
         Player.ModifyCost(Player.GetComponent<PlayerInfo>().MaxCost - Player.GetComponent<PlayerInfo>().curCost);
 
-        Debug.Log("��һغϿ�ʼ - �ȴ�����");
-       
-        ChangeState(BattleState.EnemyTurn);
+        Debug.Log("玩家回合开始 - 等待操作");
+
+        // 设置等待标志
+        isWaitingForPlayerAction = true;
+
+        // 这里可以启用玩家交互UI
+        // UIManager.Instance.SetEndTurnButtonActive(true);
     }
     public void OnEndTurnButtonClicked()
     {
-        //������Ƿ�Ϸ�
-        Debug.Log("��ҽ����غ�");
+        if (!isWaitingForPlayerAction) return;
 
+        Debug.Log("玩家结束回合");
 
+        // 清除等待标志
+        isWaitingForPlayerAction = false;
 
+        // 切换到敌人回合
+        ChangeState(BattleState.EnemyTurn);
     }
 
-    // ��ҽ����غ�
+    // 玩家结束回合
     public void EndPlayerTurn()
     {
         if (currentState != BattleState.PlayerTurn) return;
 
-        //���������غ�
+        //在这里结算回合
 
         ChangeState(BattleState.EnemyTurn);
     }
     public bool PlayCard(Card card)
     {
-        if (currentState != BattleState.PlayerTurn) return false;
-        if(Player.curCost <= card.Cost)return false; 
+        if (currentState != BattleState.PlayerTurn || isWaitingForPlayerAction == false) return false;
+        if (Player.curCost <= card.Cost) return false;
 
-        if(card.Move.Count != 0)
+        if (card.Move.Count != 0)
         {
-            Action<Vector2Int> callback = OnPositionChanged.Invoke;
-            isWaitingForPlayerAction = true; //��ʼ�ȴ����ѡ��λ��
-            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback));
-            isWaitingForPlayerAction = false; //���ѡ��λ�ý���
+            //  OnPositionChange?.Invoke(this, new PlayerWantMoveEventArgs(GetAdjacent(card.Move) , /*card.MoveDistance*/1));
+            //传入getadj，调用mapmanager的显示函数
+            Vector2Int v = new(0, 0);
+            OnPositionChanged?.Invoke(v);
         }
+
+
         return true;
-    } 
+    }
     public void EndBattle()
     {
-        //������������ս������
+        //怪物死亡进入战斗结算
     }
     public bool CheckPosIsValid(Vector2Int v)
     {
@@ -237,23 +248,23 @@ public class BattleManager : MonoBehaviour
         int x = Player.PlayerGridPos.x;
         int y = Player.PlayerGridPos.y;
         int dir_id = 0;
-        for(int i = 0;i < 6;i ++)
+        for (int i = 0; i < 6; i++)
         {
             if (Player.Direction == new Vector2Int(dx[i], dy[i])) dir_id = i;
         }
-        
+
         for (int i = 0; i < Dir.Count; i++)
         {
             int newDir = (dir_id + Dir[i]) % 6;
-            if (CheckPosIsValid(new Vector2Int(x +  dx[newDir], y +  dy[newDir]))) res.Add(new Vector2Int(x +  dx[newDir], y + dy[newDir]));
+            if (CheckPosIsValid(new Vector2Int(x + dx[newDir], y + dy[newDir]))) res.Add(new Vector2Int(x + dx[newDir], y + dy[newDir]));
         }
         return res;
     }
 
-    public 
+    public
     // Update is called once per frame
     void Update()
     {
-       
+
     }
 }
