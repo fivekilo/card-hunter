@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
 
 public class EnemyAIController : MonoBehaviour
 {
@@ -26,7 +24,7 @@ public class EnemyAIController : MonoBehaviour
         _mapManager = FindObjectOfType<MapManager>();
         _player= FindObjectOfType<PlayerInfo>();
     }
-
+   
     public IEnumerator TakeTurn()//执行回合
     {
         //先出上一回合结束的招式(待编写)
