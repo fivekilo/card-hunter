@@ -15,6 +15,7 @@ public class CardManager : MonoBehaviour
     public Card CreateCard(int cardNum, Transform parent)
     {
         GameObject newCard = Instantiate(card, parent);
+        newCard.transform.position = new Vector3(0, -300, 0) + transform.position;
         Card carddata = newCard.GetComponent<Card>();
         carddata.cardNum = cardNum;
         carddata.cardInit();
@@ -67,11 +68,7 @@ public class CardManager : MonoBehaviour
     }
     void Start()
     {
-       // AddCardToHand(CreateCard(1, transform));
-        //AddCardToHand(CreateCard(2, transform));
-       // AddCardToHand(CreateCard(3, transform));
-        //AddCardToHand(CreateCard(4, transform));
-        //AddCardToHand(CreateCard(5, transform));
+
     }
 
     // Update is called once per frame

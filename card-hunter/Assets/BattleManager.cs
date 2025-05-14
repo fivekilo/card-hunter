@@ -106,7 +106,7 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 1; i <= 8; i++)
         {
-            Card newcard = cardManager.CreateCard(i, cardManager.transform);
+            Card newcard = cardManager.CreateCard(i,cardManager.transform );
             discardPile.Add(newcard); 
         }
         ShuffleDeck(discardPile);
@@ -218,6 +218,7 @@ public class BattleManager : MonoBehaviour
         if (currentState != BattleState.PlayerTurn || isWaitingForPlayerAction == false) return;
        // Debug.Log(card.Cost);
         if (Player.curCost < card.Cost)return;
+        //LockCards();
         Player.ModifyCost(Player.curCost - card.Cost);
         Debug.Log("还剩" + Player.curCost.ToString() + "费！");
         if(card.Move != null)
@@ -226,20 +227,28 @@ public class BattleManager : MonoBehaviour
             Action<Vector2Int> callback = OnPositionChanged.Invoke;
             StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback));
         }
-
+        cardManager.RemoveCardFromHand(card, hand);
         UpdateCards();
     } 
     public void UpdateCards()
     {
         foreach(Card card in hand)
         {
-            Debug.Log("1");
+            
             if(Player.curCost < card.Cost || Player.curBladeNum < -card.DeltaBladeNum || Player.curBladeLevel < -card.DeltaBladeLevel)
             {
                 card.CBuse = false;
             }
         }
     }
+    //public void LockCards()
+    //{
+    //    foreach (Card card in hand)
+    //    {
+    //            card.CBuse = false;
+    //    }
+    //}
+
     public void EndBattle()
     {
         
