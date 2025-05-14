@@ -168,6 +168,17 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    private IEnumerator HandEnemyTurn()
+    {
+        foreach(var enemy in _enemies)
+        {
+            if (enemy != null)
+            {
+                yield return enemy.TakeTurn();
+            }
+        }
+        ChangeState(BattleState.PlayerDraw);
+    }
 
     private IEnumerator PlayerDrawPhase()
     {
