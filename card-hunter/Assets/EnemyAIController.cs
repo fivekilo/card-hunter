@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class EnemyAIController : MonoBehaviour
 {
@@ -14,26 +16,39 @@ public class EnemyAIController : MonoBehaviour
     [SerializeField] protected int _currentHealth;
     [SerializeField] protected int moveRange=3;//每回合最大移动距离
     [SerializeField] protected int detectionRange=6;//检测玩家的最大范围
-
+    [SerializeField] private float moveInterval = 0.3f; // 移动动画间隔
+    
     void Start()
     {
         _battleManager = FindObjectOfType<BattleManager>();
         _currentGridPos= Vector2Int.FloorToInt(transform.position); // 初始位置需对齐网格
+        SnapToGrid();
         _mapManager = FindObjectOfType<MapManager>();
         _player= FindObjectOfType<PlayerInfo>();
     }
 
-    public virtual void TakeTurn()//执行回合
+    public IEnumerator TakeTurn()//执行回合
     {
         //先出上一回合结束的招式(待编写)
         //再判断移动
-        //if(ShouldMoveToPlayer())
-        //{
-        //    List<Vector2Int> path = CalculatePath();
-        //}
+        if (ShouldMoveToPlayer())
+        {
+            List<Vector2Int> path = CalculatePath();
+            yield return MoveAlongPath(path);
+        }
+        else
+        {
+            yield return WanderRandomly();
+        }
         //出下一招（待编写）
     }
 
+    bool ShouldMoveToPlayer()
+    {
+        if (_player == null) return false;
+        int distance = (int)Vector2Int.Distance(_currentGridPos, _player.PlayerGridPos);
+        return distance <= detectionRange;
+    }
     //寻路算法（待编写）
     private List<Vector2Int> CalculatePath()
     {
@@ -74,9 +89,59 @@ public class EnemyAIController : MonoBehaviour
         {
             path.Add(current);
             current = cameFrom[current];
+            // 防止无限循环
+            if (path.Count > 100) break;
         }
         path.Reverse();
-        return path;
+        return TrimPathToMoveRange(path);
+    }
+    //行走范围不能超过最大移动距离
+    List<Vector2Int> TrimPathToMoveRange(List<Vector2Int> path)
+    {
+        List<Vector2Int> trimmedPath = new List<Vector2Int>();
+        int stepsTaken = 0;
+
+        foreach (var pos in path)
+        {
+            if (stepsTaken >= moveRange) break;
+            trimmedPath.Add(pos);
+            stepsTaken++; 
+        }
+        return trimmedPath;
+    }
+
+    //沿着路径走或随机游荡
+    IEnumerator MoveAlongPath(List<Vector2Int> path)
+    {
+        foreach (var pos in path)
+        {
+            if (!_battleManager.CheckPosIsValid(pos)) break;
+            UpdatePosition(pos);
+            yield return new WaitForSeconds(moveInterval);//等待一定时长
+        }
+    }
+    IEnumerator WanderRandomly()
+    {
+        //先找出周围可以移动的点
+        List<Vector2Int> possibleMoves = _mapManager.GetNearby(_currentGridPos)
+            .FindAll(pos => !_mapManager.IsPositionOccupied(pos));
+        if (possibleMoves.Count > 0)
+        {
+            Vector2Int target = possibleMoves[Random.Range(0, possibleMoves.Count)];
+            UpdatePosition(target);
+            yield return new WaitForSeconds(moveInterval);
+        }
+    }
+
+    //更新坐标位置
+    void UpdatePosition(Vector2Int newPos)
+    {
+        _currentGridPos = newPos;
+        SnapToGrid();
+    }
+    public void SnapToGrid()
+    {
+        transform.position = _mapManager.GetVector3(_currentGridPos);
     }
 
     public Vector2Int GetCurrentGridPos() // 公共方法供MapManager调用
