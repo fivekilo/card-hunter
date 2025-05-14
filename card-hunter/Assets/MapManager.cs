@@ -24,6 +24,7 @@ public class MapManager : MonoBehaviour
                 Vector3 pos=new Vector3(3*(x+y)/2.0f,math.sqrt(3)*(y-x)/2,0);
                 GameObject GO=Instantiate(Hex,pos,Quaternion.identity);
                 GO.transform.SetParent(transform);
+                GO.GetComponent<Hexagon>().AddImage("background");
                 Hexs[x,y]=GO;
             }
         }
