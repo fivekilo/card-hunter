@@ -72,7 +72,7 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
             card.transform.position += new Vector3(10000, 0, 0);//后用对象池实现卡牌消失
         }
         
-    }
+    }                                     
     private bool IsDroppedInValidZone(PointerEventData eventData)
     {
         return eventData.pointerEnter != null &&

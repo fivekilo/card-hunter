@@ -224,7 +224,11 @@ public class MapManager : MonoBehaviour
             ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
             map.ChangeColor(pos, color);
         }
+        BattleManager battleManager = GetComponentInParent<BattleManager>();
+        battleManager.isWaitingForPlayerChoose = false;
         callback(ClickedPos);
+       
+
     }
 
     public Vector3 GetVector3(Vector2Int pos)
