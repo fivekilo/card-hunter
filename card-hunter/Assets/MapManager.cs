@@ -87,6 +87,10 @@ public class MapManager : MonoBehaviour
         {
             goto restart;
         }
+        if (!CheckConnectivity())//不连通重新生成
+        {
+            goto restart;
+        }
     }
     private void ContentGenerate()//要素生成
     {
@@ -212,6 +216,10 @@ public class MapManager : MonoBehaviour
                     accessible.Add(player + D * i);
                 }
             }
+        }
+        if (accessible.Count == 0)
+        {
+            yield break;
         }
 
         foreach(Vector2Int pos in accessible)
