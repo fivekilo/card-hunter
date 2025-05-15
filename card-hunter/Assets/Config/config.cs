@@ -227,16 +227,16 @@ public class GameConfig : ScriptableObject
         0
     }.AsReadOnly();
 
-    public static IReadOnlyList<List<int>> Attack = new List<List<int>>
-    {null,//造成伤害
-        new List<int>{6},//1
-        new List<int>{4},//2
-        new List<int>{7},//3
-        new List<int>{4,4},//4
-        new List<int>{10},//5
-        null,//6
-        null,//7
-        null
+    public static IReadOnlyList<Vector2Int> Attack = new List<Vector2Int>
+    {new Vector2Int(0, 0),//造成伤害
+        new Vector2Int(6 , 1),//1
+        new Vector2Int (4, 1),//2
+        new Vector2Int (7, 1),//3
+        new Vector2Int (4, 2),//4
+        new Vector2Int (10, 1),//5
+        new Vector2Int(0 , 0),//6
+        new Vector2Int(0 , 0),//7
+        new Vector2Int(0 , 0)
     }.AsReadOnly();
 
     public static IReadOnlyList<int> Defence = new List<int>

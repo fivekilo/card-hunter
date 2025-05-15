@@ -30,7 +30,7 @@ public class Card : MonoBehaviour
     public List<int> AttackDirection; //攻击方向
     public int AttackLength;//攻击长度
     public int Cost;//费用
-    public List<int> Attack;//攻击
+    public Vector2Int Attack;//攻击
     public int Defence;//格挡
     public int DeltaCost;//回费
     public int DeltaBladeNum;//回气刃槽

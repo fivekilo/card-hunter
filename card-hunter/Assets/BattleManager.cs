@@ -136,6 +136,7 @@ public class BattleManager : MonoBehaviour
             deck.RemoveAt(0);
             cardManager.AddCardToHand(drawnCard, hand);
         }
+      //  Debug.Log(hand.Count);
     }
     public void ShuffleDeck(List<Card> cards)
     {
@@ -196,7 +197,7 @@ public class BattleManager : MonoBehaviour
         Debug.Log("waiting complete");
         //  Action<Vector2Int> callback = OnPositionChanged.Invoke;
         //  StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1, 1) , callback));
-
+        Debug.Log(hand.Count);
         DrawCard(GameConfig.InitialHandCardNum);
         ChangeState(BattleState.PlayerTurn);
     }
@@ -217,8 +218,8 @@ public class BattleManager : MonoBehaviour
 
         Debug.Log("玩家结束回合了");
 
-        
 
+        EndPlayerTurn();
         ChangeState(BattleState.EnemyTurn);
     }
     public void OnMoveButtonClicked()
@@ -241,8 +242,14 @@ public class BattleManager : MonoBehaviour
     {
         if (currentState != BattleState.PlayerTurn) return;
 
-
-        ChangeState(BattleState.EnemyTurn);
+        discardPile.AddRange(hand);
+        foreach(Card card in hand)
+        {
+            card.transform.position += new Vector3(10000, 0, 0);
+        }
+        hand.Clear();
+        Debug.Log("回合结束时手牌数为:" + hand.Count);
+        cardManager.UpdateCardPositions(hand);
     }
     public IEnumerator MoveAndAttackCoRoutine(Card card)
     {
@@ -252,6 +259,7 @@ public class BattleManager : MonoBehaviour
             isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
             Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
+            Player.ModifySituation(0);
             yield return StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback1, callback2));
         }
 
@@ -259,6 +267,7 @@ public class BattleManager : MonoBehaviour
         {
             isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback = OnDirectionChanged.Invoke;
+            Player.ModifySituation(1);
             yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(card.AttackDirection), Player.PlayerGridPos, new(0, card.AttackLength), callback));
         }
     }
@@ -297,8 +306,31 @@ public class BattleManager : MonoBehaviour
             Player.ModifyBladeLevel(Player.curBladeLevel + card.DeltaBladeLevel);
             OnBladeLevelChange?.Invoke(Player.curBladeLevel);
         }
-        
+
+        if (card.AttackDirection != null)
+        {
+            int[] dx = { 1, 0, -1, -1, 0, 1 };
+            int[] dy = { 0, 1, 1, 0, -1, -1 };
+            FindAllEnemies();
+            foreach (int Dir_id in card.AttackDirection)
+            {
+                for(int i = 0;i <= card.AttackLength;i ++)
+                {
+                    Vector2Int nowPos = Player.PlayerGridPos + new Vector2Int(dx[Dir_id] * i, dy[Dir_id] * i);
+                    foreach (EnemyAIController enemyAI in _enemies)
+                    {
+                        if(enemyAI.GetCurrentGridPos() == nowPos)
+                        {
+                            enemyAI.ReduceHealth(card.Attack.x * card.Attack.y);
+                        }
+                    }
+                }
+            }
+        }
+
         cardManager.RemoveCardFromHand(card, hand);
+        card.transform.position += new Vector3(10000, 0, 0);
+        discardPile.Add(card);
     } 
     public void UpdateCards()
     {

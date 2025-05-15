@@ -70,7 +70,7 @@ public class CardManager : MonoBehaviour
         }
     }
 
-    private void UpdateCardPositions(List<Card> cardsInHand)
+    public void UpdateCardPositions(List<Card> cardsInHand)
     {
         float totalWidth = (cardsInHand.Count - 1) * cardSpacing;
         float startX = -totalWidth / 2f;
