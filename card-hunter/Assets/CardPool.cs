@@ -7,7 +7,6 @@ public class CardPool : MonoBehaviour
     public GameObject cardPrefab;
     public int copiesPerCard = 1; // 每种卡牌保留的副本数
     public int initialCardTypes = 8; // 初始卡牌种类数量
-
     private Dictionary<int, Queue<GameObject>> cardPools;
     //private Dictionary<string, Card> cardDataMap;
 
@@ -36,8 +35,8 @@ public class CardPool : MonoBehaviour
 
         for (int i = 0; i < copiesPerCard; i++)
         {
-            GameObject card = Instantiate(cardPrefab);
-            card.transform.SetParent(transform);
+            GameObject card = Instantiate(cardPrefab,transform);
+            //card.transform.SetParent(transform);
             card.SetActive(false);
 
             // 设置卡牌数据

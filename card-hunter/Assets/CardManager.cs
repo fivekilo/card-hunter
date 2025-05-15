@@ -9,16 +9,17 @@ public class CardManager : MonoBehaviour
     public float cardSpacing = 100f; // 卡牌间距
    // public float moveDuration = 0.3f; // 移动动画时间
     public GameObject card;
-    public CardPool cardpool;
+   // public CardPool cardpool;
     public int originalsortingOrder;
     //private List<Card> cards;
     public Card CreateCard(int cardNum, Transform parent)
     {
-        GameObject newCard = cardpool.GetCard(cardNum);
+        GameObject newCard = Instantiate(card,parent);
+        //GameObject newCard = cardpool.GetCard(cardNum);
         newCard.transform.position = new Vector3(0, -300, 0) + transform.position;
         Card carddata = newCard.GetComponent<Card>();
-        //carddata.cardNum = cardNum;
-        //carddata.cardInit();
+        carddata.cardNum = cardNum;
+        carddata.cardInit();
         return carddata;
         // Start is called before the first frame update
     }
@@ -59,7 +60,7 @@ public class CardManager : MonoBehaviour
     void Start()
     {
         originalsortingOrder = 0;
-        cardpool = GetComponent<CardPool>();
+     //   cardpool = GetComponent<CardPool>();
     }
 
     // Update is called once per frame
