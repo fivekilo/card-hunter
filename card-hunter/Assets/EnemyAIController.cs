@@ -139,7 +139,7 @@ public class EnemyAIController : MonoBehaviour
     }
     public void SnapToGrid()
     {
-        transform.position = _mapManager.GetVector3(_currentGridPos);
+    //    transform.position = _mapManager.GetVector3(_currentGridPos);
     }
 
     public Vector2Int GetCurrentGridPos() // 公共方法供MapManager调用
