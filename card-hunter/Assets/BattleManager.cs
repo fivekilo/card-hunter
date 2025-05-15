@@ -79,6 +79,7 @@ public class BattleManager : MonoBehaviour
         OnDirectionChanged += Player.GetComponent<PlayerShow>().ModifyDirection;
         OnDirectionChanged += Player.ModifyDirection;
 
+        Endbutton.onClick.AddListener(OnEndTurnButtonClicked);
       /*  Endbutton.onClick.AddListener(() => {
            Card newcard= cardManager.CreateCard(i, cardManager.transform);
             cardManager.AddCardToHand(newcard , hand);
@@ -162,6 +163,7 @@ public class BattleManager : MonoBehaviour
                 break;
 
             case BattleState.EnemyTurn:
+          //      HandEnemyTurn();
                 break;
 
             case BattleState.NotBegin:
@@ -208,11 +210,11 @@ public class BattleManager : MonoBehaviour
     }
     public void OnEndTurnButtonClicked()
     {
-        if (!isWaitingForPlayerAction) return;
+        if (isWaitingForPlayerAction == true) return;
 
-        Debug.Log("玩家结束回合");
+        Debug.Log("玩家结束回合了");
 
-        isWaitingForPlayerAction = false;
+        
 
         ChangeState(BattleState.EnemyTurn);
     }
