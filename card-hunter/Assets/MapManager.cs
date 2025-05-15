@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 
 public class MapManager : MonoBehaviour
@@ -183,7 +184,7 @@ public class MapManager : MonoBehaviour
         }
         return true;
     }
-    public IEnumerator MoveCommand(List<Vector2Int> directions, Vector2Int player,Vector2Int length,Action<Vector2Int>callback)//移动指令
+    public IEnumerator MoveCommand(List<Vector2Int> directions, Vector2Int player,Vector2Int length,Action<Vector2Int>callback1 , Action<Vector2Int> callback2)//移动指令
     {
         //还没添加越过障碍物功能
         List<Vector2Int> ObPosition = map.GetObstacles();
@@ -227,11 +228,84 @@ public class MapManager : MonoBehaviour
         }
         BattleManager battleManager = GetComponentInParent<BattleManager>();
         battleManager.isWaitingForPlayerChoose = false;
-        callback(ClickedPos);
-       
+        callback2(GetNewDir(ClickedPos, player));
+        callback1(ClickedPos);
+        
 
     }
 
+    public IEnumerator AttackCommand(List<Vector2Int> directions, Vector2Int player, Vector2Int length, Action<Vector2Int> callback)//移动指令
+    {
+        //还没添加越过障碍物功能
+        List<Vector2Int> ObPosition = map.GetObstacles();
+        Vector2Int D = new Vector2Int();
+        List<Vector2Int> accessible = new List<Vector2Int>();
+        foreach (Vector2Int pos in ObPosition)
+        {
+            if (directions.Contains(pos))
+            {
+                directions.Remove(pos);
+            }
+        }
+        //计算可达的格子
+        foreach (Vector2Int direction in directions)
+        {
+            D = direction - player;
+            for (int i = length[0]; i <= length[1]; i++)
+            {
+                if (ObPosition.Contains(player + D * i))
+                {
+                    break;
+                }
+                else
+                {
+                    accessible.Add(player + D * i);
+                }
+            }
+        }
+
+        foreach (Vector2Int pos in accessible)
+        {
+            map.ChangeColor(pos, Color.red);
+        }
+
+        ClickedPos = new Vector2Int(-1, -1);
+        yield return new WaitUntil(() => accessible.Contains(ClickedPos));
+        foreach (Vector2Int pos in accessible)
+        {
+            ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
+            map.ChangeColor(pos, color);
+        }
+        BattleManager battleManager = GetComponentInParent<BattleManager>();
+        battleManager.isWaitingForPlayerChoose = false;
+        Vector2Int Direction = GetNewDir(ClickedPos , player);
+        callback(Direction);
+    }
+    public Vector2Int GetNewDir(Vector2Int ClickedPos , Vector2Int player)
+    {
+        Vector2Int Dir = ClickedPos - player;
+        int[] dx = { 1, 0, -1, -1, 0, 1 };
+        int[] dy = { 0, 1, 1, 0, -1, -1 };
+        int Dir_id = -1;
+        Vector2Int res = new(-1, -1);
+        for (int i = 0; i < 6; i++)
+        {
+            for (int j = 1; j <= GameConfig.size; j++)
+            {
+                if (j * dx[i] == Dir.x && j * dy[i] == Dir.y) { Dir_id = i; break; }
+            }
+        }
+        if (Dir_id == -1)
+        {
+            Debug.Log("AttackCommand：不存在新方向");
+        }
+        else
+        {
+            Vector2Int Direction = new Vector2Int(dx[Dir_id], dy[Dir_id]);
+            res = Direction;
+        }
+        return res;
+    }
     public Vector3 GetVector3(Vector2Int pos)
     {
         return map.GetHex(pos).transform.position;

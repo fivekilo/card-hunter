@@ -75,8 +75,9 @@ public class BattleManager : MonoBehaviour
 
         OnPositionChanged += Player.ModifyPos;
         OnPositionChanged += Player.GetComponent<PlayerShow>().ModifyPos;
+
         OnDirectionChanged += Player.GetComponent<PlayerShow>().ModifyDirection;
-        
+        OnDirectionChanged += Player.ModifyDirection;
 
       /*  Endbutton.onClick.AddListener(() => {
            Card newcard= cardManager.CreateCard(i, cardManager.transform);
@@ -237,15 +238,16 @@ public class BattleManager : MonoBehaviour
         {
             //  OnPositionChange?.Invoke(this, new PlayerWantMoveEventArgs(GetAdjacent(card.Move) , /*card.MoveDistance*/1));
             isWaitingForPlayerChoose = true;
-            Action<Vector2Int> callback = OnPositionChanged.Invoke;
-            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback));
+            Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
+            Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
+            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback1 , callback2));
         }
 
         if(card.AttackDirection != null)
         {
             isWaitingForPlayerChoose = true;
-            Action<Vector2Int> callback = OnPositionChanged.Invoke;
-            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.AttackDirection), Player.PlayerGridPos, new(card.AttackLength,card.AttackLength), callback));
+            Action<Vector2Int> callback = OnDirectionChanged.Invoke;
+            StartCoroutine(mapmanager.AttackCommand(GetAdjacent(card.AttackDirection), Player.PlayerGridPos, new(0 , card.AttackLength), callback));
         }
 
         if(card.DeltaBladeNum != 0)
