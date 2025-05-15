@@ -101,7 +101,6 @@ public class BattleManager : MonoBehaviour
         OnBladeLevelChange?.Invoke(2);
 
         InitializeDeck();
-        FindAllEnemies();
 
         ChangeState(BattleState.PlayerDraw);
     }
@@ -175,15 +174,16 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator HandEnemyTurn()
     {
-        /* foreach(var enemy in _enemies)
+        Debug.Log("怪物回合开始了!");
+        yield return new WaitForSeconds(5f);
+        FindAllEnemies();
+        foreach(var enemy in _enemies)
          {
              if (enemy != null)
              {
                  yield return enemy.TakeTurn();
              }
-         }*/
-        Debug.Log("怪物回合开始了!");
-        yield return new WaitForSeconds(5f);
+        }
         Debug.Log("怪物回合结束了!");
         ChangeState(BattleState.PlayerDraw);
     }
@@ -244,32 +244,47 @@ public class BattleManager : MonoBehaviour
 
         ChangeState(BattleState.EnemyTurn);
     }
+    public IEnumerator MoveAndAttackCoRoutine(Card card)
+    {
+        if (card.Move != null)
+        {
+            //  OnPositionChange?.Invoke(this, new PlayerWantMoveEventArgs(GetAdjacent(card.Move) , /*card.MoveDistance*/1));
+            isWaitingForPlayerChoose = true;
+            Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
+            Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
+            yield return StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback1, callback2));
+        }
+
+        if (card.AttackDirection != null)
+        {
+            isWaitingForPlayerChoose = true;
+            Action<Vector2Int> callback = OnDirectionChanged.Invoke;
+            yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(card.AttackDirection), Player.PlayerGridPos, new(0, card.AttackLength), callback));
+        }
+    }
     public void PlayCard(Card card)
     {
-
         if (currentState != BattleState.PlayerTurn ) return;
         if (Player.curCost < card.Cost)return;
 
         Player.ModifyCost(Player.curCost - card.Cost);
         Debug.Log("还剩" + Player.curCost.ToString() + "费！");
 
-        if(card.Move != null)
-        {
-            //  OnPositionChange?.Invoke(this, new PlayerWantMoveEventArgs(GetAdjacent(card.Move) , /*card.MoveDistance*/1));
-            isWaitingForPlayerChoose = true;
-            Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
-            Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
-            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback1 , callback2));
-            Player.ModifySituation(0);
-        }
+        /*   if(card.Move != null)
+           {
+               isWaitingForPlayerChoose = true;
+               Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
+               Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
+               StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback1 , callback2));
+           }
 
-        if(card.AttackDirection != null)
-        {
-            isWaitingForPlayerChoose = true;
-            Action<Vector2Int> callback = OnDirectionChanged.Invoke;
-            StartCoroutine(mapmanager.AttackCommand(GetAdjacent(card.AttackDirection), Player.PlayerGridPos, new(0 , card.AttackLength), callback));
-            Player.ModifySituation(1);
-        }
+           if(card.AttackDirection != null)
+           {
+               isWaitingForPlayerChoose = true;
+               Action<Vector2Int> callback = OnDirectionChanged.Invoke;
+               StartCoroutine(mapmanager.AttackCommand(GetAdjacent(card.AttackDirection), Player.PlayerGridPos, new(0 , card.AttackLength), callback));
+           }*/
+        StartCoroutine(MoveAndAttackCoRoutine(card));
 
         if(card.DeltaBladeNum != 0)
         {

@@ -15,7 +15,7 @@ public class MapManager : MonoBehaviour
     private const double ObstacleRate = GameConfig.ObstacleRate;//障碍物生成概率
     private const int ObstacleSup = GameConfig.ObstacleSup;//障碍物生成上限
     int size = GameConfig.size;//地图尺寸
-
+    private bool MoveComplete = false;
 
     public void spawn()//地图初始化
     {
@@ -76,9 +76,7 @@ public class MapManager : MonoBehaviour
                 double r = random.NextDouble();
                 if (r < ObstacleRate)
                 {
-                    map.GetHex(pos).tag = "Obstacle";
-                    map.AddObstacle(pos);
-                    map.GetHex(pos).GetComponent<Hexagon>().ChangeColor(Color.grey);//目前为变色效果
+                    map.GetHex(pos).AddComponent<Hexagon>().ObstacleAdd();
                     count++;
                 }
             }
@@ -87,8 +85,13 @@ public class MapManager : MonoBehaviour
         {
             goto restart;
         }
-        if (!CheckConnectivity())//不连通重新生成
+        if (!CheckConnectivity())//不连通先删除再生成
         {
+            List<Vector2Int>Obstacles=map.GetObstacles();
+            foreach(Vector2Int ob in Obstacles)
+            {
+                map.GetHex(ob).GetComponent<Hexagon>().ObstacleRemove();
+            }
             goto restart;
         }
     }
@@ -194,6 +197,7 @@ public class MapManager : MonoBehaviour
         List<Vector2Int> ObPosition = map.GetObstacles();
         Vector2Int D = new Vector2Int();
         List<Vector2Int>accessible = new List<Vector2Int>();
+        BattleManager battleManager = GetComponentInParent<BattleManager>();
         foreach (Vector2Int pos in ObPosition)
         {
             if (directions.Contains(pos))
@@ -219,6 +223,8 @@ public class MapManager : MonoBehaviour
         }
         if (accessible.Count == 0)
         {
+            Debug.Log("不存在移动的范围！");
+            battleManager.isWaitingForPlayerChoose = false;
             yield break;
         }
 
@@ -234,20 +240,22 @@ public class MapManager : MonoBehaviour
             ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
             map.ChangeColor(pos, color);
         }
-        BattleManager battleManager = GetComponentInParent<BattleManager>();
         battleManager.isWaitingForPlayerChoose = false;
         callback2(GetNewDir(ClickedPos, player));
         callback1(ClickedPos);
-        
-
+        //MoveComplete = true;
     }
 
     public IEnumerator AttackCommand(List<Vector2Int> directions, Vector2Int player, Vector2Int length, Action<Vector2Int> callback)//移动指令
     {
+
+       /* yield return new WaitUntil(() => MoveComplete == true);
+        MoveComplete = false;*/
         //还没添加越过障碍物功能
         List<Vector2Int> ObPosition = map.GetObstacles();
         Vector2Int D = new Vector2Int();
         List<Vector2Int> accessible = new List<Vector2Int>();
+        BattleManager battleManager = GetComponentInParent<BattleManager>();
         foreach (Vector2Int pos in ObPosition)
         {
             if (directions.Contains(pos))
@@ -271,6 +279,12 @@ public class MapManager : MonoBehaviour
                 }
             }
         }
+        if (accessible.Count == 0)
+        {
+            Debug.Log("不存在攻击的范围！");
+            battleManager.isWaitingForPlayerChoose = false;
+            yield break;
+        }
 
         foreach (Vector2Int pos in accessible)
         {
@@ -284,7 +298,7 @@ public class MapManager : MonoBehaviour
             ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
             map.ChangeColor(pos, color);
         }
-        BattleManager battleManager = GetComponentInParent<BattleManager>();
+        
         battleManager.isWaitingForPlayerChoose = false;
         Vector2Int Direction = GetNewDir(ClickedPos , player);
         callback(Direction);
