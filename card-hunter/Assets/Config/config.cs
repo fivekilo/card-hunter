@@ -156,15 +156,15 @@ public class GameConfig : ScriptableObject
     }.AsReadOnly();
 
     public static IReadOnlyList<int> OnlyLState = new List<int>
-    {0,//限制形态使用 0不限 1限自由 2限制连携
-        0,//1
-        0,//2
-        0,//3
-        0,//4
-        0,//5
-        0,//6
-        0,//7
-        0
+    {2,//限制形态使用 0自由 1连携 2不限
+        2,//1
+        2,//2
+        2,//3
+        2,//4
+        2,//5
+        2,//6
+        2,//7
+        2
     }.AsReadOnly();
 
     public static IReadOnlyList<int> EnterState = new List<int>

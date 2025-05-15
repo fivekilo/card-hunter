@@ -12,6 +12,7 @@ public class PlayerInfo : MonoBehaviour
     public int MaxCost = GameConfig.InitialCost;
     public int curCost;
 
+    public int Situation;//人物状态 0自由 1连携
     public int curBladeNum = 0; //气刃值
     public int curBladeLevel = 0; //气刃等级
     public Vector2Int PlayerGridPos = new (0 , 0); //玩家位置
@@ -19,6 +20,7 @@ public class PlayerInfo : MonoBehaviour
 
     public TextMeshProUGUI HP;
     public TextMeshProUGUI endurance;
+    public TextMeshProUGUI MoveCost;
     // public delegate void CharacterEvent(PlayerInfo Player);
     //public event CharacterEvent OnHealthChanged;
     //public event CharacterEvent OnEnergyChanged;
@@ -30,6 +32,7 @@ public class PlayerInfo : MonoBehaviour
 
     public void Initialize()
     {
+        Situation = 0;
         curHealth = MaxHealth;
         curCost = MaxCost;
         curBladeLevel = 0;
@@ -49,6 +52,11 @@ public class PlayerInfo : MonoBehaviour
     public void ModifyBladeNum(int amount)
     {
         curBladeNum = Mathf.Clamp(amount, 0, GameConfig.MaxBladeNum);
+    }
+    public void ModifySituation(int amount)
+    {
+        Situation = Mathf.Clamp(amount, 0, 1);
+        MoveCost.text = $"{Situation + 1}";
     }
     public void ModifyBladeLevel(int amount)
     {

@@ -5,8 +5,8 @@ using UnityEngine;
 public class CardPool : MonoBehaviour
 {
     public GameObject cardPrefab;
-    public int copiesPerCard = 1; // ÿ�ֿ��Ʊ����ĸ�����
-    public int initialCardTypes = 8; // ��ʼ������������
+    public int copiesPerCard = 2; // 副本数
+    public int initialCardTypes = 8; // 初始化卡牌数
     private Dictionary<int, Queue<GameObject>> cardPools;
     //private Dictionary<string, Card> cardDataMap;
 
@@ -19,9 +19,7 @@ public class CardPool : MonoBehaviour
     {
         cardPools = new Dictionary<int, Queue<GameObject>>();
         //cardDataMap = new Dictionary<string, Card>();
-
-        // ��ʼ��ʾ���������ݣ�ʵ����Ŀ��Ӧ�������ط����أ�
-        for (int i = 1; i < initialCardTypes; i++)
+        for (int i = 1; i < initialCardTypes+1; i++)
         {
             RegisterCardType(i);
         }
@@ -39,7 +37,6 @@ public class CardPool : MonoBehaviour
             //card.transform.SetParent(transform);
             card.SetActive(false);
 
-            // ���ÿ�������
             Card carddata = card.GetComponent<Card>();
             if (carddata != null)
             {
@@ -72,7 +69,6 @@ public class CardPool : MonoBehaviour
         }
         else
         {
-            // ��̬�����¿��ƣ�����Ԥ�踱������
             GameObject newCard = Instantiate(cardPrefab);
             Card newCardData = newCard.GetComponent<Card>();
             newCardData.cardNum=cardnum;
