@@ -12,8 +12,8 @@ public class EnemyAIController : MonoBehaviour
     [Header("基础属性")]
     [SerializeField] protected int _maxHealth = 100;
     [SerializeField] protected int _currentHealth;
-    [SerializeField] protected int moveRange=3;//每回合最大移动距离
-    [SerializeField] protected int detectionRange=6;//检测玩家的最大范围
+    [SerializeField] protected int moveRange = 2;//每回合最大移动距离
+    [SerializeField] protected int detectionRange = 4;//检测玩家的最大范围
     [SerializeField] private float moveInterval = 0.3f; // 移动动画间隔
     
     void Start()
@@ -36,9 +36,8 @@ public class EnemyAIController : MonoBehaviour
         if (ShouldMoveToPlayer())
         {
             List<Vector2Int> path = CalculatePath();
-            if(path.Count==0 )
+            if(path.Count==0 )//没生成路径相当于没找到玩家
             {
-                Debug.Log($"没找到玩家捏");
                 yield return WanderRandomly();
             }
             else
@@ -55,7 +54,6 @@ public class EnemyAIController : MonoBehaviour
     {
         if (_player == null) return false;
         int distance = (int)Vector2Int.Distance(_currentGridPos, _player.PlayerGridPos);
-        Debug.Log($"检测到玩家当前位置：{_player.PlayerGridPos}");
         return distance <= detectionRange;
     }
     //寻路算法（待编写）
@@ -70,16 +68,18 @@ public class EnemyAIController : MonoBehaviour
         while (queue.Count > 0)
         {
             Vector2Int current = queue.Dequeue();
-
-            if (current == _player.PlayerGridPos)
-            {
-                foundplayer = true;
+            if (foundplayer == true)
                 break;
-            }
 
-                foreach (Vector2Int neighbor in _battleManager.GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }))
+            foreach (Vector2Int neighbor in _mapManager.GetNearby(current))
             {
-                if(!camefrom.ContainsKey(neighbor)&& _battleManager.CheckPosIsValid(neighbor)&& !_mapManager.IsPositionOccupied(neighbor))
+                if (neighbor == _player.PlayerGridPos)
+                {
+                    camefrom[neighbor] = current;
+                    foundplayer = true;
+                    break;
+                }
+                if (!camefrom.ContainsKey(neighbor)&& _battleManager.CheckPosIsValid(neighbor)&& !_mapManager.IsPositionOccupied(neighbor))
                 {
                     queue.Enqueue(neighbor);
                     camefrom[neighbor] = current;
@@ -124,6 +124,7 @@ public class EnemyAIController : MonoBehaviour
         foreach (var pos in path)
         {
             if (!_battleManager.CheckPosIsValid(pos)) break;
+            if (pos == _player.PlayerGridPos) break;//如果要走到玩家那一格了就刹车
             UpdatePosition(pos);
             yield return new WaitForSeconds(moveInterval);//等待一定时长
         }
@@ -150,10 +151,16 @@ public class EnemyAIController : MonoBehaviour
         newPos3.z = -5;
         transform.position = newPos3;
     }
-    //public void SnapToGrid()
-    //{
-    //    transform.position = _mapManager.GetVector3(_currentGridPos);
-    //}
+    
+    //加减血量
+    public void AddHealth(int num)
+    {
+        _currentHealth += num;
+    }
+    public void ReduceHealth(int num)
+    {
+        _currentHealth -= num;
+    }
 
     public Vector2Int GetCurrentGridPos() // 公共方法供MapManager调用
     {
