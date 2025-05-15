@@ -31,6 +31,7 @@ public class BattleManager : MonoBehaviour
     public MapManager mapmanager;
     public BladegasSlotController BladeLevelSlot;
     public Button Endbutton;
+    public Button Movebutton;
     public CardManager cardManager;
    // public int i = 1;
     private List<Card> InitialDeck = new(); 
@@ -58,7 +59,6 @@ public class BattleManager : MonoBehaviour
     public delegate void DirectionChangedHandler(Vector2Int newDir);
     public event DirectionChangedHandler OnDirectionChanged; 
 
-    public bool isWaitingForPlayerAction = false;
     public bool isWaitingForPlayerChoose = false;
     public UnityEvent EndTurnClicked; 
 
@@ -79,11 +79,13 @@ public class BattleManager : MonoBehaviour
         OnDirectionChanged += Player.GetComponent<PlayerShow>().ModifyDirection;
         OnDirectionChanged += Player.ModifyDirection;
 
-      /*  Endbutton.onClick.AddListener(() => {
-           Card newcard= cardManager.CreateCard(i, cardManager.transform);
-            cardManager.AddCardToHand(newcard , hand);
-            i = i % 8 + 1;
-        });*/
+        Endbutton.onClick.AddListener(OnEndTurnButtonClicked);
+        Movebutton.onClick.AddListener(OnMoveButtonClicked);
+        /*  Endbutton.onClick.AddListener(() => {
+             Card newcard= cardManager.CreateCard(i, cardManager.transform);
+              cardManager.AddCardToHand(newcard , hand);
+              i = i % 8 + 1;
+          });*/
         InitializeBattle();
         foreach (Card card in discardPile)
         {
@@ -99,7 +101,6 @@ public class BattleManager : MonoBehaviour
         OnBladeLevelChange?.Invoke(2);
 
         InitializeDeck();
-        FindAllEnemies();
 
         ChangeState(BattleState.PlayerDraw);
     }
@@ -162,6 +163,7 @@ public class BattleManager : MonoBehaviour
                 break;
 
             case BattleState.EnemyTurn:
+                StartCoroutine(HandEnemyTurn());
                 break;
 
             case BattleState.NotBegin:
@@ -172,13 +174,17 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator HandEnemyTurn()
     {
+        Debug.Log("怪物回合开始了!");
+        yield return new WaitForSeconds(5f);
+        FindAllEnemies();
         foreach(var enemy in _enemies)
-        {
-            if (enemy != null)
-            {
-                yield return enemy.TakeTurn();
-            }
+         {
+             if (enemy != null)
+             {
+                 yield return enemy.TakeTurn();
+             }
         }
+        Debug.Log("怪物回合结束了!");
         ChangeState(BattleState.PlayerDraw);
     }
 
@@ -201,23 +207,33 @@ public class BattleManager : MonoBehaviour
         Player.ModifyCost(Player.GetComponent<PlayerInfo>().MaxCost);
 
 
-        isWaitingForPlayerAction = true;
 
        // UIManager.Instance.SetEndTurnButtonActive(true);
 
     }
     public void OnEndTurnButtonClicked()
     {
-        if (!isWaitingForPlayerAction) return;
+        if (isWaitingForPlayerChoose == true || currentState != BattleState.PlayerTurn) return;
 
-        Debug.Log("玩家结束回合");
+        Debug.Log("玩家结束回合了");
 
-        isWaitingForPlayerAction = false;
+        
 
         ChangeState(BattleState.EnemyTurn);
     }
+    public void OnMoveButtonClicked()
+    {
+        if (currentState != BattleState.PlayerTurn) return;
+        if (Player.curCost < 1) return;
+        //缺少自由态判断
+        Player.ModifyCost(Player.curCost - 1);
+        isWaitingForPlayerChoose = true;
+            Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
+            Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
+            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1,1), callback1 , callback2));
+    }
 
-   
+
     public void EndPlayerTurn()
     {
         if (currentState != BattleState.PlayerTurn) return;
@@ -269,7 +285,7 @@ public class BattleManager : MonoBehaviour
         foreach(Card card in hand)
         {
             
-            if(Player.curCost < card.Cost || Player.curBladeNum < -card.DeltaBladeNum || Player.curBladeLevel < -card.DeltaBladeLevel || isWaitingForPlayerChoose)
+            if(Player.curCost < card.Cost || Player.curBladeNum < -card.DeltaBladeNum || Player.curBladeLevel < -card.DeltaBladeLevel || isWaitingForPlayerChoose || currentState != BattleState.PlayerTurn)
             {
                 card.CBuse = false;
             }

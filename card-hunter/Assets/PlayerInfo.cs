@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.PlayerSettings;
@@ -16,6 +17,8 @@ public class PlayerInfo : MonoBehaviour
     public Vector2Int PlayerGridPos = new (0 , 0); //ÕÊº“Œª÷√
     public Vector2Int Direction = new Vector2Int(1, 0);
 
+    public TextMeshProUGUI HP;
+    public TextMeshProUGUI endurance;
     // public delegate void CharacterEvent(PlayerInfo Player);
     //public event CharacterEvent OnHealthChanged;
     //public event CharacterEvent OnEnergyChanged;
@@ -36,10 +39,12 @@ public class PlayerInfo : MonoBehaviour
     public void ModifyHealth(int amount)
     {
         curHealth = Mathf.Clamp(amount, 0, MaxHealth);
+        HP.text= $"{curHealth}/{MaxHealth}";
     }
     public void ModifyCost(int amount)
     {
         curCost = Mathf.Clamp(amount, 0, MaxCost);
+        endurance.text = $"{curCost}/{MaxCost}";
     }
     public void ModifyBladeNum(int amount)
     {
