@@ -27,8 +27,7 @@ public class GameManager : MonoBehaviour
     {
         //显示任务面板,传回所选委托
         List<Commission> commissions = new List<Commission>();
-        Debug.Log("点击camp");
-
+        
     }
     private void EventHandle(Event e)//处理随机事件
     {

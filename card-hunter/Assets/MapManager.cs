@@ -62,8 +62,8 @@ public class MapManager : MonoBehaviour
     private void ObstacleGenerate()//障碍物生成
     {
         System.Random random = new System.Random();
-        int count = 0;
     restart:
+        int count = 0;
         for (int x = 0; x < size; x++)
         {
             for (int y = 0; y < size; y++)
@@ -71,7 +71,7 @@ public class MapManager : MonoBehaviour
                 Vector2Int pos= new Vector2Int(x, y);
                 if (count >= ObstacleSup)
                 {
-                    return;
+                    goto check;
                 }
                 double r = random.NextDouble();
                 if (r < ObstacleRate)
@@ -81,6 +81,7 @@ public class MapManager : MonoBehaviour
                 }
             }
         }
+    check:
         if (count < 3)//太少障碍物重新生成
         {
             goto restart;
