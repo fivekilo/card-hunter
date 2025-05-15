@@ -5,8 +5,8 @@ using UnityEngine;
 public class CardPool : MonoBehaviour
 {
     public GameObject cardPrefab;
-    public int copiesPerCard = 4; // 每种卡牌保留的副本数
-    public int initialCardTypes = 10; // 初始卡牌种类数量
+    public int copiesPerCard = 1; // 每种卡牌保留的副本数
+    public int initialCardTypes = 8; // 初始卡牌种类数量
 
     private Dictionary<int, Queue<GameObject>> cardPools;
     //private Dictionary<string, Card> cardDataMap;
@@ -21,7 +21,7 @@ public class CardPool : MonoBehaviour
         cardPools = new Dictionary<int, Queue<GameObject>>();
         //cardDataMap = new Dictionary<string, Card>();
 
-        // 初始化示例卡牌数据（实际项目中应从其他地方加载）
+        // 初始化示例卡牌数据
         for (int i = 1; i < initialCardTypes; i++)
         {
             RegisterCardType(i);
@@ -37,6 +37,7 @@ public class CardPool : MonoBehaviour
         for (int i = 0; i < copiesPerCard; i++)
         {
             GameObject card = Instantiate(cardPrefab);
+            card.transform.SetParent(transform);
             card.SetActive(false);
 
             // 设置卡牌数据
