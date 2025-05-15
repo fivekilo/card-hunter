@@ -99,7 +99,6 @@ public class BattleManager : MonoBehaviour
         OnBladeLevelChange?.Invoke(2);
 
         InitializeDeck();
-        FindAllEnemies();
 
         ChangeState(BattleState.PlayerDraw);
     }
@@ -173,15 +172,16 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator HandEnemyTurn()
     {
-        /* foreach(var enemy in _enemies)
+        Debug.Log("怪物回合开始了!");
+        yield return new WaitForSeconds(5f);
+        FindAllEnemies();
+        foreach(var enemy in _enemies)
          {
              if (enemy != null)
              {
                  yield return enemy.TakeTurn();
              }
-         }*/
-        Debug.Log("怪物回合开始了!");
-        yield return new WaitForSeconds(5f);
+        }
         Debug.Log("怪物回合结束了!");
         ChangeState(BattleState.PlayerDraw);
     }

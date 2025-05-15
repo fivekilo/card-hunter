@@ -8,7 +8,7 @@ public class EnemyAIController : MonoBehaviour
     public BattleManager _battleManager;
     public Vector2Int _currentGridPos { get; set; }
     public MapManager _mapManager;
-    private PlayerInfo _player;
+    public PlayerInfo _player;
     [Header("基础属性")]
     [SerializeField] protected int _maxHealth = 100;
     [SerializeField] protected int _currentHealth;
@@ -30,12 +30,19 @@ public class EnemyAIController : MonoBehaviour
    
     public IEnumerator TakeTurn()//执行回合
     {
+
         //先出上一回合结束的招式(待编写)
         //再判断移动
         if (ShouldMoveToPlayer())
         {
             List<Vector2Int> path = CalculatePath();
-            yield return MoveAlongPath(path);
+            if(path.Count==0 )
+            {
+                Debug.Log($"没找到玩家捏");
+                yield return WanderRandomly();
+            }
+            else
+                yield return MoveAlongPath(path);
         }
         else
         {
@@ -48,6 +55,7 @@ public class EnemyAIController : MonoBehaviour
     {
         if (_player == null) return false;
         int distance = (int)Vector2Int.Distance(_currentGridPos, _player.PlayerGridPos);
+        Debug.Log($"检测到玩家当前位置：{_player.PlayerGridPos}");
         return distance <= detectionRange;
     }
     //寻路算法（待编写）
@@ -78,7 +86,6 @@ public class EnemyAIController : MonoBehaviour
                 }
             }
         }
-
         return foundplayer ? ReconstructPath(camefrom) : new List<Vector2Int>();
     }
 
