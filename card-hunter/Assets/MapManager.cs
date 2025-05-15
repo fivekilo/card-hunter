@@ -24,6 +24,7 @@ public class MapManager : MonoBehaviour
                 Vector3 pos=new Vector3(3*(x+y)/2.0f,math.sqrt(3)*(y-x)/2,0);
                 GameObject GO=Instantiate(Hex,pos,Quaternion.identity);
                 GO.transform.SetParent(transform);
+                GO.GetComponent<Hexagon>().AddImage("background");
                 Hexs[x,y]=GO;
             }
         }
@@ -224,7 +225,11 @@ public class MapManager : MonoBehaviour
             ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
             map.ChangeColor(pos, color);
         }
+        BattleManager battleManager = GetComponentInParent<BattleManager>();
+        battleManager.isWaitingForPlayerChoose = false;
         callback(ClickedPos);
+       
+
     }
 
     public Vector3 GetVector3(Vector2Int pos)

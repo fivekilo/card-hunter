@@ -58,7 +58,8 @@ public class BattleManager : MonoBehaviour
     public delegate void DirectionChangedHandler(Vector2Int newDir);
     public event DirectionChangedHandler OnDirectionChanged; 
 
-    private bool isWaitingForPlayerAction = false; 
+    public bool isWaitingForPlayerAction = false;
+    public bool isWaitingForPlayerChoose = false;
     public UnityEvent EndTurnClicked; 
 
     private void Start()
@@ -168,11 +169,22 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    private IEnumerator HandEnemyTurn()
+    {
+        foreach(var enemy in _enemies)
+        {
+            if (enemy != null)
+            {
+                yield return enemy.TakeTurn();
+            }
+        }
+        ChangeState(BattleState.PlayerDraw);
+    }
 
     private IEnumerator PlayerDrawPhase()
     {
         Debug.Log("draw waiting");
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2f);
      //   OnPositionChanged?.Invoke(new(3, 4));
         Debug.Log("waiting complete");
       //  Action<Vector2Int> callback = OnPositionChanged.Invoke;
@@ -215,39 +227,64 @@ public class BattleManager : MonoBehaviour
     public void PlayCard(Card card)
     {
 
-        if (currentState != BattleState.PlayerTurn || isWaitingForPlayerAction == false) return;
-       // Debug.Log(card.Cost);
+        if (currentState != BattleState.PlayerTurn ) return;
         if (Player.curCost < card.Cost)return;
-        //LockCards();
+
         Player.ModifyCost(Player.curCost - card.Cost);
         Debug.Log("还剩" + Player.curCost.ToString() + "费！");
+
         if(card.Move != null)
         {
             //  OnPositionChange?.Invoke(this, new PlayerWantMoveEventArgs(GetAdjacent(card.Move) , /*card.MoveDistance*/1));
+            isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback = OnPositionChanged.Invoke;
             StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback));
         }
+
+        if(card.AttackDirection != null)
+        {
+            isWaitingForPlayerChoose = true;
+            Action<Vector2Int> callback = OnPositionChanged.Invoke;
+            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.AttackDirection), Player.PlayerGridPos, new(card.AttackLength,card.AttackLength), callback));
+        }
+
+        if(card.DeltaBladeNum != 0)
+        {
+            Player.ModifyBladeNum(Player.curBladeNum + card.DeltaBladeNum);
+            OnBladeGasChange?.Invoke(Player.curBladeNum);
+        }
+
+        if(card.DeltaBladeNum != 0)
+        {
+            Player.ModifyBladeLevel(Player.curBladeLevel + card.DeltaBladeLevel);
+            OnBladeLevelChange?.Invoke(Player.curBladeLevel);
+        }
+        
         cardManager.RemoveCardFromHand(card, hand);
-        UpdateCards();
     } 
     public void UpdateCards()
     {
         foreach(Card card in hand)
         {
             
-            if(Player.curCost < card.Cost || Player.curBladeNum < -card.DeltaBladeNum || Player.curBladeLevel < -card.DeltaBladeLevel)
+            if(Player.curCost < card.Cost || Player.curBladeNum < -card.DeltaBladeNum || Player.curBladeLevel < -card.DeltaBladeLevel || isWaitingForPlayerChoose)
             {
                 card.CBuse = false;
             }
+            else
+            {
+                card.CBuse = true;
+
+            }
         }
     }
-    //public void LockCards()
-    //{
-    //    foreach (Card card in hand)
-    //    {
-    //            card.CBuse = false;
-    //    }
-    //}
+    public void LockCards()
+    {
+        foreach (Card card in hand)
+        {
+            card.CBuse = false;
+        }
+    }
 
     public void EndBattle()
     {
@@ -283,6 +320,6 @@ public class BattleManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        UpdateCards();
     }
 }
