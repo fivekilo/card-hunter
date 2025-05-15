@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class EnemyAIController : MonoBehaviour
@@ -9,6 +10,7 @@ public class EnemyAIController : MonoBehaviour
     public Vector2Int _currentGridPos { get; set; }
     public MapManager _mapManager;
     public PlayerInfo _player;
+    public TextMeshProUGUI text;
     [Header("基础属性")]
     [SerializeField] protected int _maxHealth = 100;
     [SerializeField] protected int _currentHealth;
@@ -26,6 +28,7 @@ public class EnemyAIController : MonoBehaviour
         transform.position = InitialPos;
         _player= FindObjectOfType<PlayerInfo>();
         _currentHealth = _maxHealth;
+        text = GetComponentInChildren<TextMeshProUGUI>();
     }
    
     public IEnumerator TakeTurn()//执行回合
@@ -153,13 +156,14 @@ public class EnemyAIController : MonoBehaviour
     }
     
     //加减血量
-    public void AddHealth(int num)
+   /* public void AddHealth(int num)
     {
         _currentHealth += num;
-    }
+    }*/
     public void ReduceHealth(int num)
     {
-        _currentHealth -= num;
+        _currentHealth = Mathf.Clamp(_currentHealth - num, 0, _maxHealth);
+        text.text = $"{_currentHealth}/{_maxHealth}";
     }
 
     public Vector2Int GetCurrentGridPos() // 公共方法供MapManager调用
