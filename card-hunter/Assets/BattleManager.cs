@@ -508,9 +508,9 @@ public class BattleManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
      //   OnPositionChanged?.Invoke(new(3, 4));
         Debug.Log("waiting complete");
-        //  Action<Vector2Int> callback = OnPositionChanged.Invoke;
-        //  StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1, 1) , callback));
-
+      //  Action<Vector2Int> callback = OnPositionChanged.Invoke;
+      //  StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1, 1) , callback));
+      
         DrawCard(GameConfig.InitialHandCardNum);
         ChangeState(BattleState.PlayerTurn);
     }

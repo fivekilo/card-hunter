@@ -35,6 +35,8 @@ public class BladegasSlotController : MonoBehaviour
     void Start()
     {
 
+     //   ShowBladeGas(5);
+     //   ShowBladeLevel(2);
     }
 
     // Update is called once per frame
