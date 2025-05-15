@@ -14,9 +14,10 @@ public class PlayerShow : MonoBehaviour
         InitialPos.z = -5;
         Player.transform.position = InitialPos;
     }
-    public void ModifyDirection(Vector2Int newDir)
+   /* public void ModifyDirection(Vector2Int newDir)
     {
         //改变贴图
+        Debug.Log("转向了！");
         PlayerInfo Player = GetComponent<PlayerInfo>();
         Vector2Int Dir = Player.Direction;
         int[] dx = { 1, 0, -1, -1, 0, 1 };
@@ -27,6 +28,26 @@ public class PlayerShow : MonoBehaviour
             if (newDir == new Vector2Int(dx[i], dy[i])) Dir_id = i;
         }
         //选择新的图片名称
+        string newsource = "PlayerDir/" + "PlayerDir" + Dir_id.ToString();
+        ModifyPlayerImage(newsource);
+    }*/
+    public void ModifyDirection(Vector2Int Dir)
+    {
+        PlayerInfo Player = GetComponent<PlayerInfo>();
+        int[] dx = { 1, 0, -1, -1, 0, 1 };
+        int[] dy = { 0, 1, 1, 0, -1, -1 };
+        int Dir_id = -1;
+        for (int i = 0; i < 6; i++)
+        {
+            if (Dir == new Vector2Int(dx[i], dy[i])) Dir_id = i;
+        }
+        if (Dir_id == -1)
+        {
+            Debug.Log("PlayerShow：不存在新的方向！");
+            return;
+        }
+        string newsource = "PlayerDir/" + "PlayerDir" + Dir_id.ToString();
+        ModifyPlayerImage(newsource);
     }
     public void ModifyPos(Vector2Int newPos)
     {

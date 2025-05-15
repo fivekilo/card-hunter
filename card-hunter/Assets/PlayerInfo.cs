@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.PlayerSettings;
 
 public class PlayerInfo : MonoBehaviour
 {
@@ -57,6 +58,23 @@ public class PlayerInfo : MonoBehaviour
         }
         PlayerGridPos.x = newPos.x;
         PlayerGridPos.y = newPos.y;
+    }
+    public void ModifyDirection(Vector2Int Dir)
+    {
+        int[] dx = { 1, 0, -1, -1, 0, 1 };
+        int[] dy = { 0, 1, 1, 0, -1, -1 };
+        int Dir_id = -1;
+        
+        for (int i = 0; i < 6; i++)
+        {
+            if (dx[i] == Dir.x && dy[i] == Dir.y) { Dir_id = i;break; }
+        }
+        if (Dir_id == -1)
+        {
+            Debug.Log("PlayerInfo：不存在新方向");
+            return;
+        }
+        Direction = new Vector2Int(dx[Dir_id], dy[Dir_id]);
     }
     void Start()
     {
