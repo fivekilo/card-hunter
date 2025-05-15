@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyAIController : MonoBehaviour
 {
     //加载基本事项
-    protected BattleManager _battleManager;
+    public BattleManager _battleManager;
     public Vector2Int _currentGridPos { get; set; }
     public MapManager _mapManager;
     private PlayerInfo _player;
@@ -18,11 +18,14 @@ public class EnemyAIController : MonoBehaviour
     
     void Start()
     {
-        _battleManager = FindObjectOfType<BattleManager>();
-        _currentGridPos= Vector2Int.FloorToInt(transform.position); // 初始位置需对齐网格
-        SnapToGrid();
-        _mapManager = FindObjectOfType<MapManager>();
+        _battleManager = GetComponentInParent<BattleManager>();
+        _mapManager = _battleManager.mapmanager;
+        _currentGridPos = new(GameConfig.size/2,GameConfig.size/2); 
+        Vector3 InitialPos = _mapManager.GetVector3(_currentGridPos);
+        InitialPos.z = -5;
+        transform.position = InitialPos;
         _player= FindObjectOfType<PlayerInfo>();
+        _currentHealth = _maxHealth;
     }
    
     public IEnumerator TakeTurn()//执行回合
@@ -120,6 +123,7 @@ public class EnemyAIController : MonoBehaviour
     }
     IEnumerator WanderRandomly()
     {
+
         //先找出周围可以移动的点
         List<Vector2Int> possibleMoves = _mapManager.GetNearby(_currentGridPos)
             .FindAll(pos => !_mapManager.IsPositionOccupied(pos));
@@ -135,12 +139,14 @@ public class EnemyAIController : MonoBehaviour
     void UpdatePosition(Vector2Int newPos)
     {
         _currentGridPos = newPos;
-        SnapToGrid();
+        Vector3 newPos3 = _mapManager.GetVector3(_currentGridPos);
+        newPos3.z = -5;
+        transform.position = newPos3;
     }
-    public void SnapToGrid()
-    {
-        transform.position = _mapManager.GetVector3(_currentGridPos);
-    }
+    //public void SnapToGrid()
+    //{
+    //    transform.position = _mapManager.GetVector3(_currentGridPos);
+    //}
 
     public Vector2Int GetCurrentGridPos() // 公共方法供MapManager调用
     {
