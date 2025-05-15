@@ -163,6 +163,7 @@ public class EnemyAIController : MonoBehaviour
     public void ReduceHealth(int num)
     {
         _currentHealth = Mathf.Clamp(_currentHealth - num, 0, _maxHealth);
+        Debug.Log("怪物被打了！");
         text.text = $"{_currentHealth}/{_maxHealth}";
     }
 
