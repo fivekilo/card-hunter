@@ -151,10 +151,16 @@ public class EnemyAIController : MonoBehaviour
         newPos3.z = -5;
         transform.position = newPos3;
     }
-    //public void SnapToGrid()
-    //{
-    //    transform.position = _mapManager.GetVector3(_currentGridPos);
-    //}
+    
+    //加减血量
+    public void AddHealth(int num)
+    {
+        _currentHealth += num;
+    }
+    public void ReduceHealth(int num)
+    {
+        _currentHealth -= num;
+    }
 
     public Vector2Int GetCurrentGridPos() // 公共方法供MapManager调用
     {
