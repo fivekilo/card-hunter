@@ -66,10 +66,12 @@ public class Card : MonoBehaviour
         TextMeshProUGUI cardTypeBox = GetComponentsInChildren<TextMeshProUGUI>()[0];
         TextMeshProUGUI cardTextBox = GetComponentsInChildren<TextMeshProUGUI>()[1];
         TextMeshProUGUI cardNameBox = GetComponentsInChildren<TextMeshProUGUI>()[2];
+        TextMeshProUGUI cardCost = GetComponentsInChildren<TextMeshProUGUI>()[3];
         FindText(cardNum, ref cardName,ref cardText,ref cardType);
         cardTypeBox.text = cardType;
         cardTextBox.text = cardText;
         cardNameBox.text = cardName;
+        cardCost.text = Cost.ToString();
     }
     private void cardFrameworkInit(int cardNum)
     {
@@ -102,10 +104,11 @@ public class Card : MonoBehaviour
         DeltaHealth = GameConfig.DeltaHealth[cardNum]; //生命值变化
     }
     public void cardInit()
-    {
+    {        
+        cardPropertyInit(cardNum);
         cardTextsInit(cardNum);
         cardFrameworkInit(cardNum);
-        cardPropertyInit(cardNum);
+
         CBuse = true;
     }
     

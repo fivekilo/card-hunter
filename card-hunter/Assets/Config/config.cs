@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [CreateAssetMenu(fileName = "GameConfig", menuName = "Configs/Game Config")]
 public class GameConfig : ScriptableObject
@@ -297,6 +298,21 @@ public class GameConfig : ScriptableObject
         0,//7
         0
     }.AsReadOnly();
+
+    public enum MoveType { None, Forward, Backward}
+    //招式信息内部类
+    public class EnemySkillConfig
+    {
+        public int skillID;
+        public string skillName;
+        public List<int>directions; //攻击方向 正前方0 逆时针标号 不移动为null
+        public List<Vector2Int> range;//范围
+        public int damage;
+        public int hittimes;//伤害次数
+        public MoveType moveType;
+        public int moveDistance;    //移动方式和距离
+        public List<int> debuffIDs;
+    }
 
     //RogueMod
     public static readonly List<Commission> Commissions= new List<Commission>{ new Commission(0, "大贼龙", 1) };
