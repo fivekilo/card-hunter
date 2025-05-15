@@ -58,7 +58,6 @@ public class BattleManager : MonoBehaviour
     public delegate void DirectionChangedHandler(Vector2Int newDir);
     public event DirectionChangedHandler OnDirectionChanged; 
 
-    public bool isWaitingForPlayerAction = false;
     public bool isWaitingForPlayerChoose = false;
     public UnityEvent EndTurnClicked; 
 
@@ -163,7 +162,7 @@ public class BattleManager : MonoBehaviour
                 break;
 
             case BattleState.EnemyTurn:
-          //      HandEnemyTurn();
+                StartCoroutine(HandEnemyTurn());
                 break;
 
             case BattleState.NotBegin:
@@ -174,13 +173,16 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator HandEnemyTurn()
     {
-        foreach(var enemy in _enemies)
-        {
-            if (enemy != null)
-            {
-                yield return enemy.TakeTurn();
-            }
-        }
+        /* foreach(var enemy in _enemies)
+         {
+             if (enemy != null)
+             {
+                 yield return enemy.TakeTurn();
+             }
+         }*/
+        Debug.Log("怪物回合开始了!");
+        yield return new WaitForSeconds(5f);
+        Debug.Log("怪物回合结束了!");
         ChangeState(BattleState.PlayerDraw);
     }
 
@@ -203,14 +205,13 @@ public class BattleManager : MonoBehaviour
         Player.ModifyCost(Player.GetComponent<PlayerInfo>().MaxCost);
 
 
-        isWaitingForPlayerAction = true;
 
        // UIManager.Instance.SetEndTurnButtonActive(true);
 
     }
     public void OnEndTurnButtonClicked()
     {
-        if (isWaitingForPlayerAction == true) return;
+        if (isWaitingForPlayerChoose == true || currentState != BattleState.PlayerTurn) return;
 
         Debug.Log("玩家结束回合了");
 
@@ -271,7 +272,7 @@ public class BattleManager : MonoBehaviour
         foreach(Card card in hand)
         {
             
-            if(Player.curCost < card.Cost || Player.curBladeNum < -card.DeltaBladeNum || Player.curBladeLevel < -card.DeltaBladeLevel || isWaitingForPlayerChoose)
+            if(Player.curCost < card.Cost || Player.curBladeNum < -card.DeltaBladeNum || Player.curBladeLevel < -card.DeltaBladeLevel || isWaitingForPlayerChoose || currentState != BattleState.PlayerTurn)
             {
                 card.CBuse = false;
             }
