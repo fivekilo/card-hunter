@@ -315,5 +315,5 @@ public class GameConfig : ScriptableObject
     }
 
     //RogueMod
-    public static readonly List<Commission> Commissions= new List<Commission>{ new Commission(0, "大贼龙", 1) };
+    public static readonly List<Commission> Commissions= new List<Commission>{ new Commission(0, "大贼龙", 1,1) };
 }

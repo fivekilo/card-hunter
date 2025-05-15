@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public GameObject camp;
+    private RogueMod RM;
     private bool ComAccept=false;//是否可以接取委托
     private void ShowStartMenu()//显示起始界面
     {
@@ -25,8 +26,13 @@ public class GameManager : MonoBehaviour
     }
     private void AcceptCommission()//接取委托（生成随机委托,生成随机事件）
     {
-        //显示任务面板,传回所选委托
         List<Commission> commissions = new List<Commission>();
+        List<Commission>selected= RM.ChooseCommission(commissions, 3);
+        //显示任务面板,传回所选委托
+        Commission commission = GameConfig.Commissions[0];
+        //去程：生成随机事件
+        List<Event>events = new List<Event>();
+        RM.EventGenerate(events, 2);
         
     }
     private void EventHandle(Event e)//处理随机事件
