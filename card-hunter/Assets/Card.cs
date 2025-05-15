@@ -23,7 +23,7 @@ public class Card : MonoBehaviour
     public bool Consumption;//消耗
     public int DrawCard;//抽牌
     public bool Nothingness;//虚无
-    public int OnlyLState;//0:不限 1:限自由态 2:限连携态
+    public int OnlyLState;//0:限自由态 1:限连携态 2:不限
     public int EnterState;//1:进入自由态 2:进入连携态
     public List<int> Buff;//Buff
     public List<int> DeBuff;//DeBuff

@@ -224,13 +224,16 @@ public class BattleManager : MonoBehaviour
     public void OnMoveButtonClicked()
     {
         if (currentState != BattleState.PlayerTurn) return;
-        if (Player.curCost < 1) return;
-        //缺少自由态判断
-        Player.ModifyCost(Player.curCost - 1);
+        int MoveCost = Player.Situation + 1;
+        if (Player.curCost < MoveCost) return;
+        
+        Player.ModifyCost(Player.curCost - MoveCost);
         isWaitingForPlayerChoose = true;
-        Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
-        Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
-        StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1,1), callback1 , callback2));
+            Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
+            Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
+            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1,1), callback1 , callback2));
+        Player.ModifySituation(0);
+
     }
 
 
@@ -302,7 +305,13 @@ public class BattleManager : MonoBehaviour
         foreach(Card card in hand)
         {
             
-            if(Player.curCost < card.Cost || Player.curBladeNum < -card.DeltaBladeNum || Player.curBladeLevel < -card.DeltaBladeLevel || isWaitingForPlayerChoose || currentState != BattleState.PlayerTurn)
+            if(Player.curCost < card.Cost || 
+                Player.curBladeNum < -card.DeltaBladeNum ||
+                Player.curBladeLevel < -card.DeltaBladeLevel || 
+                isWaitingForPlayerChoose || 
+                currentState != BattleState.PlayerTurn||
+                (card.OnlyLState!=2&&Player.Situation!=card.OnlyLState)
+                )
             {
                 card.CBuse = false;
             }

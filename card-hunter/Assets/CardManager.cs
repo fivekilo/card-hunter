@@ -11,19 +11,46 @@ public class CardManager : MonoBehaviour
     public float maxRotation = 15f;  // �����ת�Ƕ�
    // public float moveDuration = 0.3f; // �ƶ�����ʱ��
     public GameObject card;
-   // public CardPool cardpool;
+    public CardPool cardpool;
     public int originalsortingOrder;
     //private List<Card> cards;
     public Card CreateCard(int cardNum, Transform parent)
     {
-        GameObject newCard = Instantiate(card,parent);
+        ////GameObject newCard = Instantiate(card,parent);
         //GameObject newCard = cardpool.GetCard(cardNum);
+        //newCard.transform.position = new Vector3(0, -300, 0) + transform.position;
+        //Card carddata = newCard.GetComponent<Card>();
+        ////carddata.cardNum = cardNum;
+        ////carddata.cardInit();
+        //return carddata;
+        //// Start is called before the first frame update
+        ///
+        if (cardpool == null)
+        {
+            Debug.Log("CardPool is not assigned!");
+            return null;
+        }
+
+        // 2. 从卡牌池获取卡牌
+        GameObject newCard = cardpool.GetCard(cardNum);
+        if (newCard == null)
+        {
+            Debug.Log($"Card {cardNum} not found in pool!");
+            return null;
+        }
+
+        // 3. 设置卡牌位置
         newCard.transform.position = new Vector3(0, -300, 0) + transform.position;
+
+        // 4. 获取 Card 组件
         Card carddata = newCard.GetComponent<Card>();
-        carddata.cardNum = cardNum;
-        carddata.cardInit();
+        if (carddata == null)
+        {
+            Debug.Log("No Card component on the card prefab!");
+            return null;
+        }
+
         return carddata;
-        // Start is called before the first frame update
     }
     public void AddCardToHand(Card card,List<Card> cardsInHand)
     {
@@ -70,10 +97,14 @@ public class CardManager : MonoBehaviour
             //card.transform.SetSiblingIndex(i);
         }
     }
+    private void Awake()
+    {
+        //cardpool = GetComponent<CardPool>();
+    }
     void Start()
     {
         originalsortingOrder = 0;
-     //   cardpool = GetComponent<CardPool>();
+        
     }
 
     // Update is called once per frame
