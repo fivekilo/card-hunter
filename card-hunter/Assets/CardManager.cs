@@ -11,6 +11,7 @@ public class CardManager : MonoBehaviour
     public float maxRotation = 15f;  // 最大旋转角度
    // public float moveDuration = 0.3f; // 移动动画时间
     public GameObject card;
+    public int originalsortingOrder;
     //private List<Card> cards;
     public Card CreateCard(int cardNum, Transform parent)
     {
@@ -48,6 +49,7 @@ public class CardManager : MonoBehaviour
         for (int i = 0; i < cardsInHand.Count; i++)
         {
             Card card = cardsInHand[i];
+            card.GetComponentInChildren<Canvas>().sortingOrder = i;
             //float ratio = (float)i / (cardsInHand.Count - 1);
             float xPos = startX + i * cardSpacing;
 
@@ -63,12 +65,12 @@ public class CardManager : MonoBehaviour
             //card.transform.Rotate(new Vector3(0, 0, rotation));
 
             // 设置层级，使中间卡牌在最上面
-            card.transform.SetSiblingIndex(i);
+            //card.transform.SetSiblingIndex(i);
         }
     }
     void Start()
     {
-
+        originalsortingOrder = 0;
     }
 
     // Update is called once per frame
