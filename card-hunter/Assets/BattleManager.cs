@@ -79,6 +79,7 @@ public class BattleManager : MonoBehaviour
         OnDirectionChanged += Player.GetComponent<PlayerShow>().ModifyDirection;
         OnDirectionChanged += Player.ModifyDirection;
 
+        Endbutton.onClick.AddListener(OnEndTurnButtonClicked);
       /*  Endbutton.onClick.AddListener(() => {
            Card newcard= cardManager.CreateCard(i, cardManager.transform);
             cardManager.AddCardToHand(newcard , hand);
@@ -162,6 +163,7 @@ public class BattleManager : MonoBehaviour
                 break;
 
             case BattleState.EnemyTurn:
+          //      HandEnemyTurn();
                 break;
 
             case BattleState.NotBegin:
@@ -188,9 +190,9 @@ public class BattleManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
      //   OnPositionChanged?.Invoke(new(3, 4));
         Debug.Log("waiting complete");
-      //  Action<Vector2Int> callback = OnPositionChanged.Invoke;
-      //  StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1, 1) , callback));
-      
+        //  Action<Vector2Int> callback = OnPositionChanged.Invoke;
+        //  StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1, 1) , callback));
+
         DrawCard(GameConfig.InitialHandCardNum);
         ChangeState(BattleState.PlayerTurn);
     }
@@ -208,11 +210,11 @@ public class BattleManager : MonoBehaviour
     }
     public void OnEndTurnButtonClicked()
     {
-        if (!isWaitingForPlayerAction) return;
+        if (isWaitingForPlayerAction == true) return;
 
-        Debug.Log("玩家结束回合");
+        Debug.Log("玩家结束回合了");
 
-        isWaitingForPlayerAction = false;
+        
 
         ChangeState(BattleState.EnemyTurn);
     }

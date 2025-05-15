@@ -314,4 +314,6 @@ public class GameConfig : ScriptableObject
         public List<int> debuffIDs;
     }
 
+    //RogueMod
+    public static readonly List<Commission> Commissions= new List<Commission>{ new Commission(0, "大贼龙", 1) };
 }
