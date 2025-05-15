@@ -29,6 +29,16 @@ public class Hexagon : MonoBehaviour
         AddImage(content.ToString());
         this.tag = "Content";
     }
+    public void ObstacleAdd()
+    {
+        tag = "Obstacle";
+        ChangeColor(Color.grey);
+    }
+    public void ObstacleRemove()
+    {
+        tag = "Untagged";
+        ChangeColor(Color.white);
+    }
     void Start()
     {
         

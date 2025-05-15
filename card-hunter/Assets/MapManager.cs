@@ -76,9 +76,7 @@ public class MapManager : MonoBehaviour
                 double r = random.NextDouble();
                 if (r < ObstacleRate)
                 {
-                    map.GetHex(pos).tag = "Obstacle";
-                    map.AddObstacle(pos);
-                    map.GetHex(pos).GetComponent<Hexagon>().ChangeColor(Color.grey);//目前为变色效果
+                    map.GetHex(pos).AddComponent<Hexagon>().ObstacleAdd();
                     count++;
                 }
             }
@@ -87,8 +85,13 @@ public class MapManager : MonoBehaviour
         {
             goto restart;
         }
-        if (!CheckConnectivity())//不连通重新生成
+        if (!CheckConnectivity())//不连通先删除再生成
         {
+            List<Vector2Int>Obstacles=map.GetObstacles();
+            foreach(Vector2Int ob in Obstacles)
+            {
+                map.GetHex(ob).GetComponent<Hexagon>().ObstacleRemove();
+            }
             goto restart;
         }
     }
@@ -270,6 +273,10 @@ public class MapManager : MonoBehaviour
                     accessible.Add(player + D * i);
                 }
             }
+        }
+        if (accessible.Count == 0)
+        {
+            yield break;
         }
 
         foreach (Vector2Int pos in accessible)
