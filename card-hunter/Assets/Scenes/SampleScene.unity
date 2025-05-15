@@ -1514,6 +1514,7 @@ MonoBehaviour:
   mapmanager: {fileID: 1151624064}
   BladeLevelSlot: {fileID: 589125591}
   Endbutton: {fileID: 1255822434}
+  Movebutton: {fileID: 777040609}
   cardManager: {fileID: 2051032136}
   discardPile: []
   isWaitingForPlayerAction: 0

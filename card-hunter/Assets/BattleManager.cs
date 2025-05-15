@@ -31,6 +31,7 @@ public class BattleManager : MonoBehaviour
     public MapManager mapmanager;
     public BladegasSlotController BladeLevelSlot;
     public Button Endbutton;
+    public Button Movebutton;
     public CardManager cardManager;
    // public int i = 1;
     private List<Card> InitialDeck = new(); 
@@ -79,11 +80,12 @@ public class BattleManager : MonoBehaviour
         OnDirectionChanged += Player.ModifyDirection;
 
         Endbutton.onClick.AddListener(OnEndTurnButtonClicked);
-      /*  Endbutton.onClick.AddListener(() => {
-           Card newcard= cardManager.CreateCard(i, cardManager.transform);
-            cardManager.AddCardToHand(newcard , hand);
-            i = i % 8 + 1;
-        });*/
+        Movebutton.onClick.AddListener(OnMoveButtonClicked);
+        /*  Endbutton.onClick.AddListener(() => {
+             Card newcard= cardManager.CreateCard(i, cardManager.transform);
+              cardManager.AddCardToHand(newcard , hand);
+              i = i % 8 + 1;
+          });*/
         InitializeBattle();
         foreach (Card card in discardPile)
         {
@@ -219,8 +221,19 @@ public class BattleManager : MonoBehaviour
 
         ChangeState(BattleState.EnemyTurn);
     }
+    public void OnMoveButtonClicked()
+    {
+        if (currentState != BattleState.PlayerTurn) return;
+        if (Player.curCost < 1) return;
+        //缺少自由态判断
+        Player.ModifyCost(Player.curCost - 1);
+        isWaitingForPlayerChoose = true;
+            Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
+            Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
+            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1,1), callback1 , callback2));
+    }
 
-   
+
     public void EndPlayerTurn()
     {
         if (currentState != BattleState.PlayerTurn) return;
