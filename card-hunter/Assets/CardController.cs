@@ -8,7 +8,7 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     private Vector3 hoverScale = new Vector3(1.65f, 1.98f, 1f);
     private Vector3 normalScale = new Vector3(1.5f, 1.8f, 1f);
     private RectTransform rectTransform;
-    private Canvas canvas;
+    public  Canvas canvas;
     public Canvas canvas2;
     private CanvasGroup canvasGroup;
     private Vector2 originalPosition;

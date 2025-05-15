@@ -310,21 +310,25 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &193024313
-Transform:
+--- !u!224 &193024313
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 193024312}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.9, y: 1.83, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1923255098}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1.1, y: 1.1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &193024314
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -389,7 +393,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9378c001cb1d846bd952feecb9e00c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapManager: {fileID: 1151624064}
+  _battleManager: {fileID: 0}
+  _mapManager: {fileID: 0}
   _maxHealth: 100
   _currentHealth: 0
   moveRange: 3
@@ -1494,6 +1499,7 @@ MonoBehaviour:
   arcHeight: 50
   maxRotation: 15
   card: {fileID: 2974870984592191552, guid: 73f05b87b91c26d409e3b508e2d9a27b, type: 3}
+  originalsortingOrder: 0
 --- !u!223 &2051032137
 Canvas:
   m_ObjectHideFlags: 0
