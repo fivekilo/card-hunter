@@ -6,19 +6,22 @@ using static UnityEditor.PlayerSettings;
 
 public class CardManager : MonoBehaviour
 {
-    public float cardSpacing = 100f; // ¿¨ÅÆ¼ä¾à
-   // public float moveDuration = 0.3f; // ÒÆ¶¯¶¯»­Ê±¼ä
+    public float cardSpacing = 100f; // ï¿½ï¿½ï¿½Æ¼ï¿½ï¿½
+    public float arcHeight = 50f;    // ï¿½ï¿½ï¿½Î¸ß¶ï¿½
+    public float maxRotation = 15f;  // ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½Ç¶ï¿½
+   // public float moveDuration = 0.3f; // ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
     public GameObject card;
-    public CardPool cardpool;
+   // public CardPool cardpool;
     public int originalsortingOrder;
     //private List<Card> cards;
     public Card CreateCard(int cardNum, Transform parent)
     {
-        GameObject newCard = cardpool.GetCard(cardNum);
+        GameObject newCard = Instantiate(card,parent);
+        //GameObject newCard = cardpool.GetCard(cardNum);
         newCard.transform.position = new Vector3(0, -300, 0) + transform.position;
         Card carddata = newCard.GetComponent<Card>();
-        //carddata.cardNum = cardNum;
-        //carddata.cardInit();
+        carddata.cardNum = cardNum;
+        carddata.cardInit();
         return carddata;
         // Start is called before the first frame update
     }
@@ -49,17 +52,28 @@ public class CardManager : MonoBehaviour
         {
             Card card = cardsInHand[i];
             card.GetComponentInChildren<Canvas>().sortingOrder = i;
-            float ratio = (float)i / (cardsInHand.Count - 1);
+            //float ratio = (float)i / (cardsInHand.Count - 1);
             float xPos = startX + i * cardSpacing;
-            // ÒÆ¶¯¿¨ÅÆ
-            card.transform.position = new Vector3(xPos, 0, 0)+transform.position;
 
+            // ï¿½ï¿½ï¿½ã»¡ï¿½ï¿½Î»ï¿½ï¿½
+            //float yPos = -arcHeight * Mathf.Sin(ratio * Mathf.PI);
+
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½Ç¶ï¿½
+            //float rotation = Mathf.Lerp(-maxRotation, maxRotation, ratio);
+
+            // Ê¹ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
+            //card.transform.Translate(new Vector3(xPos, 0, 0));
+            card.transform.position = new Vector3(xPos, 0, 0)+transform.position;
+            //card.transform.Rotate(new Vector3(0, 0, rotation));
+
+            // ï¿½ï¿½ï¿½Ã²ã¼¶ï¿½ï¿½Ê¹ï¿½Ð¼ä¿¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            //card.transform.SetSiblingIndex(i);
         }
     }
     void Start()
     {
         originalsortingOrder = 0;
-        cardpool = GetComponent<CardPool>();
+     //   cardpool = GetComponent<CardPool>();
     }
 
     // Update is called once per frame
