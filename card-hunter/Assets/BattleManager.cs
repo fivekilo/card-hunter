@@ -319,9 +319,15 @@ public class BattleManager : MonoBehaviour
                     Vector2Int nowPos = Player.PlayerGridPos + new Vector2Int(dx[Dir_id] * i, dy[Dir_id] * i);
                     foreach (EnemyAIController enemyAI in _enemies)
                     {
-                        if(enemyAI.GetCurrentGridPos() == nowPos)
+
+                        if (enemyAI.GetCurrentGridPos() == nowPos)
                         {
                             enemyAI.ReduceHealth(card.Attack.x * card.Attack.y);
+                        }
+                        else
+                        {
+                            Debug.Log($"now pos:{nowPos.x} {nowPos.y}");
+                            Debug.Log($"enemy pos:{enemyAI.GetCurrentGridPos().x} {enemyAI.GetCurrentGridPos().y}");
                         }
                     }
                 }
