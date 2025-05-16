@@ -38,7 +38,7 @@ public class EnemySkillSystem : MonoBehaviour
         Vector2Int enemypos = aiController._currentGridPos;
         int enemydirection = aiController.direction;
         List<Vector2Int> actualrangepos =GetSkillRange(nextskillconfig,enemypos,enemydirection);
-
+        mapManager.ChangeColorByPos(actualrangepos, Color.magenta);//记得改回来
     }
 
     public List<Vector2Int> GetSkillRange(GameConfig.EnemySkillConfig config, Vector2Int enemypos, int enemydirection)
@@ -67,12 +67,32 @@ public class EnemySkillSystem : MonoBehaviour
         currentSkillID = nextSkillID;//获取上回合选定的技能
         GameConfig.EnemySkillConfig config = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == currentSkillID);
         if (config == null) yield break;
+        //改回攻击范围变的色
+        Vector2Int enemypos = aiController._currentGridPos;
+        int enemydirection = aiController.direction;
+        List<Vector2Int> actualrangepos = GetSkillRange(config, enemypos, enemydirection);
+        ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
+        mapManager.ChangeColorByPos(actualrangepos, color);
 
         // 执行移动
         //yield return HandleSkillMovement(config);
-        // 执行伤害
-        //yield return ApplySkillDamage(config);
+        //执行伤害
+        yield return ApplySkillDamage(config, actualrangepos);
         // 应用Debuff
         //ApplyDebuffs(config);
     }
+
+    private IEnumerator ApplySkillDamage(GameConfig.EnemySkillConfig config, List<Vector2Int> actualrangepos)
+    {
+        List<PlayerInfo> players = battleManager.GetTargetsInRange(actualrangepos);
+        foreach (PlayerInfo player in players)
+        {
+            for (int i = 1; i <= config.hittimes; i++)
+            {
+                battleManager.ApplyDamage(player, config.damage,aiController);
+                yield return new WaitForSeconds(0.2f);
+            }
+        }
+    }
+
 }

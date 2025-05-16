@@ -42,7 +42,8 @@ public class EnemyAIController : MonoBehaviour
     public IEnumerator TakeTurn()//执行回合
     {
 
-        //先出上一回合结束的招式(待编写)
+        //先出上一回合指定的招式
+        yield return skillSystem.ExecuteCurrentSkill();
         //再判断移动
         if (ShouldMoveToPlayer())
         {
@@ -58,7 +59,8 @@ public class EnemyAIController : MonoBehaviour
         {
             yield return WanderRandomly();
         }
-        //出下一招（待编写）
+        //展示要出的下一招
+        skillSystem.SelectNextSkill();
     }
 
     bool ShouldMoveToPlayer()
@@ -178,9 +180,12 @@ public class EnemyAIController : MonoBehaviour
     {
         return _currentGridPos;
     }
+
     // Update is called once per frame
     void Update()
     {
-        
+        //以防变身更新了技能组，不断传入新技能
+        skillSystem = GetComponent<EnemySkillSystem>();
+        skillSystem.availableSkills = selfSkills;
     }
 }

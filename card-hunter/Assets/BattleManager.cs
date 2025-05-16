@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 //using UnityEngine.UIElements;
 
 public enum BattleState
@@ -423,6 +425,24 @@ public class BattleManager : MonoBehaviour
         {
             card.CBuse = false;
         }
+    }
+
+    //给怪物检测攻击范围内有无玩家
+    public List<PlayerInfo> GetTargetsInRange(List<Vector2Int> actualrangepos)
+    {
+        List<PlayerInfo> players = new List<PlayerInfo>();
+        foreach (Vector2Int pos in actualrangepos)
+        {
+            if (Player.PlayerGridPos == pos)
+                players.Add(Player);
+        }
+        return players;
+    }
+    //怪物对玩家造成伤害
+    public void ApplyDamage(PlayerInfo target, int damage, EnemyAIController origin)
+    {
+        int temphealth = Player.curHealth-damage;
+        Player.ModifyHealth(temphealth);
     }
 
     public void EndBattle()
