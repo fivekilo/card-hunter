@@ -12,7 +12,7 @@ public class EnemySkillSystem : MonoBehaviour
     //技能相关信息
     public int currentSkillID;
     public int nextSkillID;
-    private List<int> availableSkills =new List<int>();//该怪物有的技能组ID
+    public List<int> availableSkills =new List<int>();//该怪物有的技能组ID
     //（靠aicontroll在开始时/转形态时主动传入）
 
     void Awake()
@@ -32,13 +32,40 @@ public class EnemySkillSystem : MonoBehaviour
         {
             nextSkillID = availableSkills[Random.Range(0, availableSkills.Count)];
         }
+
+        //获取技能范围并展示
+        GameConfig.EnemySkillConfig nextskillconfig = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == nextSkillID);
+        Vector2Int enemypos = aiController._currentGridPos;
+        int enemydirection = aiController.direction;
+        List<Vector2Int> actualrangepos =GetSkillRange(nextskillconfig,enemypos,enemydirection);
+
+    }
+
+    public List<Vector2Int> GetSkillRange(GameConfig.EnemySkillConfig config, Vector2Int enemypos, int enemydirection)
+    {
+        List <Vector2Int> ActualRangePos= new List<Vector2Int>();
+        List<Vector2Int> VectorRange = config.range;
+        //计算方向导致的坐标变换偏移量
+        //标准方向向量  0，1，2，3，4，5
+        List<Vector2Int> StdVector = new List<Vector2Int> {new Vector2Int(1,0), new Vector2Int(0,1), new Vector2Int(-1, 1), 
+            new Vector2Int(-1, 0), new Vector2Int(0, -1),new Vector2Int(1,-1) };
+        foreach (Vector2Int singlepos in VectorRange)
+        {
+            Vector2Int temp = new Vector2Int();
+            //重要推导公式
+            temp.x = singlepos.x * StdVector[0 + enemydirection].x + singlepos.y * StdVector[(5 + enemydirection) % 6].x;
+            temp.y = singlepos.x * StdVector[0 + enemydirection].y + singlepos.y * StdVector[(5 + enemydirection) % 6].y;
+            Vector2Int RangeRealPos = enemypos + temp;
+            ActualRangePos.Add(RangeRealPos);
+        }
+        return ActualRangePos;
     }
 
     //执行技能
     public IEnumerator ExecuteCurrentSkill()
     {
         currentSkillID = nextSkillID;//获取上回合选定的技能
-        var config = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == currentSkillID);
+        GameConfig.EnemySkillConfig config = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == currentSkillID);
         if (config == null) yield break;
 
         // 执行移动

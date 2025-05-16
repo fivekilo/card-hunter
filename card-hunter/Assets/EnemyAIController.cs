@@ -6,9 +6,9 @@ using UnityEngine;
 public class EnemyAIController : MonoBehaviour
 {
     //加载基本事项
-    public BattleManager _battleManager;
+    private BattleManager _battleManager;
     public Vector2Int _currentGridPos { get; set; }
-    public MapManager _mapManager;
+    private MapManager _mapManager;
     public PlayerInfo _player;
     public TextMeshProUGUI text;
     [Header("基础属性")]
@@ -17,6 +17,7 @@ public class EnemyAIController : MonoBehaviour
     [SerializeField] protected int moveRange = 2;//每回合最大移动距离
     [SerializeField] protected int detectionRange = 4;//检测玩家的最大范围
     [SerializeField] private float moveInterval = 0.3f; // 移动动画间隔
+    public int direction=0;//方向
 
     public EnemySkillSystem skillSystem;
     [SerializeField] private List<int> selfSkills = new List<int>();//自身技能组（需要预先在inspector里设置好！）
@@ -26,12 +27,16 @@ public class EnemyAIController : MonoBehaviour
         _battleManager = GetComponentInParent<BattleManager>();
         _mapManager = _battleManager.mapmanager;
         _currentGridPos = new(GameConfig.size/2,GameConfig.size/2); 
+        //初始化位置
         Vector3 InitialPos = _mapManager.GetVector3(_currentGridPos);
         InitialPos.z = -5;
         transform.position = InitialPos;
         _player= FindObjectOfType<PlayerInfo>();
         _currentHealth = _maxHealth;
         text = GetComponentInChildren<TextMeshProUGUI>();
+        //传入技能
+        skillSystem = GetComponent<EnemySkillSystem>();
+        skillSystem.availableSkills = selfSkills;
     }
    
     public IEnumerator TakeTurn()//执行回合
