@@ -111,8 +111,9 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 1; i <= 8; i++)
         {
-            Card newcard = cardManager.CreateCard(1,cardManager.transform );
-            discardPile.Add(newcard); 
+            Card newcard = cardManager.CreateCard(i  ,cardManager.transform );
+            discardPile.Add(newcard);
+            CardIntoHand(newcard);
         }
         ShuffleDeck(discardPile);
     }
@@ -122,7 +123,7 @@ public class BattleManager : MonoBehaviour
         _enemies = new List<EnemyAIController>(FindObjectsOfType<EnemyAIController>());
     }
 
-    public void CardIntoHand(Card card)
+    public void CardIntoHand(Card card) //只有初始化 衍生物 boss塞牌才调用
     {
         CardController cardController = card.GetComponent<CardController>();
         cardController.OnCardUsed += PlayCard;
@@ -142,7 +143,7 @@ public class BattleManager : MonoBehaviour
             Card drawnCard = deck[0];
             deck.RemoveAt(0);
             cardManager.AddCardToHand(drawnCard, hand);
-            CardIntoHand(drawnCard);
+            
         }
       //  Debug.Log(hand.Count);
     }
@@ -250,13 +251,17 @@ public class BattleManager : MonoBehaviour
     {
         if (currentState != BattleState.PlayerTurn) return;
 
-        discardPile.AddRange(hand);
         foreach(Card card in hand)
         {
             card.transform.position += new Vector3(10000, 0, 0);
         }
+        foreach (Card card in hand)
+        {
+            if(card.Nothingness == false)
+            discardPile.Add(card);
+        }
         hand.Clear();
-        Debug.Log("回合结束时手牌数为:" + hand.Count);
+    //    Debug.Log("回合结束时手牌数为:" + hand.Count);
         cardManager.UpdateCardPositions(hand);
     }
     public IEnumerator ConsumeCoRoutine(Card card)
@@ -316,11 +321,15 @@ public class BattleManager : MonoBehaviour
                     }
                 }
             }
+            int cnt = 0;
             foreach(EnemyAIController enemy in AttackedMonster)
             {
+                cnt++;
+                Debug.Log("被打第" + cnt.ToString() + "次");
                 enemy.ReduceHealth(card.Attack.x * card.Attack.y);
+                Debug.Log(card.Attack.x.ToString()  + " " +  card.Attack.y.ToString());
             }
-
+        //    Debug.Log(AttackedMonster.Count);
         }
 
         if(card.Derivation != 0)
@@ -334,9 +343,11 @@ public class BattleManager : MonoBehaviour
             }
         }
        
+       
+
         cardManager.RemoveCardFromHand(card, hand);
         card.transform.position += new Vector3(10000, 0, 0);
-        if(card.Consumption != true)
+        if(card.Consumption != true) //消耗判断
         discardPile.Add(card);
 
     }
