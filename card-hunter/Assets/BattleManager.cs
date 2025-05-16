@@ -272,16 +272,25 @@ public class BattleManager : MonoBehaviour
             isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
             Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
-            Player.ModifySituation(0);
-            yield return StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback1, callback2));
+            List<int> newDir = card.Move;
+            List<int> AllDir = new List<int> { 0, 1, 2, 3, 4, 5 };
+            if (Player.Situation == 0) newDir = AllDir;
+            if (card.EnterState == 1 || (card.EnterState == 0 && Player.Situation == 0))
+                Player.ModifySituation(0);
+            else if (card.EnterState == 2 || (card.EnterState == 0 && Player.Situation == 1))
+                Player.ModifySituation(1);
+            yield return StartCoroutine(mapmanager.MoveCommand(GetAdjacent(newDir), Player.PlayerGridPos, card.MoveLength, callback1, callback2));
         }
 
         if (card.AttackDirection != null)
         {
             isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback = OnDirectionChanged.Invoke;
+            List<int> newDir = card.AttackDirection;
+            List<int> AllDir = new List<int> { 0, 1, 2, 3, 4, 5 };
+            if (Player.Situation == 0) newDir = AllDir;
             Player.ModifySituation(1);
-            yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(card.AttackDirection), Player.PlayerGridPos, new(0, card.AttackLength), callback));
+            yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback));
         }
         if (card.DeltaBladeNum != 0)
         {
