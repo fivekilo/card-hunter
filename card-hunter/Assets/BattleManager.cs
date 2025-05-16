@@ -270,6 +270,46 @@ public class BattleManager : MonoBehaviour
             Player.ModifySituation(1);
             yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(card.AttackDirection), Player.PlayerGridPos, new(0, card.AttackLength), callback));
         }
+        if (card.DeltaBladeNum != 0)
+        {
+            Player.ModifyBladeNum(Player.curBladeNum + card.DeltaBladeNum);
+            OnBladeGasChange?.Invoke(Player.curBladeNum);
+        }
+
+        if (card.DeltaBladeLevel != 0)
+        {
+            Player.ModifyBladeLevel(Player.curBladeLevel + card.DeltaBladeLevel);
+            OnBladeLevelChange?.Invoke(Player.curBladeLevel);
+        }
+
+        if (card.AttackDirection != null)
+        {
+            int[] dx = { 1, 0, -1, -1, 0, 1 };
+            int[] dy = { 0, 1, 1, 0, -1, -1 };
+            int PlayerDirId = -1;
+            for (int i = 0; i < 6; i++)
+            {
+                if (Player.Direction.x == dx[i] && Player.Direction.y == dy[i]) { PlayerDirId = i; break; }
+            }
+            FindAllEnemies();
+            foreach (int Dir_id in card.AttackDirection)
+            {
+                for (int i = 0; i <= card.AttackLength; i++)
+                {
+                    int newDir = (Dir_id + PlayerDirId) % 6;
+                    Vector2Int nowPos = Player.PlayerGridPos + new Vector2Int(dx[newDir] * i, dy[newDir] * i);
+                    foreach (EnemyAIController enemyAI in _enemies)
+                    {
+                        if (enemyAI.GetCurrentGridPos() == nowPos)
+                        {
+                            enemyAI.ReduceHealth(card.Attack.x * card.Attack.y);
+                        }
+                    }
+                }
+            }
+        }
+        
+        
     }
     public void PlayCard(Card card)
     {
@@ -293,50 +333,48 @@ public class BattleManager : MonoBehaviour
                Action<Vector2Int> callback = OnDirectionChanged.Invoke;
                StartCoroutine(mapmanager.AttackCommand(GetAdjacent(card.AttackDirection), Player.PlayerGridPos, new(0 , card.AttackLength), callback));
            }*/
+        
+        
         StartCoroutine(MoveAndAttackCoRoutine(card));
-
-        if(card.DeltaBladeNum != 0)
-        {
-            Player.ModifyBladeNum(Player.curBladeNum + card.DeltaBladeNum);
-            OnBladeGasChange?.Invoke(Player.curBladeNum);
-        }
-
-        if(card.DeltaBladeNum != 0)
-        {
-            Player.ModifyBladeLevel(Player.curBladeLevel + card.DeltaBladeLevel);
-            OnBladeLevelChange?.Invoke(Player.curBladeLevel);
-        }
-
-        if (card.AttackDirection != null)
-        {
-            int[] dx = { 1, 0, -1, -1, 0, 1 };
-            int[] dy = { 0, 1, 1, 0, -1, -1 };
-            FindAllEnemies();
-            foreach (int Dir_id in card.AttackDirection)
-            {
-                for(int i = 0;i <= card.AttackLength;i ++)
-                {
-                    Vector2Int nowPos = Player.PlayerGridPos + new Vector2Int(dx[Dir_id] * i, dy[Dir_id] * i);
-                    foreach (EnemyAIController enemyAI in _enemies)
-                    {
-
-                        if (enemyAI.GetCurrentGridPos() == nowPos)
-                        {
-                            enemyAI.ReduceHealth(card.Attack.x * card.Attack.y);
-                        }
-                        else
-                        {
-                            Debug.Log($"now pos:{nowPos.x} {nowPos.y}");
-                            Debug.Log($"enemy pos:{enemyAI.GetCurrentGridPos().x} {enemyAI.GetCurrentGridPos().y}");
-                        }
-                    }
-                }
-            }
-        }
-
         cardManager.RemoveCardFromHand(card, hand);
         card.transform.position += new Vector3(10000, 0, 0);
         discardPile.Add(card);
+        /*   if(card.DeltaBladeNum != 0)
+           {
+               Player.ModifyBladeNum(Player.curBladeNum + card.DeltaBladeNum);
+               OnBladeGasChange?.Invoke(Player.curBladeNum);
+           }
+
+           if(card.DeltaBladeLevel != 0)
+           {
+               Player.ModifyBladeLevel(Player.curBladeLevel + card.DeltaBladeLevel);
+               OnBladeLevelChange?.Invoke(Player.curBladeLevel);
+           }
+
+           if (card.AttackDirection != null)
+           {
+               int[] dx = { 1, 0, -1, -1, 0, 1 };
+               int[] dy = { 0, 1, 1, 0, -1, -1 };
+               FindAllEnemies();
+               foreach (int Dir_id in card.AttackDirection)
+               {
+                   for(int i = 0;i <= card.AttackLength;i ++)
+                   {
+                       Vector2Int nowPos = Player.PlayerGridPos + new Vector2Int(dx[Dir_id] * i, dy[Dir_id] * i);
+                       foreach (EnemyAIController enemyAI in _enemies)
+                       {
+                           if(enemyAI.GetCurrentGridPos() == nowPos)
+                           {
+                               enemyAI.ReduceHealth(card.Attack.x * card.Attack.y);
+                           }
+                       }
+                   }
+               }
+           }
+
+           cardManager.RemoveCardFromHand(card, hand);
+           card.transform.position += new Vector3(10000, 0, 0);
+           discardPile.Add(card);*/
     } 
     public void UpdateCards()
     {
