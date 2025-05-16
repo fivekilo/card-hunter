@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -33,7 +34,8 @@ public class BattleManager : MonoBehaviour
     public Button Endbutton;
     public Button Movebutton;
     public CardManager cardManager;
-   // public int i = 1;
+    public TextMeshProUGUI UserIndicator;
+    // public int i = 1;
     private List<Card> InitialDeck = new(); 
     private List<Card> deck = new ();      
     [SerializeField]
@@ -87,11 +89,11 @@ public class BattleManager : MonoBehaviour
               i = i % 8 + 1;
           });*/
         InitializeBattle();
-        foreach (Card card in discardPile)
+     /*   foreach (Card card in discardPile)
         {
             CardController cardController = card.GetComponent<CardController>();
             cardController.OnCardUsed += PlayCard;
-        }
+        }*/
         
     }
 
@@ -109,8 +111,9 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 1; i <= 8; i++)
         {
-            Card newcard = cardManager.CreateCard(i,cardManager.transform );
-            discardPile.Add(newcard); 
+            Card newcard = cardManager.CreateCard(i  ,cardManager.transform );
+            discardPile.Add(newcard);
+            CardIntoHand(newcard);
         }
         ShuffleDeck(discardPile);
     }
@@ -120,6 +123,11 @@ public class BattleManager : MonoBehaviour
         _enemies = new List<EnemyAIController>(FindObjectsOfType<EnemyAIController>());
     }
 
+    public void CardIntoHand(Card card) //只有初始化 衍生物 boss塞牌才调用
+    {
+        CardController cardController = card.GetComponent<CardController>();
+        cardController.OnCardUsed += PlayCard;
+    }
     public void DrawCard(int num)
     {
         for(int i = 0;i < num;i ++)
@@ -135,6 +143,7 @@ public class BattleManager : MonoBehaviour
             Card drawnCard = deck[0];
             deck.RemoveAt(0);
             cardManager.AddCardToHand(drawnCard, hand);
+            
         }
       //  Debug.Log(hand.Count);
     }
@@ -242,16 +251,20 @@ public class BattleManager : MonoBehaviour
     {
         if (currentState != BattleState.PlayerTurn) return;
 
-        discardPile.AddRange(hand);
         foreach(Card card in hand)
         {
             card.transform.position += new Vector3(10000, 0, 0);
         }
+        foreach (Card card in hand)
+        {
+            if(card.Nothingness == false)
+            discardPile.Add(card);
+        }
         hand.Clear();
-        Debug.Log("回合结束时手牌数为:" + hand.Count);
+    //    Debug.Log("回合结束时手牌数为:" + hand.Count);
         cardManager.UpdateCardPositions(hand);
     }
-    public IEnumerator MoveAndAttackCoRoutine(Card card)
+    public IEnumerator ConsumeCoRoutine(Card card)
     {
         if (card.Move != null)
         {
@@ -259,49 +272,33 @@ public class BattleManager : MonoBehaviour
             isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
             Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
-            Player.ModifySituation(0);
-            yield return StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback1, callback2));
+            List<int> newDir = card.Move;
+            List<int> AllDir = new List<int> { 0, 1, 2, 3, 4, 5 };
+            if (Player.Situation == 0) newDir = AllDir;
+            if (card.EnterState == 1 || (card.EnterState == 0 && Player.Situation == 0))
+                Player.ModifySituation(0);
+            else if (card.EnterState == 2 || (card.EnterState == 0 && Player.Situation == 1))
+                Player.ModifySituation(1);
+            yield return StartCoroutine(mapmanager.MoveCommand(GetAdjacent(newDir), Player.PlayerGridPos, card.MoveLength, callback1, callback2));
         }
 
         if (card.AttackDirection != null)
         {
             isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback = OnDirectionChanged.Invoke;
+            List<int> newDir = card.AttackDirection;
+            List<int> AllDir = new List<int> { 0, 1, 2, 3, 4, 5 };
+            if (Player.Situation == 0) newDir = AllDir;
             Player.ModifySituation(1);
-            yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(card.AttackDirection), Player.PlayerGridPos, new(0, card.AttackLength), callback));
+            yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback));
         }
-    }
-    public void PlayCard(Card card)
-    {
-        if (currentState != BattleState.PlayerTurn ) return;
-        if (Player.curCost < card.Cost)return;
-
-        Player.ModifyCost(Player.curCost - card.Cost);
-        Debug.Log("还剩" + Player.curCost.ToString() + "费！");
-
-        /*   if(card.Move != null)
-           {
-               isWaitingForPlayerChoose = true;
-               Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
-               Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
-               StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback1 , callback2));
-           }
-
-           if(card.AttackDirection != null)
-           {
-               isWaitingForPlayerChoose = true;
-               Action<Vector2Int> callback = OnDirectionChanged.Invoke;
-               StartCoroutine(mapmanager.AttackCommand(GetAdjacent(card.AttackDirection), Player.PlayerGridPos, new(0 , card.AttackLength), callback));
-           }*/
-        StartCoroutine(MoveAndAttackCoRoutine(card));
-
-        if(card.DeltaBladeNum != 0)
+        if (card.DeltaBladeNum != 0)
         {
             Player.ModifyBladeNum(Player.curBladeNum + card.DeltaBladeNum);
             OnBladeGasChange?.Invoke(Player.curBladeNum);
         }
 
-        if(card.DeltaBladeNum != 0)
+        if (card.DeltaBladeLevel != 0)
         {
             Player.ModifyBladeLevel(Player.curBladeLevel + card.DeltaBladeLevel);
             OnBladeLevelChange?.Invoke(Player.curBladeLevel);
@@ -311,26 +308,71 @@ public class BattleManager : MonoBehaviour
         {
             int[] dx = { 1, 0, -1, -1, 0, 1 };
             int[] dy = { 0, 1, 1, 0, -1, -1 };
+            int PlayerDirId = -1;
+            for (int i = 0; i < 6; i++)
+            {
+                if (Player.Direction.x == dx[i] && Player.Direction.y == dy[i]) { PlayerDirId = i; break; }
+            }
             FindAllEnemies();
+            List<EnemyAIController> AttackedMonster = new();
             foreach (int Dir_id in card.AttackDirection)
             {
-                for(int i = 0;i <= card.AttackLength;i ++)
+                for (int i = 0; i <= card.AttackLength; i++)
                 {
-                    Vector2Int nowPos = Player.PlayerGridPos + new Vector2Int(dx[Dir_id] * i, dy[Dir_id] * i);
+                    int newDir = (Dir_id + PlayerDirId) % 6;
+                    Vector2Int nowPos = Player.PlayerGridPos + new Vector2Int(dx[newDir] * i, dy[newDir] * i);
                     foreach (EnemyAIController enemyAI in _enemies)
                     {
-                        if(enemyAI.GetCurrentGridPos() == nowPos)
+                        if (enemyAI.GetCurrentGridPos() == nowPos && !AttackedMonster.Contains(enemyAI))
                         {
-                            enemyAI.ReduceHealth(card.Attack.x * card.Attack.y);
+                            AttackedMonster.Add(enemyAI);
                         }
                     }
                 }
             }
+            int cnt = 0;
+            foreach(EnemyAIController enemy in AttackedMonster)
+            {
+                cnt++;
+                Debug.Log("被打第" + cnt.ToString() + "次");
+                enemy.ReduceHealth(card.Attack.x * card.Attack.y);
+                Debug.Log(card.Attack.x.ToString()  + " " +  card.Attack.y.ToString());
+            }
+        //    Debug.Log(AttackedMonster.Count);
         }
+
+        if(card.Derivation != 0)
+        {
+            Card newCard = cardManager.CreateCard(card.Derivation, cardManager.transform);
+            if (hand.Count < GameConfig.MaxHandCardNum)
+            {
+                hand.Add(newCard);
+                CardIntoHand(newCard);
+                cardManager.UpdateCardPositions(hand);
+            }
+        }
+       
+       
 
         cardManager.RemoveCardFromHand(card, hand);
         card.transform.position += new Vector3(10000, 0, 0);
+        if(card.Consumption != true) //消耗判断
         discardPile.Add(card);
+
+    }
+    public void PlayCard(Card card)
+    {
+        if (currentState != BattleState.PlayerTurn ) return;
+        if (Player.curCost < card.Cost)return;
+
+        Player.ModifyCost(Player.curCost - card.Cost);
+        Debug.Log("还剩" + Player.curCost.ToString() + "费！");
+
+      
+        
+        StartCoroutine(ConsumeCoRoutine(card));
+        
+        
     } 
     public void UpdateCards()
     {

@@ -68,7 +68,7 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         else
         {
             OnCardUsed?.Invoke(card);
-            Debug.Log("卡牌被使用了");
+            Debug.Log($"{card.cardName}卡牌被使用了");
             card.transform.position += new Vector3(10000, 0, 0);//后用对象池实现卡牌消失
         }
         

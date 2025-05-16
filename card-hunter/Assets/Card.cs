@@ -36,7 +36,7 @@ public class Card : MonoBehaviour
     public int DeltaBladeNum;//回气刃槽
     public int DeltaBladeLevel; //提升气刃等级
     public int DeltaHealth; //生命值变化
-
+    public bool Sequence;//0先攻击再移动 1先移动再攻击 默认为true
     //private TextMeshProUGUI cardTextBox;
     //private TextMeshProUGUI cardNameBox;
     //private TextMeshProUGUI cardTypeBox;
@@ -102,6 +102,7 @@ public class Card : MonoBehaviour
         DeltaBladeNum = GameConfig.DeltaBladeNum[cardNum];//回气刃槽
         DeltaBladeLevel = GameConfig.DeltaBladeLevel[cardNum]; //提升气刃等级
         DeltaHealth = GameConfig.DeltaHealth[cardNum]; //生命值变化
+        Sequence = GameConfig.Sequence[cardNum];
     }
     public void cardInit()
     {        
