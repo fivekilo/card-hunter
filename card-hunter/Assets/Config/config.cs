@@ -484,6 +484,11 @@ public class GameConfig : ScriptableObject
         }
     }.AsReadOnly();
 
+    public static IReadOnlyList<string> Destinies = new List<string> {"Forest","Desert","Valcano"};
+    public const int RoutePointNum= 2;//路径上的节点
+    public const int PointDistance = 1;//节点间距
+    public const float MoveDuration = 1;//移动时长
+
     //RogueMod
-    public static readonly List<Commission> Commissions= new List<Commission>{ new Commission(0, "大贼龙", 1,1) };
+    public static readonly List<Commission> Commissions= new List<Commission>{ new Commission(0, "大贼龙", 1,0) };
 }
