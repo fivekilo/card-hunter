@@ -12,12 +12,15 @@ public class EnemyAIController : MonoBehaviour
     public PlayerInfo _player;
     public TextMeshProUGUI text;
     [Header("基础属性")]
-    [SerializeField] protected int _maxHealth = 100;
-    [SerializeField] protected int _currentHealth;
+    [SerializeField] public int _maxHealth = 100;
+    [SerializeField] public int _currentHealth;
     [SerializeField] protected int moveRange = 2;//每回合最大移动距离
     [SerializeField] protected int detectionRange = 4;//检测玩家的最大范围
     [SerializeField] private float moveInterval = 0.3f; // 移动动画间隔
-    
+
+    public EnemySkillSystem skillSystem;
+    [SerializeField] private List<int> selfSkills = new List<int>();//自身技能组（需要预先在inspector里设置好！）
+
     void Start()
     {
         _battleManager = GetComponentInParent<BattleManager>();
@@ -156,14 +159,13 @@ public class EnemyAIController : MonoBehaviour
     }
     
     //加减血量
-   /* public void AddHealth(int num)
-    {
-        _currentHealth += num;
-    }*/
     public void ReduceHealth(int num)
     {
         _currentHealth = Mathf.Clamp(_currentHealth - num, 0, _maxHealth);
-        Debug.Log("怪物被打了！");
+        if (num>=0) 
+            Debug.Log("怪物被打了！");
+        else
+            Debug.Log("怪物回复生命值了！");
         text.text = $"{_currentHealth}/{_maxHealth}";
     }
 
