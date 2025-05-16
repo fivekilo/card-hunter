@@ -311,7 +311,11 @@ public class MapManager : MonoBehaviour
     //让指定坐标（地图坐标）的格子变色
     public void ChangeColorByPos(List<Vector2Int> PosSet,Color color) 
     {
-        foreach (Vector2Int pos in PosSet) { map.ChangeColor(pos, color); }
+        foreach (Vector2Int pos in PosSet) 
+        {   
+            if (map.GetHex(pos).tag != "Obstacle")
+                map.ChangeColor(pos, color);
+        }
     }
 
     public Vector2Int GetNewDir(Vector2Int ClickedPos , Vector2Int player)

@@ -189,7 +189,7 @@ public class BattleManager : MonoBehaviour
     {
         UserIndicator.text = "怪物回合开始了......";
         Debug.Log("怪物回合开始了!");
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2f);
         FindAllEnemies();
         foreach(var enemy in _enemies)
          {

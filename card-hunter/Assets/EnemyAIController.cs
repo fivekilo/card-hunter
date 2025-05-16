@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class EnemyAIController : MonoBehaviour
 {
@@ -17,7 +18,10 @@ public class EnemyAIController : MonoBehaviour
     [SerializeField] protected int moveRange = 2;//每回合最大移动距离
     [SerializeField] protected int detectionRange = 4;//检测玩家的最大范围
     [SerializeField] private float moveInterval = 0.3f; // 移动动画间隔
-    public int direction=0;//方向
+    //方向及方向转换
+    public int direction=0;
+    private List<Vector2Int> StdVector = new List<Vector2Int> {new Vector2Int(1,0), new Vector2Int(0,1), new Vector2Int(-1, 1),
+            new Vector2Int(-1, 0), new Vector2Int(0, -1),new Vector2Int(1,-1) };
 
     public EnemySkillSystem skillSystem;
     [SerializeField] private List<int> selfSkills = new List<int>();//自身技能组（需要预先在inspector里设置好！）
@@ -137,6 +141,10 @@ public class EnemyAIController : MonoBehaviour
         foreach (var pos in path)
         {
             if (!_battleManager.CheckPosIsValid(pos)) break;
+            //先更新方向再动
+            Vector2Int directionvector = pos - _currentGridPos;
+            int newdirection = StdVector.FindIndex(vector => vector==directionvector);
+            ChangeDirection(newdirection);
             if (pos == _player.PlayerGridPos) break;//如果要走到玩家那一格了就刹车
             UpdatePosition(pos);
             yield return new WaitForSeconds(moveInterval);//等待一定时长
@@ -151,6 +159,9 @@ public class EnemyAIController : MonoBehaviour
         if (possibleMoves.Count > 0)
         {
             Vector2Int target = possibleMoves[Random.Range(0, possibleMoves.Count)];
+            Vector2Int directionvector = target - _currentGridPos;
+            int newdirection = StdVector.FindIndex(vector => vector == directionvector);
+            ChangeDirection(newdirection);
             UpdatePosition(target);
             yield return new WaitForSeconds(moveInterval);
         }
@@ -179,6 +190,15 @@ public class EnemyAIController : MonoBehaviour
     public Vector2Int GetCurrentGridPos() // 公共方法供MapManager调用
     {
         return _currentGridPos;
+    }
+
+    //调转方向(待编写)
+    public void ChangeDirection(int newdirection)
+    {
+        int offset = newdirection - direction;
+        if (offset < 0) offset = 6 + offset;
+        //transform.rotation.z = (transform.rotation.z + 60 * offset) % 360;
+        direction = newdirection;
     }
 
     // Update is called once per frame

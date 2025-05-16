@@ -41,22 +41,25 @@ public class EnemySkillSystem : MonoBehaviour
         mapManager.ChangeColorByPos(actualrangepos, Color.magenta);//记得改回来
     }
 
+    //获取攻击范围对应的地图坐标
     public List<Vector2Int> GetSkillRange(GameConfig.EnemySkillConfig config, Vector2Int enemypos, int enemydirection)
     {
         List <Vector2Int> ActualRangePos= new List<Vector2Int>();
         List<Vector2Int> VectorRange = config.range;
-        //计算方向导致的坐标变换偏移量
+        //1.计算方向导致的坐标变换偏移量
         //标准方向向量  0，1，2，3，4，5
         List<Vector2Int> StdVector = new List<Vector2Int> {new Vector2Int(1,0), new Vector2Int(0,1), new Vector2Int(-1, 1), 
             new Vector2Int(-1, 0), new Vector2Int(0, -1),new Vector2Int(1,-1) };
         foreach (Vector2Int singlepos in VectorRange)
         {
             Vector2Int temp = new Vector2Int();
-            //重要推导公式
+            //2.重要推导公式
             temp.x = singlepos.x * StdVector[0 + enemydirection].x + singlepos.y * StdVector[(5 + enemydirection) % 6].x;
             temp.y = singlepos.x * StdVector[0 + enemydirection].y + singlepos.y * StdVector[(5 + enemydirection) % 6].y;
             Vector2Int RangeRealPos = enemypos + temp;
-            ActualRangePos.Add(RangeRealPos);
+            //3.防越界
+            if(RangeRealPos.x >= 0 && RangeRealPos.y >= 0)
+                ActualRangePos.Add(RangeRealPos);
         }
         return ActualRangePos;
     }
