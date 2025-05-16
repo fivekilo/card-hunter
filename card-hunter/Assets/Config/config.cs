@@ -300,19 +300,104 @@ public class GameConfig : ScriptableObject
     }.AsReadOnly();
 
     public enum MoveType { None, Forward, Backward}
+    public enum EnemyBuff { None, TurntoPlayer }//怪物给自己加的buff
+    public enum EnemyDebuff { None, CantMove }//怪物给玩家加的debuff
     //招式信息内部类
     public class EnemySkillConfig
     {
         public int skillID;
         public string skillName;
-        public List<int>directions; //攻击方向 正前方0 逆时针标号 不移动为null
-        public List<Vector2Int> range;//范围
+        public List<Vector2Int> range;//范围(填写对于怪物相对xy轴的相对坐标)
         public int damage;
         public int hittimes;//伤害次数
         public MoveType moveType;
         public int moveDistance;    //移动方式和距离
-        public List<int> debuffIDs;
+        public EnemyBuff enemybuff;
+        public EnemyDebuff enemydebuff;  //怪物的特殊效果
+        public int HPchange;//回复生命值数量（填入负值来回复生命）
     }
+    public static IReadOnlyList<EnemySkillConfig> EnemySkills = new List<EnemySkillConfig>
+    {
+        new EnemySkillConfig
+        {
+            skillID = 1,
+            skillName = "爪击",
+            range = new List<Vector2Int>{new Vector2Int(1,0), new Vector2Int(0, 1), new Vector2Int(1, -1) },
+            damage =5,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            enemybuff = EnemyBuff.None,
+            enemydebuff = EnemyDebuff.None,
+            HPchange = 0
+        },
+        new EnemySkillConfig
+        {
+            skillID = 2,
+            skillName = "二连前咬",
+            range = new List<Vector2Int>{new Vector2Int(1,0), new Vector2Int(0, 1), new Vector2Int(1, -1) },
+            damage =3,
+            hittimes = 2,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            enemybuff = EnemyBuff.TurntoPlayer,
+            enemydebuff = EnemyDebuff.None,
+            HPchange = 0
+        },
+        new EnemySkillConfig
+        {
+            skillID = 3,
+            skillName = "龙车",
+            range = new List<Vector2Int>{new Vector2Int(1,0), new Vector2Int(2, 0), new Vector2Int(3, 0) },
+            damage =8,
+            hittimes = 1,
+            moveType = MoveType.Forward,
+            moveDistance = 3,
+            enemybuff = EnemyBuff.None,
+            enemydebuff = EnemyDebuff.None,
+            HPchange = 0
+        },
+        new EnemySkillConfig
+        {
+            skillID = 4,
+            skillName = "进食",
+            range = new List<Vector2Int>(),
+            damage =0,
+            hittimes = 0,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            enemybuff = EnemyBuff.None,
+            enemydebuff = EnemyDebuff.None,
+            HPchange = -20
+        },
+        new EnemySkillConfig
+        {
+            skillID = 5,
+            skillName = "浓痰喷射",
+            range = new List<Vector2Int>{new Vector2Int(1,0), new Vector2Int(0, 1), new Vector2Int(1, -1) },
+            damage =4,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            enemybuff = EnemyBuff.None,
+            enemydebuff = EnemyDebuff.CantMove,
+            HPchange = 0
+        },
+        new EnemySkillConfig
+        {
+            skillID = 6,
+            skillName = "下压",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(0,1),new Vector2Int(1,1),
+                new Vector2Int(1,-1),new Vector2Int(2,-1)},
+            damage =9,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            enemybuff = EnemyBuff.None,
+            enemydebuff = EnemyDebuff.None,
+            HPchange = 0
+        }
+    }.AsReadOnly();
 
     //RogueMod
     public static readonly List<Commission> Commissions= new List<Commission>{ new Commission(0, "大贼龙", 1,1) };

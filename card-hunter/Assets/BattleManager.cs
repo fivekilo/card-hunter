@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -33,7 +34,8 @@ public class BattleManager : MonoBehaviour
     public Button Endbutton;
     public Button Movebutton;
     public CardManager cardManager;
-   // public int i = 1;
+    public TextMeshProUGUI UserIndicator;
+    // public int i = 1;
     private List<Card> InitialDeck = new(); 
     private List<Card> deck = new ();      
     [SerializeField]
@@ -109,7 +111,7 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 1; i <= 8; i++)
         {
-            Card newcard = cardManager.CreateCard(i,cardManager.transform );
+            Card newcard = cardManager.CreateCard(1,cardManager.transform );
             discardPile.Add(newcard); 
         }
         ShuffleDeck(discardPile);
