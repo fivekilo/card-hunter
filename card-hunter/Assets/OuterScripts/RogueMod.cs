@@ -34,7 +34,7 @@ public class Commission//á÷ÁÔÎ¯ÍĞ
     public int id;
     public string monster;
     public int difficulty;
-    public int place;//1:É­ÁÖ 2:»ÄÄ® 3:»ğÉ½
+    public int place;//0:É­ÁÖ 1:»ÄÄ® 2:»ğÉ½
     public Commission(int id, string monster, int difficulty, int place)
     {
         this.id = id;

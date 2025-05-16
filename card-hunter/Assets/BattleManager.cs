@@ -99,6 +99,7 @@ public class BattleManager : MonoBehaviour
 
     private void InitializeBattle()
     {
+        UserIndicator.text = "初始化中";
         OnBladeGasChange?.Invoke(5);
         OnBladeLevelChange?.Invoke(2);
 
@@ -109,7 +110,7 @@ public class BattleManager : MonoBehaviour
 
     public void InitializeDeck()
     {
-        for (int i = 1; i <= 8; i++)
+        for (int i = 1; i <= 11; i++)
         {
             Card newcard = cardManager.CreateCard(i  ,cardManager.transform );
             discardPile.Add(newcard);
@@ -130,7 +131,7 @@ public class BattleManager : MonoBehaviour
     }
     public void DrawCard(int num)
     {
-        for(int i = 0;i < num;i ++)
+        for (int i = 0;i < num;i ++)
         {
             if(deck.Count == 0)
             {
@@ -184,6 +185,7 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator HandEnemyTurn()
     {
+        UserIndicator.text = "怪物回合开始了......";
         Debug.Log("怪物回合开始了!");
         yield return new WaitForSeconds(5f);
         FindAllEnemies();
@@ -194,6 +196,7 @@ public class BattleManager : MonoBehaviour
                  yield return enemy.TakeTurn();
              }
         }
+        UserIndicator.text = "怪物回合结束了!";
         Debug.Log("怪物回合结束了!");
         ChangeState(BattleState.PlayerDraw);
     }
@@ -201,6 +204,7 @@ public class BattleManager : MonoBehaviour
     private IEnumerator PlayerDrawPhase()
     {
         Debug.Log("draw waiting");
+        UserIndicator.text = "抽牌阶段";
         yield return new WaitForSeconds(2f);
      //   OnPositionChanged?.Invoke(new(3, 4));
         Debug.Log("waiting complete");
@@ -216,9 +220,9 @@ public class BattleManager : MonoBehaviour
         
         Player.ModifyCost(Player.GetComponent<PlayerInfo>().MaxCost);
 
+        UserIndicator.text = "玩家回合";
 
-
-       // UIManager.Instance.SetEndTurnButtonActive(true);
+        // UIManager.Instance.SetEndTurnButtonActive(true);
 
     }
     public void OnEndTurnButtonClicked()
@@ -226,7 +230,7 @@ public class BattleManager : MonoBehaviour
         if (isWaitingForPlayerChoose == true || currentState != BattleState.PlayerTurn) return;
 
         Debug.Log("玩家结束回合了");
-
+        UserIndicator.text = "玩家回合结束";
 
         EndPlayerTurn();
         ChangeState(BattleState.EnemyTurn);
@@ -236,14 +240,13 @@ public class BattleManager : MonoBehaviour
         if (currentState != BattleState.PlayerTurn) return;
         int MoveCost = Player.Situation + 1;
         if (Player.curCost < MoveCost) return;
-        
+        Debug.Log("移动指令被触发了");
         Player.ModifyCost(Player.curCost - MoveCost);
         isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
             Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
             StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1,1), callback1 , callback2));
         Player.ModifySituation(0);
-
     }
 
 
@@ -266,22 +269,46 @@ public class BattleManager : MonoBehaviour
     }
     public IEnumerator ConsumeCoRoutine(Card card)
     {
+        if(card.Sequence == false)
+        {
+            if (card.AttackDirection != null)
+            {
+                UserIndicator.text = "请选择攻击方向";
+                isWaitingForPlayerChoose = true;
+                Action<Vector2Int> callback = OnDirectionChanged.Invoke;
+                List<int> newDir = card.AttackDirection;
+                List<int> AllDir = new List<int> { 0, 1, 2, 3, 4, 5 };
+                if (Player.Situation == 0) newDir = AllDir;
+                Player.ModifySituation(1);
+                yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback));
+            }
+        }
         if (card.Move != null)
         {
             //  OnPositionChange?.Invoke(this, new PlayerWantMoveEventArgs(GetAdjacent(card.Move) , /*card.MoveDistance*/1));
             isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
             Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
-            Player.ModifySituation(0);
-            yield return StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback1, callback2));
+            List<int> newDir = card.Move;
+            List<int> AllDir = new List<int> { 0, 1, 2, 3, 4, 5 };
+            if (Player.Situation == 0) newDir = AllDir;
+            if (card.EnterState == 1 || (card.EnterState == 0 && Player.Situation == 0))
+                Player.ModifySituation(0);
+            else if (card.EnterState == 2 || (card.EnterState == 0 && Player.Situation == 1))
+                Player.ModifySituation(1);
+            yield return StartCoroutine(mapmanager.MoveCommand(GetAdjacent(newDir), Player.PlayerGridPos, card.MoveLength, callback1, callback2));
         }
 
-        if (card.AttackDirection != null)
+        if (card.AttackDirection != null && card.Sequence == true)
         {
+            UserIndicator.text = "请选择攻击方向";
             isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback = OnDirectionChanged.Invoke;
+            List<int> newDir = card.AttackDirection;
+            List<int> AllDir = new List<int> { 0, 1, 2, 3, 4, 5 };
+            if (Player.Situation == 0) newDir = AllDir;
             Player.ModifySituation(1);
-            yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(card.AttackDirection), Player.PlayerGridPos, new(0, card.AttackLength), callback));
+            yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback));
         }
         if (card.DeltaBladeNum != 0)
         {
@@ -343,13 +370,16 @@ public class BattleManager : MonoBehaviour
             }
         }
        
-       
+       if(card.DrawCard != 0)
+        {
+            DrawCard(card.DrawCard);
+        }
 
         cardManager.RemoveCardFromHand(card, hand);
         card.transform.position += new Vector3(10000, 0, 0);
         if(card.Consumption != true) //消耗判断
         discardPile.Add(card);
-
+        UserIndicator.text = "玩家回合";
     }
     public void PlayCard(Card card)
     {
