@@ -69,7 +69,7 @@ public class CardPool : MonoBehaviour
         }
         else
         {
-            GameObject newCard = Instantiate(cardPrefab);
+            GameObject newCard = Instantiate(cardPrefab,transform);
             Card newCardData = newCard.GetComponent<Card>();
             newCardData.cardNum=cardnum;
             newCardData.cardInit();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -33,7 +34,8 @@ public class BattleManager : MonoBehaviour
     public Button Endbutton;
     public Button Movebutton;
     public CardManager cardManager;
-   // public int i = 1;
+    public TextMeshProUGUI UserIndicator;
+    // public int i = 1;
     private List<Card> InitialDeck = new(); 
     private List<Card> deck = new ();      
     [SerializeField]
@@ -87,11 +89,11 @@ public class BattleManager : MonoBehaviour
               i = i % 8 + 1;
           });*/
         InitializeBattle();
-        foreach (Card card in discardPile)
+     /*   foreach (Card card in discardPile)
         {
             CardController cardController = card.GetComponent<CardController>();
             cardController.OnCardUsed += PlayCard;
-        }
+        }*/
         
     }
 
@@ -109,7 +111,7 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 1; i <= 8; i++)
         {
-            Card newcard = cardManager.CreateCard(i,cardManager.transform );
+            Card newcard = cardManager.CreateCard(1,cardManager.transform );
             discardPile.Add(newcard); 
         }
         ShuffleDeck(discardPile);
@@ -120,6 +122,11 @@ public class BattleManager : MonoBehaviour
         _enemies = new List<EnemyAIController>(FindObjectsOfType<EnemyAIController>());
     }
 
+    public void CardIntoHand(Card card)
+    {
+        CardController cardController = card.GetComponent<CardController>();
+        cardController.OnCardUsed += PlayCard;
+    }
     public void DrawCard(int num)
     {
         for(int i = 0;i < num;i ++)
@@ -135,6 +142,7 @@ public class BattleManager : MonoBehaviour
             Card drawnCard = deck[0];
             deck.RemoveAt(0);
             cardManager.AddCardToHand(drawnCard, hand);
+            CardIntoHand(drawnCard);
         }
       //  Debug.Log(hand.Count);
     }
@@ -251,7 +259,7 @@ public class BattleManager : MonoBehaviour
         Debug.Log("回合结束时手牌数为:" + hand.Count);
         cardManager.UpdateCardPositions(hand);
     }
-    public IEnumerator MoveAndAttackCoRoutine(Card card)
+    public IEnumerator ConsumeCoRoutine(Card card)
     {
         if (card.Move != null)
         {
@@ -292,6 +300,7 @@ public class BattleManager : MonoBehaviour
                 if (Player.Direction.x == dx[i] && Player.Direction.y == dy[i]) { PlayerDirId = i; break; }
             }
             FindAllEnemies();
+            List<EnemyAIController> AttackedMonster = new();
             foreach (int Dir_id in card.AttackDirection)
             {
                 for (int i = 0; i <= card.AttackLength; i++)
@@ -300,16 +309,36 @@ public class BattleManager : MonoBehaviour
                     Vector2Int nowPos = Player.PlayerGridPos + new Vector2Int(dx[newDir] * i, dy[newDir] * i);
                     foreach (EnemyAIController enemyAI in _enemies)
                     {
-                        if (enemyAI.GetCurrentGridPos() == nowPos)
+                        if (enemyAI.GetCurrentGridPos() == nowPos && !AttackedMonster.Contains(enemyAI))
                         {
-                            enemyAI.ReduceHealth(card.Attack.x * card.Attack.y);
+                            AttackedMonster.Add(enemyAI);
                         }
                     }
                 }
             }
+            foreach(EnemyAIController enemy in AttackedMonster)
+            {
+                enemy.ReduceHealth(card.Attack.x * card.Attack.y);
+            }
+
         }
-        
-        
+
+        if(card.Derivation != 0)
+        {
+            Card newCard = cardManager.CreateCard(card.Derivation, cardManager.transform);
+            if (hand.Count < GameConfig.MaxHandCardNum)
+            {
+                hand.Add(newCard);
+                CardIntoHand(newCard);
+                cardManager.UpdateCardPositions(hand);
+            }
+        }
+       
+        cardManager.RemoveCardFromHand(card, hand);
+        card.transform.position += new Vector3(10000, 0, 0);
+        if(card.Consumption != true)
+        discardPile.Add(card);
+
     }
     public void PlayCard(Card card)
     {
@@ -319,62 +348,11 @@ public class BattleManager : MonoBehaviour
         Player.ModifyCost(Player.curCost - card.Cost);
         Debug.Log("还剩" + Player.curCost.ToString() + "费！");
 
-        /*   if(card.Move != null)
-           {
-               isWaitingForPlayerChoose = true;
-               Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
-               Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
-               StartCoroutine(mapmanager.MoveCommand(GetAdjacent(card.Move), Player.PlayerGridPos, card.MoveLength, callback1 , callback2));
-           }
-
-           if(card.AttackDirection != null)
-           {
-               isWaitingForPlayerChoose = true;
-               Action<Vector2Int> callback = OnDirectionChanged.Invoke;
-               StartCoroutine(mapmanager.AttackCommand(GetAdjacent(card.AttackDirection), Player.PlayerGridPos, new(0 , card.AttackLength), callback));
-           }*/
+      
+        
+        StartCoroutine(ConsumeCoRoutine(card));
         
         
-        StartCoroutine(MoveAndAttackCoRoutine(card));
-        cardManager.RemoveCardFromHand(card, hand);
-        card.transform.position += new Vector3(10000, 0, 0);
-        discardPile.Add(card);
-        /*   if(card.DeltaBladeNum != 0)
-           {
-               Player.ModifyBladeNum(Player.curBladeNum + card.DeltaBladeNum);
-               OnBladeGasChange?.Invoke(Player.curBladeNum);
-           }
-
-           if(card.DeltaBladeLevel != 0)
-           {
-               Player.ModifyBladeLevel(Player.curBladeLevel + card.DeltaBladeLevel);
-               OnBladeLevelChange?.Invoke(Player.curBladeLevel);
-           }
-
-           if (card.AttackDirection != null)
-           {
-               int[] dx = { 1, 0, -1, -1, 0, 1 };
-               int[] dy = { 0, 1, 1, 0, -1, -1 };
-               FindAllEnemies();
-               foreach (int Dir_id in card.AttackDirection)
-               {
-                   for(int i = 0;i <= card.AttackLength;i ++)
-                   {
-                       Vector2Int nowPos = Player.PlayerGridPos + new Vector2Int(dx[Dir_id] * i, dy[Dir_id] * i);
-                       foreach (EnemyAIController enemyAI in _enemies)
-                       {
-                           if(enemyAI.GetCurrentGridPos() == nowPos)
-                           {
-                               enemyAI.ReduceHealth(card.Attack.x * card.Attack.y);
-                           }
-                       }
-                   }
-               }
-           }
-
-           cardManager.RemoveCardFromHand(card, hand);
-           card.transform.position += new Vector3(10000, 0, 0);
-           discardPile.Add(card);*/
     } 
     public void UpdateCards()
     {
