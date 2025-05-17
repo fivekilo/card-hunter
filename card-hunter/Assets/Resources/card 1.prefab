@@ -222,12 +222,13 @@ MonoBehaviour:
   AttackDirection: 
   AttackLength: 0
   Cost: 0
-  Attack: 
+  Attack: {x: 0, y: 0}
   Defence: 0
   DeltaCost: 0
   DeltaBladeNum: 0
   DeltaBladeLevel: 0
   DeltaHealth: 0
+  Sequence: 0
   CBuse: 0
 --- !u!114 &3026157631039736765
 MonoBehaviour:
@@ -552,8 +553,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u7C7B\u578B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a0e1fe8cbc8483b4dbbbc58129b012f5, type: 2}
-  m_sharedMaterial: {fileID: 4154161640122349812, guid: a0e1fe8cbc8483b4dbbbc58129b012f5, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d41532da63e225e4abf99fe55be353a0, type: 2}
+  m_sharedMaterial: {fileID: -344890812063308566, guid: d41532da63e225e4abf99fe55be353a0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
