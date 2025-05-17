@@ -6,6 +6,7 @@ public class Hexagon : MonoBehaviour
 {
     // Start is called before the first frame update
     public Vector2Int pos { get; set; }
+    private Stack<Color> history = new Stack<Color>();
     public GameConfig.Content content { get; set; }
     private void OnMouseDown()
     {
@@ -22,6 +23,19 @@ public class Hexagon : MonoBehaviour
     {
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
         renderer.color = color;
+        history.Push(color);
+    }
+    public void RollbackColor()
+    {
+        if (history.Count > 1)
+        {
+            history.Pop();
+            GetComponent<SpriteRenderer>().color = history.Peek();
+        }
+        else
+        {
+            throw new System.Exception("颜色栈中元素不足");
+        }
     }
     public void ContentChange(GameConfig.Content content)
     {

@@ -145,6 +145,10 @@ public class MapManager : MonoBehaviour
                     ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
                     hex.GetComponent<Hexagon>().ChangeColor(color);
                 }
+                else if (hex.tag == "Content")
+                {
+                    hex.GetComponent<Hexagon>().ChangeColor(Color.white);
+                }
             }
         }
     }
@@ -238,10 +242,9 @@ public class MapManager : MonoBehaviour
 
         ClickedPos = new Vector2Int(-1, -1);
         yield return new WaitUntil(()=>accessible.Contains(ClickedPos));
-        foreach(Vector2Int pos in accessible)
+        foreach(Vector2Int pos in accessible)//ÑÕÉ«»ØÍË
         {
-            ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
-            map.ChangeColor(pos, color);
+            map.RollbackColor(pos);
         }
         battleManager.isWaitingForPlayerChoose = false;
         callback2(GetNewDir(ClickedPos, player));
@@ -299,8 +302,7 @@ public class MapManager : MonoBehaviour
         yield return new WaitUntil(() => accessible.Contains(ClickedPos));
         foreach (Vector2Int pos in accessible)
         {
-            ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
-            map.ChangeColor(pos, color);
+            map.RollbackColor(pos);
         }
         
         battleManager.isWaitingForPlayerChoose = false;

@@ -3154,6 +3154,62 @@ MonoBehaviour:
     m_Unicode: 31034
     m_GlyphIndex: 2384
     m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 25277
+    m_GlyphIndex: 1818
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 29260
+    m_GlyphIndex: 2254
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 38454
+    m_GlyphIndex: 2953
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 27573
+    m_GlyphIndex: 2108
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 29609
+    m_GlyphIndex: 2280
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 23478
+    m_GlyphIndex: 1567
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 34892
+    m_GlyphIndex: 2663
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 25351
+    m_GlyphIndex: 1846
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 31034
+    m_GlyphIndex: 2384
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 29609
+    m_GlyphIndex: 2280
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 23478
+    m_GlyphIndex: 1567
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 34892
+    m_GlyphIndex: 2663
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 25351
+    m_GlyphIndex: 1846
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 31034
+    m_GlyphIndex: 2384
+    m_Scale: 1
   m_AtlasTextures:
   - {fileID: -473471145038706322}
   m_AtlasTextureIndex: 0
