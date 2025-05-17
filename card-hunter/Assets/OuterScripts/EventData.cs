@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,10 @@ public class EventData : MonoBehaviour
     public TextMeshProUGUI Name;
     public float buttonSpace = 20f;
     public GameObject button;
+    public bool Clicked=false;
 
     // Start is called before the first frame update
-    public void EventInit(Event myevent)
+    public IEnumerator EventInit(Event myevent, Action<Choice> Chosed)
     {
         Name.text = myevent.Name;
         discription.text = myevent.text;
@@ -30,19 +32,21 @@ public class EventData : MonoBehaviour
            GameObject choice = Instantiate(button,transform);
            float yPos = startX + (myevent.choices.Count-i) * buttonSpace;
            choice.transform.position = new Vector3(0, yPos, 0) + transform.position;
-            choiceInit(myevent.choices[i], choice);
+            choiceInit(myevent.choices[i], choice,Chosed);
         }
+        yield return new WaitUntil(() => Clicked);
+        Clicked = false;
     }
-    public void choiceInit(Choice choicedata,GameObject choice)
+    public void choiceInit(Choice choicedata,GameObject choice,Action<Choice>Chosed)
     {
         choice.GetComponentInChildren<TextMeshProUGUI>().text = choicedata.text;
         choice.GetComponentInChildren<Button>().onClick.AddListener(() => {
-            Debug.Log($"°´Å¥ {choicedata.id} ±»µã»÷");
+            Clicked = true;
+            Chosed?.Invoke(choicedata);
         });
     }
     void Start()
     {
-        EventInit(GameConfig.Events[0]);
     }
 
     // Update is called once per frame

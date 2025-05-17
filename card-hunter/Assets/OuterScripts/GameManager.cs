@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,7 +10,9 @@ public class GameManager : MonoBehaviour
     public GameObject camp;
     public GameObject WorldMap;
     public GameObject Player;
-    private bool CommissionAvailable=true;
+    public GameObject EventWin;
+    public event Action<Choice> Chosed;
+    private PlayerInfo playerinfo=new PlayerInfo();
     private RogueMod RM;
     private List<Commission> AcceptedCommission;
     private event Func<Commission,IEnumerator> ArriveBattleField;
@@ -101,10 +104,37 @@ public class GameManager : MonoBehaviour
         }
 
     }
-    private IEnumerator EventHandle(Event e)//处理随机事件
+    private IEnumerator EventChoose(Event e)//展示随机事件窗口
     {
-        Debug.Log("handling"+e.id+e.text);
-        yield return new WaitForSeconds(1);
+        GameObject EW = Instantiate(EventWin, Vector3.zero, Quaternion.identity);
+        yield return StartCoroutine(EW.GetComponent<EventData>().EventInit(e, Chosed));
+    }
+    private void ChoiceHandle(Choice choice)
+    {
+        if (choice.DeleteCard > 0)
+        {
+            //删牌函数
+        }
+        if (choice.AddCard > 0)
+        {
+            //加牌函数
+        }
+        if (choice.money != 0)
+        {
+            shareddata.playerinfo.money += choice.money;
+        }
+        if (choice.health != 0)
+        {
+            shareddata.playerinfo.curHealth += choice.health;
+        }
+        if (choice.CardsID.Count > 0)
+        {
+            //添牌函数
+        }
+        if (choice.equipment > 0)
+        {
+            //添加装备
+        }
     }
     private IEnumerator BattleEnter(Commission c)//进入战斗
     {
@@ -125,10 +155,14 @@ public class GameManager : MonoBehaviour
         RM = new RogueMod();
         RM.ArrangeEvent(GameConfig.Events,GameConfig.EventAmountBounds);
 
+        //初始化SharedData
+        shareddata.playerinfo = playerinfo;
+
         camp.GetComponent<Camp>().ClickEvent += AcceptCommission;
-        Player.GetComponent<PlayerMove>().encounterEvent += EventHandle;
+        Player.GetComponent<PlayerMove>().encounterEvent += EventChoose;
         ArriveBattleField += BattleEnter;
         ArriveCamp += CampEnter;
+        Chosed += ChoiceHandle;
         ShowStartMenu();
     }
 
