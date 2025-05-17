@@ -379,17 +379,41 @@ PrefabInstance:
       propertyPath: m_Name
       value: Monster
       objectReference: {fileID: 0}
+    - target: {fileID: 4934754776702706311, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4934754776702706311, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
+      propertyPath: m_Color.b
+      value: 0.56078434
+      objectReference: {fileID: 0}
+    - target: {fileID: 4934754776702706311, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
+      propertyPath: m_Color.g
+      value: 0.6509804
+      objectReference: {fileID: 0}
+    - target: {fileID: 4934754776702706311, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
+      propertyPath: m_Color.r
+      value: 0.6666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 5765483905233267172, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5765483905233267172, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5765483905233267172, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       propertyPath: m_LocalPosition.z
       value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7983739992392479090, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.22
+      value: 6.302
       objectReference: {fileID: 0}
     - target: {fileID: 7983739992392479090, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.13
+      value: -0.997
       objectReference: {fileID: 0}
     - target: {fileID: 7983739992392479090, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       propertyPath: m_LocalPosition.z
