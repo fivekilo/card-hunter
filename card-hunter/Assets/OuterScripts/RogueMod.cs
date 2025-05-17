@@ -5,28 +5,39 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Event//事件类
+public class Choice
 {
     public int id;
-    public string text;//事件文本
+    public string text;//选项描述
     public int DeleteCard;//可以删几张牌
     public int AddCard;//可以加入几张牌
     public int money;//获得/损失金钱
     public int health;//获得/损失生命值
     public List<int> CardsID;//添加指定卡牌
-    public int trigger;//0:何时都可以触发 1:去程触发 2:回程触发
     public int equipment;//可以获得的装备编号
-    public Event(int id,string text,int DeleteCard,int AddCard,int money,int health,List<int>CardsID,int trigger,int equipment)
+    public Choice(int id, string text, int deleteCard, int addCard, int money, int health, List<int> cardsID, int equipment)
     {
         this.id = id;
         this.text = text;
-        this.DeleteCard = DeleteCard;
-        this.AddCard = AddCard;
+        DeleteCard = deleteCard;
+        AddCard = addCard;
         this.money = money;
         this.health = health;
-        this.CardsID=CardsID;
-        this.trigger=trigger;
-        this.equipment=equipment;
+        CardsID = cardsID;
+        this.equipment = equipment;
+    }
+}
+public class Event//事件类
+{
+    public int id;
+    public string text;//事件文本
+
+    List<Choice> choices;
+    public Event(int id,string text,List<Choice>choices)
+    {
+        this.id = id;
+        this.text = text;
+        this.choices = choices;
     }
 }
 
@@ -103,7 +114,7 @@ public class RogueMod : MonoBehaviour
         }
         this.events = selections;
     }
-    public void ArrangeEvent(List<Event>E,Vector2Int bound)//bound决定随机事件数量上下限(包含上下限),从E中随机取事件编排在行程中
+    public void ArrangeEvent(List<Event>E,Vector2Int bound)//bound决定随机事件数量上下限(包含上下限),从E中随机取事件编排在行程中,E的元素个数要大于上限
     {
         System.Random random = new System.Random();
         int amount=random.Next(bound[0], bound[1]+1);

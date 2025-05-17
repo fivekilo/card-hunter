@@ -12,6 +12,7 @@ public class EnemyAIController : MonoBehaviour
     private MapManager _mapManager;
     public PlayerInfo _player;
     public TextMeshProUGUI text;
+    public Transform arrowtransform;
     [Header("基础属性")]
     [SerializeField] public int _maxHealth = 100;
     [SerializeField] public int _currentHealth;
@@ -38,6 +39,7 @@ public class EnemyAIController : MonoBehaviour
         _player= FindObjectOfType<PlayerInfo>();
         _currentHealth = _maxHealth;
         text = GetComponentInChildren<TextMeshProUGUI>();
+        arrowtransform = transform.Find("Arrow");
         //传入技能
         skillSystem = GetComponent<EnemySkillSystem>();
         skillSystem.availableSkills = selfSkills;
@@ -195,9 +197,7 @@ public class EnemyAIController : MonoBehaviour
     //调转方向(待编写)
     public void ChangeDirection(int newdirection)
     {
-        int offset = newdirection - direction;
-        if (offset < 0) offset = 6 + offset;
-        //transform.rotation.z = (transform.rotation.z + 60 * offset) % 360;
+        arrowtransform.rotation = Quaternion.Euler(0, 0, 60*newdirection);//调转箭头方向
         direction = newdirection;
     }
 
