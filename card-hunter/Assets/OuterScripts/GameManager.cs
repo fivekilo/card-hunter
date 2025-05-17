@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public SharedData shareddata;
     public GameObject camp;
     public GameObject WorldMap;
     public GameObject Player;
