@@ -498,7 +498,7 @@ public class GameConfig : ScriptableObject
     //RogueMod
     public static readonly List<Commission> Commissions = new List<Commission> { new Commission(0, "大贼龙", 1, 1) };
     public static readonly List<Event> Events = new List<Event> {
-        new Event(1,"剑术大师",
+        new Event(1,"剑术大师","剑术大师小作文","3",
             new List<Choice>{
                 new Choice(1,"[夯实基础]删一张牌",1,0,0,0,null,0),
                 new Choice(2,"[学习技巧]获得蓝色稀有度的一张牌",0,1,0,0,null,0),
