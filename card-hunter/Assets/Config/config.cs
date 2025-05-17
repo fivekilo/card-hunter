@@ -29,8 +29,8 @@ public class GameConfig : ScriptableObject
     public static IReadOnlyList<string> CardName = new List<string> {"",//卡牌名称
         "直斩" ,//1
         "踏步斩",//2
-        "气刃斩Ⅰ" ,//3
-        "气刃斩Ⅱ",//4
+        "气刃斩1" ,//3
+        "气刃斩2",//4
         "气刃大回旋" ,//5
         "翻滚",//6
         "见切",//7
