@@ -392,7 +392,7 @@ public class GameConfig : ScriptableObject
     {
         public int skillID;
         public string skillName;
-        public List<Vector2Int> range;//范围(填写对于怪物相对xy轴的相对坐标)
+        public List<Vector2Int> range;//范围(填写对于怪物相对xy轴的相对向量)
         public int damage;
         public int hittimes;//伤害次数
         public MoveType moveType;
@@ -484,11 +484,20 @@ public class GameConfig : ScriptableObject
         }
     }.AsReadOnly();
 
-    public static IReadOnlyList<string> Destinies = new List<string> {"Forest","Desert","Valcano"};
-    public const int RoutePointNum= 2;//路径上的节点
+    //GameManager
+    public const int CommissionAmount = 7;
+
+
+    //RouteRender参数
+    public static IReadOnlyList<string> Destinies = new List<string> { "Camp","Forest", "Desert", "Valcano" };
+    public const int RoutePointNum = 2;//路径上的节点
     public const int PointDistance = 1;//节点间距
     public const float MoveDuration = 1;//移动时长
+    public static readonly Vector3 CampRestPos = new Vector3(-0.6819376f, -1.417444f, 0);
 
     //RogueMod
-    public static readonly List<Commission> Commissions= new List<Commission>{ new Commission(0, "大贼龙", 1,0) };
+    public static readonly List<Commission> Commissions = new List<Commission> { new Commission(0, "大贼龙", 1, 1) };
+    public static readonly List<Event> Events = new List<Event> { };
+    public static readonly Vector2Int EventAmountBounds = new Vector2Int(5, 12);//每层总事件数限制
+    public const int EventPerTour = 2;
 }

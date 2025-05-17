@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public GameObject WorldMap;
     public GameObject Player;
     private RogueMod RM;
-    private bool ComAccept=false;//是否可以接取委托
+    private int PlayerProgress = 0;//玩家进度,标识行程
     private void ShowStartMenu()//显示起始界面
     {
 
@@ -26,31 +26,55 @@ public class GameManager : MonoBehaviour
     {
 
     }
-    private void AcceptCommission()//接取委托（生成随机委托,生成随机事件）
+    private void AcceptCommission()//接取委托（生成随机委托,生成随机事件,完成去程,处理去程中的随机事件）
     {
         List<Commission> commissions = GameConfig.Commissions;
         List<Commission>selected= RM.ChooseCommission(commissions, 1);
         //显示任务面板,传回所选委托
         Commission commission = GameConfig.Commissions[0];
         //去程：生成随机事件
-        List<Event>events = new List<Event>();
-        //RM.EventGenerate(events, 1);
+        List<Event> events = RM.GetEvents(PlayerProgress);
         //生成路径
         List<Vector3> points= WorldMap.GetComponent<RouteRender>().plotRoute(commission.place);
         //让玩家沿路径移动
-        StartCoroutine(PlayerGo(points));
+        StartCoroutine(PlayerGo(points,events));
+        PlayerProgress++;
     }
-    private IEnumerator PlayerGo(List<Vector3> points)
+    private IEnumerator PlayerGo(List<Vector3> points,List<Event> events)//使玩家完成一个行程,并在行程中处理给定的events
     {
         PlayerMove PM = Player.GetComponent<PlayerMove>();
-        foreach (Vector3 p in points)
+        //将事件与路段随机匹配
+        System.Random rand = new System.Random();
+        Dictionary<int,Event> Road_Event= new Dictionary<int,Event>();
+        foreach(Event e in events)
         {
-            yield return StartCoroutine(PM.MoveTo(p));
+            int ri;
+            do
+            {
+                ri = rand.Next(points.Count - 1);
+            }
+            while (Road_Event.ContainsKey(ri));
+            Road_Event[ri] = e;
+        }
+
+        for(int i = 0; i < points.Count; i++)
+        {
+            Event e=null;
+            if (Road_Event.ContainsKey(i - 1))
+            {
+                e= Road_Event[i-1];
+            }
+            else
+            {
+                e= null;
+            }
+            yield return PM.MoveTo(points[i], e);
         }
     }
-    private void EventHandle(Event e)//处理随机事件
+    private IEnumerator EventHandle(Event e)//处理随机事件
     {
-
+        Debug.Log("handling"+e.id);
+        yield return new WaitForSeconds(1);
     }
     private void BattleEnter(Commission c)//进入战斗
     {
@@ -58,8 +82,12 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        //初始化Rogue Mod
         RM = new RogueMod();
+        RM.ArrangeEvent(GameConfig.Events,GameConfig.EventAmountBounds);
+
         camp.GetComponent<Camp>().ClickEvent += AcceptCommission;
+        Player.GetComponent<PlayerMove>().encounterEvent += EventHandle;
         ShowStartMenu();
     }
 

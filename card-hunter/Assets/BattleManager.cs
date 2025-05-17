@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 //using UnityEngine.UIElements;
 
 public enum BattleState
@@ -110,7 +112,7 @@ public class BattleManager : MonoBehaviour
 
     public void InitializeDeck()
     {
-        for (int i = 1; i <= 8; i++)
+        for (int i = 1; i <= 11; i++)
         {
             Card newcard = cardManager.CreateCard(i  ,cardManager.transform );
             discardPile.Add(newcard);
@@ -187,7 +189,7 @@ public class BattleManager : MonoBehaviour
     {
         UserIndicator.text = "怪物回合开始了......";
         Debug.Log("怪物回合开始了!");
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2f);
         FindAllEnemies();
         foreach(var enemy in _enemies)
          {
@@ -269,6 +271,20 @@ public class BattleManager : MonoBehaviour
     }
     public IEnumerator ConsumeCoRoutine(Card card)
     {
+        if(card.Sequence == false)
+        {
+            if (card.AttackDirection != null)
+            {
+                UserIndicator.text = "请选择攻击方向";
+                isWaitingForPlayerChoose = true;
+                Action<Vector2Int> callback = OnDirectionChanged.Invoke;
+                List<int> newDir = card.AttackDirection;
+                List<int> AllDir = new List<int> { 0, 1, 2, 3, 4, 5 };
+                if (Player.Situation == 0) newDir = AllDir;
+                Player.ModifySituation(1);
+                yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback));
+            }
+        }
         if (card.Move != null)
         {
             //  OnPositionChange?.Invoke(this, new PlayerWantMoveEventArgs(GetAdjacent(card.Move) , /*card.MoveDistance*/1));
@@ -285,7 +301,7 @@ public class BattleManager : MonoBehaviour
             yield return StartCoroutine(mapmanager.MoveCommand(GetAdjacent(newDir), Player.PlayerGridPos, card.MoveLength, callback1, callback2));
         }
 
-        if (card.AttackDirection != null)
+        if (card.AttackDirection != null && card.Sequence == true)
         {
             UserIndicator.text = "请选择攻击方向";
             isWaitingForPlayerChoose = true;
@@ -356,7 +372,10 @@ public class BattleManager : MonoBehaviour
             }
         }
        
-       
+       if(card.DrawCard != 0)
+        {
+            DrawCard(card.DrawCard);
+        }
 
         cardManager.RemoveCardFromHand(card, hand);
         card.transform.position += new Vector3(10000, 0, 0);
@@ -406,6 +425,24 @@ public class BattleManager : MonoBehaviour
         {
             card.CBuse = false;
         }
+    }
+
+    //给怪物检测攻击范围内有无玩家
+    public List<PlayerInfo> GetTargetsInRange(List<Vector2Int> actualrangepos)
+    {
+        List<PlayerInfo> players = new List<PlayerInfo>();
+        foreach (Vector2Int pos in actualrangepos)
+        {
+            if (Player.PlayerGridPos == pos)
+                players.Add(Player);
+        }
+        return players;
+    }
+    //怪物对玩家造成伤害
+    public void ApplyDamage(PlayerInfo target, int damage, EnemyAIController origin)
+    {
+        int temphealth = Player.curHealth-damage;
+        Player.ModifyHealth(temphealth);
     }
 
     public void EndBattle()

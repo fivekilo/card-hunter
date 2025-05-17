@@ -7,6 +7,7 @@ using UnityEngine;
 public class RouteRender : MonoBehaviour
 {
     private LineRenderer lineRenderer;
+    private int lastDestiny=0;
     public List<Vector3> plotRoute(int destiny)//绘制完返回这些点坐标
     {
         List<Vector3> points = RandomPoints(destiny, GameConfig.RoutePointNum);
@@ -24,7 +25,7 @@ public class RouteRender : MonoBehaviour
         }
     }
 
-    private List<Vector3> RandomPoints(int destiny,int num)//生成营地到目的地的节点，包括营地和目的地，第一个元素为营地 destiny:目标地编号,0-3左上开始顺时针,num生成结点个数
+    private List<Vector3> RandomPoints(int destiny,int num)//生成营地到目的地的节点，包括营地和目的地，第一个元素为出发点 destiny:目标地编号,0为营地 1-4左上开始顺时针,num生成结点个数
     {
         List<Vector3>Ends= GetEnds(destiny);
         List<Vector3> res = new List<Vector3>();
@@ -63,7 +64,7 @@ public class RouteRender : MonoBehaviour
         }
         return res;
     }
-    private List<Vector3>GetEnds(int destiny)//根据目的地获取边界点 destiny:目标地编号,0-3左上开始顺时针
+    private List<Vector3>GetEnds(int destiny)//根据目的地获取边界点 destiny:目标地编号,0为营地 1-4左上开始顺时针
     {
         List<Vector3>Ends=new List<Vector3>();
         Vector3 point,_point = new Vector3();
@@ -72,28 +73,36 @@ public class RouteRender : MonoBehaviour
         switch (destiny)
         {
             case 0:
+                Ends.Add(transform.Find("Player").position);
+                point = transform.Find("Camp").gameObject.GetComponent<Camp>().EndPoint(lastDestiny);
+                Ends.Add(point);
+                break;
+            case 1:
                 point=transform.Find("Camp").gameObject.GetComponent<Camp>().EndPoint(destiny);
                 Ends.Add(point);
                 D= transform.Find(GameConfig.Destinies[destiny]).gameObject;
                 size=D.GetComponent<SpriteRenderer>().bounds.size;
                 _point = D.transform.position + new Vector3(size.x/2,-size.y/2,0);
                 Ends.Add(_point);
-                break;
-            case 1:
-                point = transform.Find("Camp").gameObject.GetComponent<Camp>().EndPoint(destiny);
-                Ends.Add(point);
-                D = transform.Find(GameConfig.Destinies[destiny]).gameObject;
-                size = D.GetComponent<SpriteRenderer>().bounds.size;
-                _point = D.transform.position + new Vector3(-size.x / 2, -size.y / 2, 0);
-                Ends.Add(_point);
+                lastDestiny = destiny;
                 break;
             case 2:
                 point = transform.Find("Camp").gameObject.GetComponent<Camp>().EndPoint(destiny);
                 Ends.Add(point);
                 D = transform.Find(GameConfig.Destinies[destiny]).gameObject;
                 size = D.GetComponent<SpriteRenderer>().bounds.size;
+                _point = D.transform.position + new Vector3(-size.x / 2, -size.y / 2, 0);
+                Ends.Add(_point);
+                lastDestiny = destiny;
+                break;
+            case 3:
+                point = transform.Find("Camp").gameObject.GetComponent<Camp>().EndPoint(destiny);
+                Ends.Add(point);
+                D = transform.Find(GameConfig.Destinies[destiny]).gameObject;
+                size = D.GetComponent<SpriteRenderer>().bounds.size;
                 _point = D.transform.position + new Vector3(-size.x / 2, size.y / 2, 0);
                 Ends.Add(_point);
+                lastDestiny = destiny;
                 break;
         }
         return Ends;

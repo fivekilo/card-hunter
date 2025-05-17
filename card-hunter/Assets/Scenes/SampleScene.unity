@@ -379,17 +379,41 @@ PrefabInstance:
       propertyPath: m_Name
       value: Monster
       objectReference: {fileID: 0}
+    - target: {fileID: 4934754776702706311, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4934754776702706311, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
+      propertyPath: m_Color.b
+      value: 0.56078434
+      objectReference: {fileID: 0}
+    - target: {fileID: 4934754776702706311, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
+      propertyPath: m_Color.g
+      value: 0.6509804
+      objectReference: {fileID: 0}
+    - target: {fileID: 4934754776702706311, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
+      propertyPath: m_Color.r
+      value: 0.6666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 5765483905233267172, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5765483905233267172, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5765483905233267172, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       propertyPath: m_LocalPosition.z
       value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7983739992392479090, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.22
+      value: 6.302
       objectReference: {fileID: 0}
     - target: {fileID: 7983739992392479090, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.13
+      value: -0.997
       objectReference: {fileID: 0}
     - target: {fileID: 7983739992392479090, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       propertyPath: m_LocalPosition.z
@@ -430,6 +454,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2902820061251023980, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1844501642}
+    - targetCorrespondingSourceObject: {fileID: 2902820061251023980, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1844501644}
   m_SourcePrefab: {fileID: 100100000, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
 --- !u!1 &338198060
 GameObject:
@@ -1743,8 +1770,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9378c001cb1d846bd952feecb9e00c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _battleManager: {fileID: 0}
-  _mapManager: {fileID: 0}
   _player: {fileID: 0}
   text: {fileID: 0}
   _maxHealth: 100
@@ -1752,8 +1777,25 @@ MonoBehaviour:
   moveRange: 2
   detectionRange: 4
   moveInterval: 0.3
+  direction: 0
   skillSystem: {fileID: 0}
-  selfSkills: 
+  selfSkills: 010000000200000003000000040000000500000006000000
+--- !u!114 &1844501644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844501639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10d11a776f4a4714b987ccc02c05db32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aiController: {fileID: 0}
+  currentSkillID: 0
+  nextSkillID: 0
+  availableSkills: 
 --- !u!1 &1923255096
 GameObject:
   m_ObjectHideFlags: 0
@@ -2149,7 +2191,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 2974870984592191552, guid: 73f05b87b91c26d409e3b508e2d9a27b, type: 3}
   copiesPerCard: 2
-  initialCardTypes: 8
+  initialCardTypes: 11
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

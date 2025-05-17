@@ -17,7 +17,6 @@ public class MapManager : MonoBehaviour
     private const int ObstacleSup = GameConfig.ObstacleSup;//障碍物生成上限
     int size = GameConfig.size;//地图尺寸
     private bool MoveComplete = false;
-    public TextMeshProUGUI UserIndicator;
     public void spawn()//地图初始化
     {
         GameObject[,] Hexs=new GameObject[size,size];
@@ -195,12 +194,13 @@ public class MapManager : MonoBehaviour
     }
     public IEnumerator MoveCommand(List<Vector2Int> directions, Vector2Int player,Vector2Int length,Action<Vector2Int>callback1 , Action<Vector2Int> callback2)//移动指令
     {
-        UserIndicator.text = "请选择移动的地块";
+        
         //还没添加越过障碍物功能
         List<Vector2Int> ObPosition = map.GetObstacles();
         Vector2Int D = new Vector2Int();
         List<Vector2Int>accessible = new List<Vector2Int>();
         BattleManager battleManager = GetComponentInParent<BattleManager>();
+        battleManager.UserIndicator.text = "请选择移动的地块";
         foreach (Vector2Int pos in ObPosition)
         {
             if (directions.Contains(pos))
@@ -247,7 +247,7 @@ public class MapManager : MonoBehaviour
         callback2(GetNewDir(ClickedPos, player));
         callback1(ClickedPos);
         //MoveComplete = true;
-        UserIndicator.text = "玩家回合";
+        battleManager.UserIndicator.text = "玩家回合";
     }
 
     public IEnumerator AttackCommand(List<Vector2Int> directions, Vector2Int player, Vector2Int length, Action<Vector2Int> callback)//移动指令
@@ -307,6 +307,17 @@ public class MapManager : MonoBehaviour
         Vector2Int Direction = GetNewDir(ClickedPos , player);
         callback(Direction);
     }
+
+    //让指定坐标（地图坐标）的格子变色
+    public void ChangeColorByPos(List<Vector2Int> PosSet,Color color) 
+    {
+        foreach (Vector2Int pos in PosSet) 
+        {   
+            if (map.GetHex(pos).tag != "Obstacle")
+                map.ChangeColor(pos, color);
+        }
+    }
+
     public Vector2Int GetNewDir(Vector2Int ClickedPos , Vector2Int player)
     {
         Vector2Int Dir = ClickedPos - player;
