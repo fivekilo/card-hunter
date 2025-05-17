@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class EnemyAIController : MonoBehaviour
 {
     //加载基本事项
-    public BattleManager _battleManager;
+    private BattleManager _battleManager;
     public Vector2Int _currentGridPos { get; set; }
-    public MapManager _mapManager;
+    private MapManager _mapManager;
     public PlayerInfo _player;
     public TextMeshProUGUI text;
     [Header("基础属性")]
@@ -17,6 +18,10 @@ public class EnemyAIController : MonoBehaviour
     [SerializeField] protected int moveRange = 2;//每回合最大移动距离
     [SerializeField] protected int detectionRange = 4;//检测玩家的最大范围
     [SerializeField] private float moveInterval = 0.3f; // 移动动画间隔
+    //方向及方向转换
+    public int direction=0;
+    private List<Vector2Int> StdVector = new List<Vector2Int> {new Vector2Int(1,0), new Vector2Int(0,1), new Vector2Int(-1, 1),
+            new Vector2Int(-1, 0), new Vector2Int(0, -1),new Vector2Int(1,-1) };
 
     public EnemySkillSystem skillSystem;
     [SerializeField] private List<int> selfSkills = new List<int>();//自身技能组（需要预先在inspector里设置好！）
@@ -26,18 +31,23 @@ public class EnemyAIController : MonoBehaviour
         _battleManager = GetComponentInParent<BattleManager>();
         _mapManager = _battleManager.mapmanager;
         _currentGridPos = new(GameConfig.size/2,GameConfig.size/2); 
+        //初始化位置
         Vector3 InitialPos = _mapManager.GetVector3(_currentGridPos);
         InitialPos.z = -5;
         transform.position = InitialPos;
         _player= FindObjectOfType<PlayerInfo>();
         _currentHealth = _maxHealth;
         text = GetComponentInChildren<TextMeshProUGUI>();
+        //传入技能
+        skillSystem = GetComponent<EnemySkillSystem>();
+        skillSystem.availableSkills = selfSkills;
     }
    
     public IEnumerator TakeTurn()//执行回合
     {
 
-        //先出上一回合结束的招式(待编写)
+        //先出上一回合指定的招式
+        yield return skillSystem.ExecuteCurrentSkill();
         //再判断移动
         if (ShouldMoveToPlayer())
         {
@@ -53,7 +63,8 @@ public class EnemyAIController : MonoBehaviour
         {
             yield return WanderRandomly();
         }
-        //出下一招（待编写）
+        //展示要出的下一招
+        skillSystem.SelectNextSkill();
     }
 
     bool ShouldMoveToPlayer()
@@ -130,6 +141,10 @@ public class EnemyAIController : MonoBehaviour
         foreach (var pos in path)
         {
             if (!_battleManager.CheckPosIsValid(pos)) break;
+            //先更新方向再动
+            Vector2Int directionvector = pos - _currentGridPos;
+            int newdirection = StdVector.FindIndex(vector => vector==directionvector);
+            ChangeDirection(newdirection);
             if (pos == _player.PlayerGridPos) break;//如果要走到玩家那一格了就刹车
             UpdatePosition(pos);
             yield return new WaitForSeconds(moveInterval);//等待一定时长
@@ -144,6 +159,9 @@ public class EnemyAIController : MonoBehaviour
         if (possibleMoves.Count > 0)
         {
             Vector2Int target = possibleMoves[Random.Range(0, possibleMoves.Count)];
+            Vector2Int directionvector = target - _currentGridPos;
+            int newdirection = StdVector.FindIndex(vector => vector == directionvector);
+            ChangeDirection(newdirection);
             UpdatePosition(target);
             yield return new WaitForSeconds(moveInterval);
         }
@@ -173,9 +191,21 @@ public class EnemyAIController : MonoBehaviour
     {
         return _currentGridPos;
     }
+
+    //调转方向(待编写)
+    public void ChangeDirection(int newdirection)
+    {
+        int offset = newdirection - direction;
+        if (offset < 0) offset = 6 + offset;
+        //transform.rotation.z = (transform.rotation.z + 60 * offset) % 360;
+        direction = newdirection;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        
+        //以防变身更新了技能组，不断传入新技能
+        skillSystem = GetComponent<EnemySkillSystem>();
+        skillSystem.availableSkills = selfSkills;
     }
 }

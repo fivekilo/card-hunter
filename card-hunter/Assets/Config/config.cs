@@ -392,7 +392,7 @@ public class GameConfig : ScriptableObject
     {
         public int skillID;
         public string skillName;
-        public List<Vector2Int> range;//范围(填写对于怪物相对xy轴的相对坐标)
+        public List<Vector2Int> range;//范围(填写对于怪物相对xy轴的相对向量)
         public int damage;
         public int hittimes;//伤害次数
         public MoveType moveType;
