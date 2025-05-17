@@ -572,7 +572,7 @@ public class BattleManager : MonoBehaviour
             playerBuff.ModifyBuffer(playerBuff.Buffer - 1);
             return;
         }
-        int temphealth = Player.curHealth-damage;
+        int temphealth = Player.curHealth - Math.Max(damage - Player.Defence , 0);
         Player.ModifyHealth(temphealth);
     }
 

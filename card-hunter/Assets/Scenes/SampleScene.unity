@@ -1351,7 +1351,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Hex: {fileID: 2644310219022200402, guid: 5184b9cca886f1348bf858d9764074e6, type: 3}
   ClickedPos: {x: 0, y: 0}
-  UserIndicator: {fileID: 1351588226}
 --- !u!4 &1151624065
 Transform:
   m_ObjectHideFlags: 0
@@ -1546,8 +1545,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u73A9\u5BB6\u884C\u4E3A\u6307\u793A\u5668"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d41532da63e225e4abf99fe55be353a0, type: 2}
-  m_sharedMaterial: {fileID: -344890812063308566, guid: d41532da63e225e4abf99fe55be353a0, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: af863550343d28c409b6179cc4682da9, type: 2}
+  m_sharedMaterial: {fileID: -7297169366253243498, guid: af863550343d28c409b6179cc4682da9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1653,6 +1652,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa6dd6994fc82ed4bada26f081b7de72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deck: 
   MaxHealth: 80
   curHealth: 0
   MaxCost: 3
@@ -1766,6 +1766,10 @@ MonoBehaviour:
   JQ: 0
   Buffer: 0
   BigJu: 0
+  Poison: 0
+  Numbness: 0
+  CantMove: 0
+  DL: 0
 --- !u!1 &1844501639 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2902820061251023980, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
@@ -1790,6 +1794,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 0}
   text: {fileID: 0}
+  arrowtransform: {fileID: 0}
   _maxHealth: 100
   _currentHealth: 0
   moveRange: 2

@@ -94,7 +94,7 @@ public class PlayerInfo : MonoBehaviour
     }
     public void ModifyDefence(int amount)
     {
-        Defence = Mathf.Clamp(amount, 0, 1);
+        Defence = Mathf.Clamp(amount, 0, 999);
     }
     void Start()
     {
