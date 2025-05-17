@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: af863550343d28c409b6179cc4682da9, type: 2}
+  m_sharedMaterial: {fileID: -7297169366253243498, guid: af863550343d28c409b6179cc4682da9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -539,5 +539,6 @@ MonoBehaviour:
   EventImage: {fileID: 8219069045636788603}
   discription: {fileID: 3910488888933141813}
   Name: {fileID: 1548098639958368507}
-  buttonSpace: 20
-  button: {fileID: 0}
+  buttonSpace: 40
+  button: {fileID: 8177689720617864080, guid: e5a906c5003c6174894d349295f5440a, type: 3}
+  Clicked: 0

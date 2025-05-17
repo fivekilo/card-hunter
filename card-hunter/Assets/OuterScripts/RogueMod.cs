@@ -138,6 +138,7 @@ public class RogueMod : MonoBehaviour
             List<int>route = new List<int>();
             EventArrangement.Add(route);
         }
+        EventArrangement[0].Add(0);
         for(int i=0;i<events.Count;i++)
         {
             List<int>PossibleNum = Enumerable.Range(0, 2*CommissionAmount-1).ToList();

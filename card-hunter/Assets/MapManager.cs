@@ -380,6 +380,11 @@ public class MapManager : MonoBehaviour
         return false;
     }
 
+    public bool isObstacle(Vector2Int pos)
+    {
+        if (map.GetHex(pos).tag == "Obstacle") return true;
+        return false;
+    }
     // Start is called before the first frame update
     void Start()
     {

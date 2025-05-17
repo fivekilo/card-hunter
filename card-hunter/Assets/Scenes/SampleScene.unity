@@ -1351,7 +1351,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Hex: {fileID: 2644310219022200402, guid: 5184b9cca886f1348bf858d9764074e6, type: 3}
   ClickedPos: {x: 0, y: 0}
-  UserIndicator: {fileID: 1351588226}
 --- !u!4 &1151624065
 Transform:
   m_ObjectHideFlags: 0
@@ -1546,8 +1545,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u73A9\u5BB6\u884C\u4E3A\u6307\u793A\u5668"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d41532da63e225e4abf99fe55be353a0, type: 2}
-  m_sharedMaterial: {fileID: -344890812063308566, guid: d41532da63e225e4abf99fe55be353a0, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: af863550343d28c409b6179cc4682da9, type: 2}
+  m_sharedMaterial: {fileID: -7297169366253243498, guid: af863550343d28c409b6179cc4682da9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1633,6 +1632,7 @@ GameObject:
   - component: {fileID: 1673011722}
   - component: {fileID: 1673011724}
   - component: {fileID: 1673011725}
+  - component: {fileID: 1673011726}
   m_Layer: 5
   m_Name: player
   m_TagString: Untagged
@@ -1652,10 +1652,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa6dd6994fc82ed4bada26f081b7de72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deck: 
   MaxHealth: 80
   curHealth: 0
   MaxCost: 3
   curCost: 0
+  Defence: 0
   Situation: 0
   curBladeNum: 0
   curBladeLevel: 0
@@ -1748,6 +1750,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1673011726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673011721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a1d5df8e4f9e904d98dc0f54e982c18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 0
+  JQ: 0
+  Buffer: 0
+  BigJu: 0
+  Poison: 0
+  Numbness: 0
+  CantMove: 0
+  DL: 0
 --- !u!1 &1844501639 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2902820061251023980, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
@@ -1772,6 +1794,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 0}
   text: {fileID: 0}
+  arrowtransform: {fileID: 0}
   _maxHealth: 100
   _currentHealth: 0
   moveRange: 2
@@ -1827,6 +1850,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   Player: {fileID: 1673011722}
+  playerBuff: {fileID: 0}
   mapmanager: {fileID: 1151624064}
   BladeLevelSlot: {fileID: 589125591}
   Endbutton: {fileID: 1255822434}
