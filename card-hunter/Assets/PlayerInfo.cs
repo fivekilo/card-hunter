@@ -13,12 +13,14 @@ public class PlayerInfo : MonoBehaviour
     public int curHealth;
     public int MaxCost = GameConfig.InitialCost;
     public int curCost;
-
+    public int Defence;
     public int Situation;//人物状态 0自由 1连携
     public int curBladeNum = 0; //气刃值
     public int curBladeLevel = 0; //气刃等级
     public Vector2Int PlayerGridPos = new (0 , 0); //玩家位置
     public Vector2Int Direction = new Vector2Int(1, 0);
+    
+
 
     public TextMeshProUGUI HP;
     public TextMeshProUGUI endurance;
@@ -48,7 +50,7 @@ public class PlayerInfo : MonoBehaviour
     }
     public void ModifyCost(int amount)
     {
-        curCost = Mathf.Clamp(amount, 0, MaxCost);
+        curCost = Mathf.Clamp(amount, 0, 999);
         endurance.text = $"{curCost}/{MaxCost}";
     }
     public void ModifyBladeNum(int amount)
@@ -90,6 +92,10 @@ public class PlayerInfo : MonoBehaviour
             return;
         }
         Direction = new Vector2Int(dx[Dir_id], dy[Dir_id]);
+    }
+    public void ModifyDefence(int amount)
+    {
+        Defence = Mathf.Clamp(amount, 0, 999);
     }
     void Start()
     {
