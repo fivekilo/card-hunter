@@ -1351,6 +1351,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Hex: {fileID: 2644310219022200402, guid: 5184b9cca886f1348bf858d9764074e6, type: 3}
   ClickedPos: {x: 0, y: 0}
+  UserIndicator: {fileID: 1351588226}
 --- !u!4 &1151624065
 Transform:
   m_ObjectHideFlags: 0
