@@ -1324,6 +1324,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Hex: {fileID: 2644310219022200402, guid: 5184b9cca886f1348bf858d9764074e6, type: 3}
   ClickedPos: {x: 0, y: 0}
+  UserIndicator: {fileID: 1351588226}
 --- !u!4 &1151624065
 Transform:
   m_ObjectHideFlags: 0
@@ -1751,6 +1752,8 @@ MonoBehaviour:
   moveRange: 2
   detectionRange: 4
   moveInterval: 0.3
+  skillSystem: {fileID: 0}
+  selfSkills: 
 --- !u!1 &1923255096
 GameObject:
   m_ObjectHideFlags: 0
@@ -1787,7 +1790,7 @@ MonoBehaviour:
   Endbutton: {fileID: 1255822434}
   Movebutton: {fileID: 777040609}
   cardManager: {fileID: 2051032136}
-  UserIndicator: {fileID: 0}
+  UserIndicator: {fileID: 1351588226}
   discardPile: []
   isWaitingForPlayerChoose: 0
   EndTurnClicked:
