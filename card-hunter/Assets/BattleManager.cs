@@ -31,6 +31,7 @@ public class BattleManager : MonoBehaviour
 {
     public BattleState currentState = BattleState.NotBegin;
     public PlayerInfo Player;
+    public PlayerBuff playerBuff;
     public MapManager mapmanager;
     public BladegasSlotController BladeLevelSlot;
     public Button Endbutton;
@@ -71,6 +72,7 @@ public class BattleManager : MonoBehaviour
 
         Player = GetComponentInChildren<PlayerInfo>();
         mapmanager = GetComponentInChildren<MapManager>();
+        playerBuff = GetComponentInChildren<PlayerBuff>();
         OnBladeGasChange += Player.ModifyBladeNum;
         OnBladeGasChange += BladeLevelSlot.ShowBladeGas;
 
@@ -221,7 +223,23 @@ public class BattleManager : MonoBehaviour
     {
         
         Player.ModifyCost(Player.GetComponent<PlayerInfo>().MaxCost);
+        Player.ModifyDefence(0);
+        playerBuff.ModifyJQ(playerBuff.JQ - 1);
+        playerBuff.ModifyBigJu(playerBuff.BigJu - 1);
+        
+        if(playerBuff.Numbness > 0)
+        {
+            playerBuff.ModifyNumbness(playerBuff.Numbness - 1);
+            OnEndTurnButtonClicked();
 
+        }
+
+        if(playerBuff.DL > 0)
+        {
+            playerBuff.ModifyDL(playerBuff.DL - 1);
+            DrawCard(1);
+            Player.ModifyCost(Player.curCost + 1);
+        }
         UserIndicator.text = "玩家回合";
 
         // UIManager.Instance.SetEndTurnButtonActive(true);
@@ -239,7 +257,7 @@ public class BattleManager : MonoBehaviour
     }
     public void OnMoveButtonClicked()
     {
-        if (currentState != BattleState.PlayerTurn) return;
+        if (currentState != BattleState.PlayerTurn || playerBuff.CantMove > 0) return;
         int MoveCost = Player.Situation + 1;
         if (Player.curCost < MoveCost) return;
         Debug.Log("移动指令被触发了");
@@ -255,6 +273,17 @@ public class BattleManager : MonoBehaviour
     public void EndPlayerTurn()
     {
         if (currentState != BattleState.PlayerTurn) return;
+
+        if(playerBuff.Poison > 0)
+        {
+            playerBuff.ModifyPoison(playerBuff.Poison - 1);
+            Player.ModifyHealth(Player.curHealth - (int)(Player.MaxHealth * 0.02));
+        }
+
+        if(playerBuff.CantMove > 0)
+        {
+            playerBuff.ModifyCantMove(playerBuff.CantMove - 1);
+        }
 
         foreach(Card card in hand)
         {
@@ -355,7 +384,8 @@ public class BattleManager : MonoBehaviour
             {
                 cnt++;
                 Debug.Log("被打第" + cnt.ToString() + "次");
-                enemy.ReduceHealth(card.Attack.x * card.Attack.y);
+                enemy.ReduceHealth(CalculateAttack(card));
+                //      enemy.ReduceHealth(card.Attack.x * card.Attack.y);
                 Debug.Log(card.Attack.x.ToString()  + " " +  card.Attack.y.ToString());
             }
         //    Debug.Log(AttackedMonster.Count);
@@ -373,15 +403,81 @@ public class BattleManager : MonoBehaviour
         }
        
        if(card.DrawCard != 0)
-        {
+       {
             DrawCard(card.DrawCard);
-        }
+       }
 
-        cardManager.RemoveCardFromHand(card, hand);
-        card.transform.position += new Vector3(10000, 0, 0);
-        if(card.Consumption != true) //消耗判断
-        discardPile.Add(card);
-        UserIndicator.text = "玩家回合";
+       if(card.Defence != 0)
+       {
+            Player.ModifyDefence(Player.Defence + card.Defence);
+       }
+
+       if(card.Buff != null)
+       {
+            foreach (int Buf_id in card.Buff)
+            {
+                switch (Buf_id)
+                {
+                    case 1:
+                        playerBuff.ModifyPower(playerBuff.Power + 1);
+                        break;
+                    case 2:
+                        playerBuff.ModifyJQ(playerBuff.JQ + 1);
+                        break;
+                    case 3:
+                        playerBuff.ModifyBuffer(playerBuff.Buffer + 1);
+                        break;
+                    case 4:
+                        playerBuff.ModifyBigJu(playerBuff.BigJu + 1);
+                        break;
+                    case 5:
+                        playerBuff.ModifyPoison(playerBuff.Poison + 1);
+                        break;
+                    case 6:
+                        playerBuff.ModifyNumbness(playerBuff.Numbness + 1);
+                        break;
+                    case 7:
+                        playerBuff.ModifyCantMove(playerBuff.CantMove + 1);
+                        break;
+                    case 8:
+                        playerBuff.ModifyDL(playerBuff.DL + 1);
+                        break;
+                }
+            }
+
+       }
+
+       cardManager.RemoveCardFromHand(card, hand);
+       card.transform.position += new Vector3(10000, 0, 0);
+       if(card.Consumption != true) //消耗判断
+       discardPile.Add(card);
+       UserIndicator.text = "玩家回合";
+       if(card.cardNum == 13)
+       {
+            OnEndTurnButtonClicked();
+       }
+    }
+    public int CalculateAttack(Card card)
+    {
+        float BladeLevelBuff = 1;
+        switch (Player.curBladeLevel)
+        {
+            case 0:
+                BladeLevelBuff = 1;
+                break;
+            case 1:
+                BladeLevelBuff = 1.1f;
+                break;
+            case 2:
+                BladeLevelBuff = 1.3f;
+                break;
+            case 3:
+                BladeLevelBuff = 1.6f;
+                break;
+        }
+        int res = 1;
+        res = (int)((card.Attack.x + playerBuff.Power )* BladeLevelBuff) * card.Attack.y;
+        return res;
     }
     public void PlayCard(Card card)
     {
@@ -441,6 +537,41 @@ public class BattleManager : MonoBehaviour
     //怪物对玩家造成伤害
     public void ApplyDamage(PlayerInfo target, int damage, EnemyAIController origin)
     {
+        if(playerBuff.BigJu > 0)
+        {
+            playerBuff.ModifyBigJu(playerBuff.BigJu - 1);
+            bool CanMove = true;
+            Vector2Int newPos = Player.PlayerGridPos + Player.Direction;
+            if (mapmanager.isObstacle(newPos) == true) CanMove = false;
+            FindAllEnemies();
+            foreach (EnemyAIController enemy in _enemies)
+            {
+                if (enemy.GetCurrentGridPos() == newPos) CanMove = false;
+            }
+            if (CanMove) OnPositionChanged?.Invoke(newPos);
+            origin.ReduceHealth(CalculateAttack(cardManager.CreateCard(13 , cardManager.transform)));
+            OnBladeLevelChange?.Invoke(Player.curBladeLevel + 1);
+        }
+
+        if(playerBuff.JQ > 0) //见切判断
+        {
+            playerBuff.ModifyJQ(playerBuff.JQ - 1);
+            Card newCard = cardManager.CreateCard(5 , cardManager.transform);
+            if (hand.Count < GameConfig.MaxHandCardNum)
+            {
+                hand.Add(newCard);
+                CardIntoHand(newCard);
+                cardManager.UpdateCardPositions(hand);
+            }
+            OnBladeGasChange?.Invoke(GameConfig.MaxBladeNum );
+         //   Player.ModifyBladeNum(GameConfig.MaxBladeNum - Player.curBladeNum);
+            return;
+        }
+        if(playerBuff.Buffer > 0) //缓冲判断
+        {
+            playerBuff.ModifyBuffer(playerBuff.Buffer - 1);
+            return;
+        }
         int temphealth = Player.curHealth-damage;
         Player.ModifyHealth(temphealth);
     }

@@ -218,14 +218,14 @@ public class GameConfig : ScriptableObject
     }.AsReadOnly();
 
     public static IReadOnlyList<List<int>> Buff = new List<List<int>>
-    {null,//Buff列表 1 见切
+    {null,//Buff列表 2 见切
         null,//1
         null,//2
         null,//3
         null,//4
         null,//5
         null,//6
-        new List<int>{1 },//7
+        new List<int>{2 },//7
         null,//8
         null,//9
         null,//10

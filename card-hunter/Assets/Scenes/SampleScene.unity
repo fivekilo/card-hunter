@@ -1608,6 +1608,7 @@ GameObject:
   - component: {fileID: 1673011722}
   - component: {fileID: 1673011724}
   - component: {fileID: 1673011725}
+  - component: {fileID: 1673011726}
   m_Layer: 5
   m_Name: player
   m_TagString: Untagged
@@ -1631,6 +1632,7 @@ MonoBehaviour:
   curHealth: 0
   MaxCost: 3
   curCost: 0
+  Defence: 0
   Situation: 0
   curBladeNum: 0
   curBladeLevel: 0
@@ -1723,6 +1725,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1673011726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673011721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a1d5df8e4f9e904d98dc0f54e982c18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 0
+  JQ: 0
+  Buffer: 0
+  BigJu: 0
 --- !u!1 &1844501639 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2902820061251023980, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
@@ -1802,6 +1820,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   Player: {fileID: 1673011722}
+  playerBuff: {fileID: 0}
   mapmanager: {fileID: 1151624064}
   BladeLevelSlot: {fileID: 589125591}
   Endbutton: {fileID: 1255822434}
