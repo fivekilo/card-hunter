@@ -145,6 +145,10 @@ public class MapManager : MonoBehaviour
                     ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
                     hex.GetComponent<Hexagon>().ChangeColor(color);
                 }
+                else if (hex.tag == "Content")
+                {
+                    hex.GetComponent<Hexagon>().ChangeColor(Color.white);
+                }
             }
         }
     }
@@ -238,10 +242,9 @@ public class MapManager : MonoBehaviour
 
         ClickedPos = new Vector2Int(-1, -1);
         yield return new WaitUntil(()=>accessible.Contains(ClickedPos));
-        foreach(Vector2Int pos in accessible)
+        foreach(Vector2Int pos in accessible)//颜色回退
         {
-            ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
-            map.ChangeColor(pos, color);
+            map.RollbackColor(pos);
         }
         battleManager.isWaitingForPlayerChoose = false;
         callback2(GetNewDir(ClickedPos, player));
@@ -299,8 +302,7 @@ public class MapManager : MonoBehaviour
         yield return new WaitUntil(() => accessible.Contains(ClickedPos));
         foreach (Vector2Int pos in accessible)
         {
-            ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
-            map.ChangeColor(pos, color);
+            map.RollbackColor(pos);
         }
         
         battleManager.isWaitingForPlayerChoose = false;
@@ -347,7 +349,22 @@ public class MapManager : MonoBehaviour
     {
         return map.GetHex(pos).transform.position;
     }
-
+    public GameConfig.Content StepContent(Vector2Int pos,out bool exist)
+    {
+        Hexagon hex = map.GetHex(pos).GetComponent<Hexagon>();
+        GameConfig.Content content = hex.content;
+        if (map.GetHex(pos).tag=="Content")
+        {
+            hex.ContentRemove();
+            exist = true;
+            return content;
+        }
+        else
+        {
+            exist = false;
+            return content;
+        }
+    }
     public bool IsPositionOccupied(Vector2Int pos)//检测地图某一格是否被占用
     {
         //检测玩家位置

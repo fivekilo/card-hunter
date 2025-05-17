@@ -26,6 +26,10 @@ public class Map
     {
         GetHex(pos).GetComponent<Hexagon>().ChangeColor(color);
     }
+    public void RollbackColor(Vector2Int pos)
+    {
+        GetHex(pos).GetComponent<Hexagon>().RollbackColor();
+    }
     public List<Vector2Int> GetObstacles()
     {
         List<Vector2Int> res=new List<Vector2Int>();

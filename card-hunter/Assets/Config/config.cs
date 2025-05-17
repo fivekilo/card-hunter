@@ -29,8 +29,8 @@ public class GameConfig : ScriptableObject
     public static IReadOnlyList<string> CardName = new List<string> {"",//卡牌名称
         "直斩" ,//1
         "踏步斩",//2
-        "气刃斩Ⅰ" ,//3
-        "气刃斩Ⅱ",//4
+        "气刃斩1" ,//3
+        "气刃斩2",//4
         "气刃大回旋" ,//5
         "翻滚",//6
         "见切",//7
@@ -61,7 +61,7 @@ public class GameConfig : ScriptableObject
         "消耗2格气刃槽，造成两次4点伤害，转向，消耗，虚无",//4
         "消耗2格气刃槽,对前方三格范围内的敌人造成10点伤害，提升气刃等级，转向，消耗，虚无",//5
         "向任意方向移动一格,进入自由态",//6
-        "消耗1格气刃槽,从后方三格中选择移动一格，获得一层免伤buff，若下回合开始时角色或见切前角色所处地块被攻击，则获得【气刃大回旋】，回满气刃槽。",//7
+        "限连携，消耗1格气刃槽,从后方三格中选择移动一格，获得一层免伤buff，若下回合开始时见切前角色所处地块或角色被攻击，则获得【气刃大回旋】，回满气刃槽。",//7
         "获得3点格挡",//8
         "造成8点伤害，恢复3格气刃槽后退或水平（前方左右）移动一格，进入自由态。",//9
         "造成5点伤害,获得5点格挡,回复1气刃槽转向",//10
@@ -484,11 +484,27 @@ public class GameConfig : ScriptableObject
         }
     }.AsReadOnly();
 
-    public static IReadOnlyList<string> Destinies = new List<string> {"Forest","Desert","Valcano"};
-    public const int RoutePointNum= 2;//路径上的节点
+    //GameManager
+    public const int CommissionAmount = 7;
+
+
+    //RouteRender参数
+    public static IReadOnlyList<string> Destinies = new List<string> { "Camp","Forest", "Desert", "Valcano" };
+    public const int RoutePointNum = 2;//路径上的节点
     public const int PointDistance = 1;//节点间距
     public const float MoveDuration = 1;//移动时长
+    public static readonly Vector3 CampRestPos = new Vector3(-0.6819376f, -1.417444f, 0);
 
     //RogueMod
-    public static readonly List<Commission> Commissions= new List<Commission>{ new Commission(0, "大贼龙", 1,0) };
+    public static readonly List<Commission> Commissions = new List<Commission> { new Commission(0, "大贼龙", 1, 1) };
+    public static readonly List<Event> Events = new List<Event> {
+        new Event(1,"剑术大师","剑术大师小作文","3",
+            new List<Choice>{
+                new Choice(1,"[夯实基础]删一张牌",1,0,0,0,null,0),
+                new Choice(2,"[学习技巧]获得蓝色稀有度的一张牌",0,1,0,0,null,0),
+                new Choice(3,"[祖传秘技]花费？？金币，获得一张金色稀有度的卡牌",0,1,-20,0,null,0)
+            })
+    };
+    public static readonly Vector2Int EventAmountBounds = new Vector2Int(1, 1);//每层总事件数限制
+    public const int EventPerTour = 2;
 }

@@ -82,18 +82,14 @@ public class CardManager : MonoBehaviour
             //float ratio = (float)i / (cardsInHand.Count - 1);
             float xPos = startX + i * cardSpacing;
 
-            // ���㻡��λ��
             //float yPos = -arcHeight * Mathf.Sin(ratio * Mathf.PI);
 
-            // ������ת�Ƕ�
             //float rotation = Mathf.Lerp(-maxRotation, maxRotation, ratio);
 
-            // ʹ�ö����ƶ�����
             //card.transform.Translate(new Vector3(xPos, 0, 0));
             card.transform.position = new Vector3(xPos, 0, 0)+transform.position;
             //card.transform.Rotate(new Vector3(0, 0, rotation));
 
-            // ���ò㼶��ʹ�м俨����������
             //card.transform.SetSiblingIndex(i);
         }
     }
