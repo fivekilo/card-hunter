@@ -30,13 +30,17 @@ public class Choice
 public class Event//事件类
 {
     public int id;
+    public string Name;
     public string text;//事件文本
+    public string Image;
 
-    List<Choice> choices;
-    public Event(int id,string text,List<Choice>choices)
+    public List<Choice> choices;
+    public Event(int id, string Name,string text, string Image,List<Choice>choices)
     {
         this.id = id;
+        this.Name = Name;
         this.text = text;
+        this.Image = Image;
         this.choices = choices;
     }
 }
@@ -148,7 +152,6 @@ public class RogueMod : MonoBehaviour
     }
     void Start()
     {
-        
     }
 
     // Update is called once per frame
