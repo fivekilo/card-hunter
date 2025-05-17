@@ -29,6 +29,11 @@ public class Hexagon : MonoBehaviour
         AddImage(content.ToString());
         this.tag = "Content";
     }
+    public void ContentRemove()
+    {
+        AddImage("background");
+        this.tag = "Untagged";
+    }
     public void ObstacleAdd()
     {
         tag = "Obstacle";

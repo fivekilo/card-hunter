@@ -347,7 +347,22 @@ public class MapManager : MonoBehaviour
     {
         return map.GetHex(pos).transform.position;
     }
-
+    public GameConfig.Content StepContent(Vector2Int pos,out bool exist)
+    {
+        Hexagon hex = map.GetHex(pos).GetComponent<Hexagon>();
+        GameConfig.Content content = hex.content;
+        if (map.GetHex(pos).tag=="Content")
+        {
+            hex.ContentRemove();
+            exist = true;
+            return content;
+        }
+        else
+        {
+            exist = false;
+            return content;
+        }
+    }
     public bool IsPositionOccupied(Vector2Int pos)//检测地图某一格是否被占用
     {
         //检测玩家位置
