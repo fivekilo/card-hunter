@@ -1653,6 +1653,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deck: 
+  money: 0
   MaxHealth: 80
   curHealth: 0
   MaxCost: 3
@@ -1739,7 +1740,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e7110c02a35042c48972d4bdafa470b6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9dbcbde663d0a2845aaffce4d20f5593, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1849,7 +1850,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
-  Player: {fileID: 1673011722}
+  Player: {fileID: 0}
   playerBuff: {fileID: 0}
   mapmanager: {fileID: 1151624064}
   BladeLevelSlot: {fileID: 589125591}
