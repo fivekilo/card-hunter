@@ -116,7 +116,7 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 1; i <= 11; i++)
         {
-            Card newcard = cardManager.CreateCard(i  ,cardManager.transform );
+            Card newcard = cardManager.CreateCard(22  ,cardManager.transform );
             discardPile.Add(newcard);
             CardIntoHand(newcard);
         }
@@ -384,7 +384,7 @@ public class BattleManager : MonoBehaviour
             {
                 cnt++;
                 Debug.Log("被打第" + cnt.ToString() + "次");
-                enemy.ReduceHealth(CalculateAttack(card));
+                enemy.ReduceHealth(CalculateAttack(card.Attack));
                 //      enemy.ReduceHealth(card.Attack.x * card.Attack.y);
                 Debug.Log(card.Attack.x.ToString()  + " " +  card.Attack.y.ToString());
             }
@@ -452,12 +452,12 @@ public class BattleManager : MonoBehaviour
        if(card.Consumption != true) //消耗判断
        discardPile.Add(card);
        UserIndicator.text = "玩家回合";
-       if(card.cardNum == 13)
+       if(card.cardNum == 22)
        {
             OnEndTurnButtonClicked();
        }
     }
-    public int CalculateAttack(Card card)
+  /*  public int CalculateAttack(Card card)
     {
         float BladeLevelBuff = 1;
         switch (Player.curBladeLevel)
@@ -477,6 +477,28 @@ public class BattleManager : MonoBehaviour
         }
         int res = 1;
         res = (int)((card.Attack.x + playerBuff.Power )* BladeLevelBuff) * card.Attack.y;
+        return res;
+    }*/
+    public int CalculateAttack(Vector2Int Attack)
+    {
+        float BladeLevelBuff = 1;
+        switch (Player.curBladeLevel)
+        {
+            case 0:
+                BladeLevelBuff = 1;
+                break;
+            case 1:
+                BladeLevelBuff = 1.1f;
+                break;
+            case 2:
+                BladeLevelBuff = 1.3f;
+                break;
+            case 3:
+                BladeLevelBuff = 1.6f;
+                break;
+        }
+        int res = 1;
+        res = (int)((Attack.x + playerBuff.Power) * BladeLevelBuff) * Attack.y;
         return res;
     }
     public void PlayCard(Card card)
@@ -549,8 +571,9 @@ public class BattleManager : MonoBehaviour
                 if (enemy.GetCurrentGridPos() == newPos) CanMove = false;
             }
             if (CanMove) OnPositionChanged?.Invoke(newPos);
-            origin.ReduceHealth(CalculateAttack(cardManager.CreateCard(13 , cardManager.transform)));
+            origin.ReduceHealth(CalculateAttack(new(5 , 4)));
             OnBladeLevelChange?.Invoke(Player.curBladeLevel + 1);
+            return;
         }
 
         if(playerBuff.JQ > 0) //见切判断

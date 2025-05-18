@@ -183,7 +183,7 @@ public class EnemyAIController : MonoBehaviour
     {
         _currentHealth = Mathf.Clamp(_currentHealth - num, 0, _maxHealth);
         if (num>=0) 
-            Debug.Log("怪物被打了！");
+            Debug.Log("怪物被打了" + num.ToString() + "血");
         else
             Debug.Log("怪物回复生命值了！");
         text.text = $"{_currentHealth}/{_maxHealth}";
