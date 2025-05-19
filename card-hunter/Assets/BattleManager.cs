@@ -32,6 +32,7 @@ public class BattleManager : MonoBehaviour
     public BattleState currentState = BattleState.NotBegin;
     public PlayerInfo Player;
     public PlayerBuff playerBuff;
+    public EnemyBuff enemyBuff;
     public MapManager mapmanager;
     public BladegasSlotController BladeLevelSlot;
     public Button Endbutton;
@@ -75,6 +76,7 @@ public class BattleManager : MonoBehaviour
         Player = GetComponentInChildren<PlayerInfo>();
         mapmanager = GetComponentInChildren<MapManager>();
         playerBuff = GetComponentInChildren<PlayerBuff>();
+        enemyBuff = GetComponentInChildren<EnemyBuff>();
         OnBladeGasChange += Player.ModifyBladeNum;
         OnBladeGasChange += BladeLevelSlot.ShowBladeGas;
 
@@ -200,7 +202,9 @@ public class BattleManager : MonoBehaviour
          {
              if (enemy != null)
              {
-                 yield return enemy.TakeTurn();
+                //判断麻痹效果
+                if(enemy.enemybuff.Numbness!=0)
+                    yield return enemy.TakeTurn();
              }
         }
         UserIndicator.text = "怪物回合结束了!";
@@ -483,7 +487,7 @@ public class BattleManager : MonoBehaviour
             }
 
        }
-        AudioManager.PlayCardPlaySound(card.cardNum);
+       AudioManager.PlayCardPlaySound(card.cardNum);
        cardManager.RemoveCardFromHand(card, hand);
        card.transform.position += new Vector3(10000, 0, 0);
        if(card.Consumption != true) //消耗判断

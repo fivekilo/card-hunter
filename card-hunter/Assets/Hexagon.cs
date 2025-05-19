@@ -5,7 +5,7 @@ using UnityEngine;
 public class Hexagon : MonoBehaviour
 {
     // Start is called before the first frame update
-    public Vector2Int pos { get; set; }
+    public Vector2Int pos;
     private Stack<Color> history = new Stack<Color>();
     public GameConfig.Content content { get; set; }
     private void OnMouseDown()
