@@ -58,7 +58,7 @@ public class EnemySkillSystem : MonoBehaviour
             temp.y = singlepos.x * StdVector[0 + enemydirection].y + singlepos.y * StdVector[(5 + enemydirection) % 6].y;
             Vector2Int RangeRealPos = enemypos + temp;
             //3.╥ют╫╫Г
-            if(RangeRealPos.x >= 0 && RangeRealPos.y >= 0)
+            if(RangeRealPos.x < GameConfig.size && RangeRealPos.y < GameConfig.size && RangeRealPos.x >= 0 && RangeRealPos.y >= 0)
                 ActualRangePos.Add(RangeRealPos);
         }
         return ActualRangePos;

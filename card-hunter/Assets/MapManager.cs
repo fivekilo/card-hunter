@@ -345,10 +345,11 @@ public class MapManager : MonoBehaviour
         }
         return res;
     }
-    public Vector3 GetVector3(Vector2Int pos)
+    public GameObject GetHexagon(Vector2Int pos)
     {
-        return map.GetHex(pos).transform.position;
+        return map.GetHex(pos);
     }
+    
     public GameConfig.Content StepContent(Vector2Int pos,out bool exist)
     {
         Hexagon hex = map.GetHex(pos).GetComponent<Hexagon>();

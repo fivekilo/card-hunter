@@ -38,6 +38,7 @@ public class BattleManager : MonoBehaviour
     public Button Movebutton;
     public CardManager cardManager;
     public TextMeshProUGUI UserIndicator;
+    public AudioManager AudioManager;
     // public int i = 1;
     private List<Card> InitialDeck = new(); 
     private List<Card> deck = new ();      
@@ -67,6 +68,7 @@ public class BattleManager : MonoBehaviour
     public bool isWaitingForPlayerChoose = false;
     public UnityEvent EndTurnClicked; 
 
+    
     private void Start()
     {
 
@@ -81,6 +83,7 @@ public class BattleManager : MonoBehaviour
 
         OnPositionChanged += Player.ModifyPos;
         OnPositionChanged += Player.GetComponent<PlayerShow>().ModifyPos;
+        OnPositionChanged += CheckContent;
 
         OnDirectionChanged += Player.GetComponent<PlayerShow>().ModifyDirection;
         OnDirectionChanged += Player.ModifyDirection;
@@ -230,8 +233,7 @@ public class BattleManager : MonoBehaviour
         if(playerBuff.Numbness > 0)
         {
             playerBuff.ModifyNumbness(playerBuff.Numbness - 1);
-            OnEndTurnButtonClicked();
-
+            Player.ModifyCost(Player.curCost - 2);
         }
 
         if(playerBuff.DL > 0)
@@ -240,6 +242,13 @@ public class BattleManager : MonoBehaviour
             DrawCard(1);
             Player.ModifyCost(Player.curCost + 1);
         }
+
+        if(playerBuff.ExCost > 0)
+        {
+            Player.ModifyCost(Player.curCost + 1);
+            playerBuff.ModifyExCost(playerBuff.ExCost - 1);
+        }
+
         UserIndicator.text = "玩家回合";
 
         // UIManager.Instance.SetEndTurnButtonActive(true);
@@ -269,7 +278,35 @@ public class BattleManager : MonoBehaviour
         Player.ModifySituation(0);
     }
 
-
+    public void CheckContent(Vector2Int Pos) 
+    {
+        bool exist = false;
+        GameConfig.Content type = mapmanager.StepContent(Pos, out exist);
+        if (exist == false) return;
+        switch (type)
+        {
+            case GameConfig.Content.LuCao:
+                Player.ModifyHealth(Player.curHealth + 10);
+                mapmanager.GetHexagon(Pos).GetComponent<Hexagon>().ContentRemove();
+                break;
+            case GameConfig.Content.Trap:
+                playerBuff.ModifyCantMove(playerBuff.CantMove + 1);
+                mapmanager.GetHexagon(Pos).GetComponent<Hexagon>().ContentRemove();
+                break;
+            case GameConfig.Content.Frog:
+                playerBuff.ModifyNumbness(playerBuff.Numbness + 1);
+                mapmanager.GetHexagon(Pos).GetComponent<Hexagon>().ContentRemove();
+                break;
+            case GameConfig.Content.DuCao:
+                playerBuff.ModifyPoison(playerBuff.Poison + 3);
+                mapmanager.GetHexagon(Pos).GetComponent<Hexagon>().ContentRemove();
+                break;
+            case GameConfig.Content.NaiLiBug:
+                playerBuff.ModifyExCost(playerBuff.ExCost + 2);
+                mapmanager.GetHexagon(Pos).GetComponent<Hexagon>().ContentRemove();
+                break;
+        }
+    }
     public void EndPlayerTurn()
     {
         if (currentState != BattleState.PlayerTurn) return;
@@ -446,7 +483,7 @@ public class BattleManager : MonoBehaviour
             }
 
        }
-
+       AudioManager.PlayCardPlaySound(card.cardNum);
        cardManager.RemoveCardFromHand(card, hand);
        card.transform.position += new Vector3(10000, 0, 0);
        if(card.Consumption != true) //消耗判断
@@ -573,6 +610,7 @@ public class BattleManager : MonoBehaviour
             if (CanMove) OnPositionChanged?.Invoke(newPos);
             origin.ReduceHealth(CalculateAttack(new(5 , 4)));
             OnBladeLevelChange?.Invoke(Player.curBladeLevel + 1);
+            AudioManager.PlayCardSpecialSound(22);
             return;
         }
 

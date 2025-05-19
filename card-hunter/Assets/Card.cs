@@ -26,7 +26,7 @@ public class Card : MonoBehaviour
     public int OnlyLState;//0:限自由态 1:限连携态 2:不限
     public int EnterState;//1:进入自由态 2:进入连携态
     public List<int> Buff;//Buff
-    public List<int> DeBuff;//DeBuff
+    public int Wound;//Wound
     public List<int> AttackDirection; //攻击方向
     public int AttackLength;//攻击长度
     public int Cost;//费用
@@ -92,7 +92,7 @@ public class Card : MonoBehaviour
         OnlyLState = GameConfig.OnlyLState[cardNum];//0:不限 1:限自由态 2:限连携态
         EnterState = GameConfig.EnterState[cardNum];//1:进入自由态 2:进入连携态
         Buff = GameConfig.Buff[cardNum];//Buff
-        DeBuff = GameConfig.DeBuff[cardNum];//DeBuff
+        Wound = GameConfig.Wound[cardNum];//Wound
         AttackDirection = GameConfig.AttackDirection[cardNum]; //攻击方向
         AttackLength = GameConfig.AttackLength[cardNum];//攻击长度
         Cost = GameConfig.Cost[cardNum];//费用
