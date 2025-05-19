@@ -41,8 +41,8 @@ public class EventData : MonoBehaviour
     {
         choice.GetComponentInChildren<TextMeshProUGUI>().text = choicedata.text;
         choice.GetComponentInChildren<Button>().onClick.AddListener(() => {
-            Clicked = true;
             Chosed?.Invoke(choicedata);
+            Clicked = true;
             Destroy(gameObject);
         });
     }

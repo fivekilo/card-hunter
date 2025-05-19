@@ -8,10 +8,12 @@ using UnityEngine.UI;
 
 public class AddCardWindow : MonoBehaviour
 {
+    private Vector3 hoverScale = new Vector3(2.122892f, 2.54747f, 1f);
+    private Vector3 normalScale = new Vector3(1.73865f, 2.08638f, 1f);
     private int ChosedNum;
     private Action<int> addCard;
     private List<GameObject> Cards=new List<GameObject>();
-    public void AddCard(Action<int>addCard)//接口函数
+    public void AddCard(Action<int>addCard,List<int>CardsID)//接口函数
     {
         this.addCard = addCard;
         //随机取三张牌
@@ -19,7 +21,7 @@ public class AddCardWindow : MonoBehaviour
         System.Random rand = new System.Random();
         while (Set.Count < 3)
         {
-            Set.Add(rand.Next(1, GameConfig.CardName.Count));
+            Set.Add(rand.Next(1, CardsID.Count));
         }
         List<int> CardNum = Set.ToList();
         for(int i = 1; i < 4; i++)
@@ -29,9 +31,7 @@ public class AddCardWindow : MonoBehaviour
         //链接处理函数和点击事件 初始化卡牌
         for(int i=0;i<3;i++)
         {
-            string name = "card " + i;
-            Debug.Log(name);
-            Cards[i].GetComponent<Card>().cardNum = CardNum[i];
+            Cards[i].GetComponent<Card>().cardNum = CardsID[CardNum[i]];
             Cards[i].GetComponent<Card>().cardInit();
             Cards[i].GetComponent<CardWin>().Clicked += ClickHandler;
         }
@@ -46,12 +46,12 @@ public class AddCardWindow : MonoBehaviour
     }
     private void ClickHandler(int num)
     {
-        //选中卡变色效果
+        //选中卡变大效果
         foreach(GameObject card in Cards)
         {
-            card.transform.Find("card Canvas/cardImage").gameObject.GetComponent<Image>().color = Color.white;
+            card.transform.localScale = normalScale;
         }
-        Cards[num].transform.Find("card Canvas/cardImage").gameObject.GetComponent<Image>().color = Color.blue;
+        Cards[num].transform.localScale = hoverScale;
         //记录号码
         ChosedNum = num;
     }

@@ -12,10 +12,14 @@ public class GameManager : MonoBehaviour
     public GameObject Player;
     public GameObject EventWin;
     public GameObject AddCardWin;
+    public GameObject DeckBtn;
+    public GameObject DeckWin;
     public event Action<Choice> Chosed;
     public event Action<int> AddCard;
+    private List<bool> AbleToMove=new List<bool> {false,false };
     private PlayerInfo playerinfo=new PlayerInfo();
     private RogueMod RM;
+    private GameObject DW;//卡组窗口
     private List<Commission> AcceptedCommission;
     private event Func<Commission,IEnumerator> ArriveBattleField;
     private event Action ArriveCamp;
@@ -110,22 +114,45 @@ public class GameManager : MonoBehaviour
     {
         GameObject EW = Instantiate(EventWin, Vector3.zero, Quaternion.identity);
         yield return StartCoroutine(EW.GetComponent<EventData>().EventInit(e, Chosed));
+        yield return new WaitUntil(() =>
+        {
+            bool res=true;
+            foreach(bool b in AbleToMove)
+            {
+                res = res && b;
+            }
+            return res;
+        });//等待AbleToMove(加卡或删卡窗口)
+        for(int i = 0; i < AbleToMove.Count; i++)//回调AbleToMove
+        {
+            AbleToMove[i] = false;
+        }
     }
     private void AddToDeck(int CardNum)
     {
         shareddata.playerinfo.deck.Add(CardNum);
+        AbleToMove[0] = true;
     }
     private void ChoiceHandle(Choice choice)
     {
         if (choice.DeleteCard > 0)
         {
             //删牌函数
+            AbleToMove[1] = true;
+        }
+        else//无需删牌
+        {
+            AbleToMove[1] = true;
         }
         if (choice.AddCard > 0)
         {
             //加牌函数
             GameObject AW = Instantiate(AddCardWin, Vector3.zero, Quaternion.identity);
-            AW.GetComponent<AddCardWindow>().AddCard(AddCard);
+            AW.GetComponent<AddCardWindow>().AddCard(AddCard,choice.CardsID);//传入可添加的卡牌范围
+        }
+        else//无需加牌
+        {
+            AbleToMove[0] = true;
         }
         if (choice.money != 0)
         {
@@ -143,6 +170,7 @@ public class GameManager : MonoBehaviour
         {
             //添加装备
         }
+        
     }
     private IEnumerator BattleEnter(Commission c)//进入战斗
     {
@@ -157,6 +185,22 @@ public class GameManager : MonoBehaviour
         Debug.Log("回到营地了");
         camp.GetComponent<Camp>().ClickEvent += AcceptCommission;
     }
+    private void CheckDeck()//查看卡组
+    {
+        DW = Instantiate(DeckWin, Vector3.zero, Quaternion.identity);
+        DW.GetComponent<DeckWin>().Show(shareddata.playerinfo.deck);
+        //改绑为关闭窗口
+        DeckBtn.GetComponent<Btn>().Clicked -= CheckDeck;
+        DeckBtn.GetComponent<Btn>().Clicked += CloseDeck;
+    }
+    private void CloseDeck()//关闭卡组窗口
+    {
+        Destroy(DW);
+        //改绑为开启窗口
+        DeckBtn.GetComponent<Btn>().Clicked += CheckDeck;
+        DeckBtn.GetComponent<Btn>().Clicked -= CloseDeck;
+    }
+
     void Start()
     {
         //初始化Rogue Mod
@@ -172,6 +216,7 @@ public class GameManager : MonoBehaviour
         ArriveCamp += CampEnter;
         Chosed += ChoiceHandle;
         AddCard += AddToDeck;
+        DeckBtn.GetComponent<Btn>().Clicked += CheckDeck;
         ShowStartMenu();
     }
 
