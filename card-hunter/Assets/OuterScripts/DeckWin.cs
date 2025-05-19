@@ -42,14 +42,14 @@ public class DeckWin : MonoBehaviour
             
             foreach (GameObject card in Cards)
             {
-                card.transform.position += new Vector3(0, -10, 0);
+                card.transform.position += new Vector3(0, -20, 0);
             }
         }
         else if(scrollInput < 0 && Cards[Cards.Count - 1].transform.position.y <= GameConfig.YBound)
         {
             foreach (GameObject card in Cards)
             {
-                card.transform.position += new Vector3(0, 10, 0);
+                card.transform.position += new Vector3(0, 20, 0);
             }
         }
     }

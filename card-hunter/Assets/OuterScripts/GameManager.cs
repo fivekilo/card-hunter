@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEditor.PlayerSettings;
 
 public class GameManager : MonoBehaviour
@@ -128,6 +129,30 @@ public class GameManager : MonoBehaviour
             AbleToMove[i] = false;
         }
     }
+    private void HideScene()
+    {
+        Scene scene = SceneManager.GetSceneByName("WorldMap");
+        foreach(GameObject G in scene.GetRootGameObjects())
+        {
+            if (G != this.gameObject)
+            {
+                G.SetActive(false);
+            }
+        }
+        transform.Find("WorldMap").gameObject.SetActive(false);
+    }
+    private void ShowScene()
+    {
+        Scene scene = SceneManager.GetSceneByName("WorldMap");
+        foreach (GameObject G in scene.GetRootGameObjects())
+        {
+            if (G != this.gameObject)
+            {
+                G.SetActive(true);
+            }
+            transform.Find("WorldMap").gameObject.SetActive(true);
+        }
+    }
     private void AddToDeck(int CardNum)
     {
         shareddata.playerinfo.deck.Add(CardNum);
@@ -174,8 +199,13 @@ public class GameManager : MonoBehaviour
     }
     private IEnumerator BattleEnter(Commission c)//进入战斗
     {
+        shareddata.commission = c;
         Debug.Log("进行了与" + c.monster + "的战斗");
-        yield return new WaitForSeconds(1);//调用战斗,返回战斗结果
+        HideScene();
+        SceneManager.LoadScene("SampleScene", LoadSceneMode.Additive);
+        yield return new WaitUntil(()=>shareddata.Complete);//调用战斗,返回战斗结果
+        SceneManager.UnloadSceneAsync("SampleScene");
+        ShowScene();
 
         //战斗结束，返回营地。返回函数与营地绑定
         camp.GetComponent<Camp>().ClickEvent+=BackToCamp;
