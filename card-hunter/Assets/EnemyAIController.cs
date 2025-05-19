@@ -33,7 +33,7 @@ public class EnemyAIController : MonoBehaviour
         _mapManager = _battleManager.mapmanager;
         _currentGridPos = new(GameConfig.size/2,GameConfig.size/2); 
         //≥ı ºªØŒª÷√
-        Vector3 InitialPos = _mapManager.GetVector3(_currentGridPos);
+        Vector3 InitialPos = _mapManager.GetHexagon(_currentGridPos).transform.position;
         InitialPos.z = -5;
         transform.position = InitialPos;
         _player= FindObjectOfType<PlayerInfo>();
@@ -173,7 +173,7 @@ public class EnemyAIController : MonoBehaviour
     void UpdatePosition(Vector2Int newPos)
     {
         _currentGridPos = newPos;
-        Vector3 newPos3 = _mapManager.GetVector3(_currentGridPos);
+        Vector3 newPos3 = _mapManager.GetHexagon(_currentGridPos).transform.position;
         newPos3.z = -5;
         transform.position = newPos3;
     }
