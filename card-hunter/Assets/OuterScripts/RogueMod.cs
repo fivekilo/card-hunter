@@ -13,7 +13,7 @@ public class Choice
     public int AddCard;//可以加入几张牌
     public int money;//获得/损失金钱
     public int health;//获得/损失生命值
-    public List<int> CardsID;//添加指定卡牌
+    public List<int> CardsID;//可添加的卡牌
     public int equipment;//可以获得的装备编号
     public Choice(int id, string text, int deleteCard, int addCard, int money, int health, List<int> cardsID, int equipment)
     {

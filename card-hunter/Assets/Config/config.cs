@@ -914,6 +914,9 @@ public class GameConfig : ScriptableObject
     //GameManager
     public const int CommissionAmount = 7;
 
+    //DeckWin 画图参数
+    public const int XBound = 720, YBound = 270;//X,Y界限坐标
+    public const int Xdelta = 440, Ydelta = 540;//两卡间隔
 
     //RouteRender参数
     public static IReadOnlyList<string> Destinies = new List<string> { "Camp","Forest", "Desert", "Valcano" };
@@ -928,8 +931,8 @@ public class GameConfig : ScriptableObject
         new Event(1,"剑术大师","剑术大师小作文","3",
             new List<Choice>{
                 new Choice(1,"[夯实基础]删一张牌",1,0,0,0,new List<int>(),0),
-                new Choice(2,"[学习技巧]获得蓝色稀有度的一张牌",0,1,0,0,new List<int>(),0),
-                new Choice(3,"[祖传秘技]花费？？金币，获得一张金色稀有度的卡牌",0,1,-20,0,new List<int>(),0)
+                new Choice(2,"[学习技巧]获得蓝色稀有度的一张牌",0,1,0,0,new List<int>{1,2,3,6 },0),
+                new Choice(3,"[祖传秘技]花费？？金币，获得一张金色稀有度的卡牌",0,1,-20,0,new List<int>{1,2,3,6 },0)
             })
     };
     public static readonly Vector2Int EventAmountBounds = new Vector2Int(1, 1);//每层总事件数限制
