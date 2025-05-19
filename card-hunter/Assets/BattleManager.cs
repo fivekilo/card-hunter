@@ -483,7 +483,7 @@ public class BattleManager : MonoBehaviour
             }
 
        }
-        AudioManager.PlayCardPlaySound(card.cardNum);
+       AudioManager.PlayCardPlaySound(card.cardNum);
        cardManager.RemoveCardFromHand(card, hand);
        card.transform.position += new Vector3(10000, 0, 0);
        if(card.Consumption != true) //消耗判断

@@ -1833,6 +1833,7 @@ MonoBehaviour:
   Movebutton: {fileID: 777040609}
   cardManager: {fileID: 2051032136}
   UserIndicator: {fileID: 1351588226}
+  AudioManager: {fileID: 0}
   discardPile: []
   isWaitingForPlayerChoose: 0
   EndTurnClicked:
@@ -2191,7 +2192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 2974870984592191552, guid: 73f05b87b91c26d409e3b508e2d9a27b, type: 3}
   copiesPerCard: 2
-  initialCardTypes: 22
+  initialCardTypes: 23
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
