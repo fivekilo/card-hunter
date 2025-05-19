@@ -76,7 +76,7 @@ public class MapManager : MonoBehaviour
                 double r = random.NextDouble();
                 if (r < ObstacleRate)
                 {
-                    map.GetHex(pos).AddComponent<Hexagon>().ObstacleAdd();
+                    map.GetHex(pos).GetComponent<Hexagon>().ObstacleAdd();
                     count++;
                 }
             }
