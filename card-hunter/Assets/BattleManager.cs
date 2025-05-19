@@ -38,6 +38,7 @@ public class BattleManager : MonoBehaviour
     public Button Movebutton;
     public CardManager cardManager;
     public TextMeshProUGUI UserIndicator;
+    public AudioManager AudioManager;
     // public int i = 1;
     private List<Card> InitialDeck = new(); 
     private List<Card> deck = new ();      
@@ -482,7 +483,7 @@ public class BattleManager : MonoBehaviour
             }
 
        }
-
+       AudioManager.PlayCardPlaySound(card.cardNum);
        cardManager.RemoveCardFromHand(card, hand);
        card.transform.position += new Vector3(10000, 0, 0);
        if(card.Consumption != true) //消耗判断
@@ -609,6 +610,7 @@ public class BattleManager : MonoBehaviour
             if (CanMove) OnPositionChanged?.Invoke(newPos);
             origin.ReduceHealth(CalculateAttack(new(5 , 4)));
             OnBladeLevelChange?.Invoke(Player.curBladeLevel + 1);
+            AudioManager.PlayCardSpecialSound(22);
             return;
         }
 

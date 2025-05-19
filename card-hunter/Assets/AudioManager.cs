@@ -11,7 +11,7 @@ public class AudioManager : MonoBehaviour
     {
         public int cardNum;
         public AudioClip playSound;
-        public AudioClip drawSound;
+        public AudioClip specialSound;
     }
     
     public List<SoundEffect> soundEffects;
@@ -36,6 +36,19 @@ public class AudioManager : MonoBehaviour
         if(sfx != null && sfx.playSound != null)
         {
             cardAudioSource.PlayOneShot(sfx.playSound);
+        }
+        else
+        {
+            Debug.LogWarning($"No play sound found for card: {cardNum}");
+        }
+    }
+
+    public void PlayCardSpecialSound(int cardNum)
+    {
+        SoundEffect sfx = soundEffects.Find(s => s.cardNum == cardNum);
+        if (sfx != null && sfx.specialSound != null)
+        {
+            cardAudioSource.PlayOneShot(sfx.specialSound);
         }
         else
         {
