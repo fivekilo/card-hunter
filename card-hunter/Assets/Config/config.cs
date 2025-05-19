@@ -766,9 +766,9 @@ public class GameConfig : ScriptableObject
     public static readonly List<Event> Events = new List<Event> {
         new Event(1,"剑术大师","剑术大师小作文","3",
             new List<Choice>{
-                new Choice(1,"[夯实基础]删一张牌",1,0,0,0,null,0),
-                new Choice(2,"[学习技巧]获得蓝色稀有度的一张牌",0,1,0,0,null,0),
-                new Choice(3,"[祖传秘技]花费？？金币，获得一张金色稀有度的卡牌",0,1,-20,0,null,0)
+                new Choice(1,"[夯实基础]删一张牌",1,0,0,0,new List<int>(),0),
+                new Choice(2,"[学习技巧]获得蓝色稀有度的一张牌",0,1,0,0,new List<int>(),0),
+                new Choice(3,"[祖传秘技]花费？？金币，获得一张金色稀有度的卡牌",0,1,-20,0,new List<int>(),0)
             })
     };
     public static readonly Vector2Int EventAmountBounds = new Vector2Int(1, 1);//每层总事件数限制

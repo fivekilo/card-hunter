@@ -43,6 +43,7 @@ public class EventData : MonoBehaviour
         choice.GetComponentInChildren<Button>().onClick.AddListener(() => {
             Clicked = true;
             Chosed?.Invoke(choicedata);
+            Destroy(gameObject);
         });
     }
     void Start()

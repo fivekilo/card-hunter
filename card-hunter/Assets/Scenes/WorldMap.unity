@@ -275,6 +275,7 @@ MonoBehaviour:
   WorldMap: {fileID: 1614852923}
   Player: {fileID: 1988310651}
   EventWin: {fileID: 8748371688726794457, guid: 5e49066b5b5a80549bd8c66b9f28dca9, type: 3}
+  AddCardWin: {fileID: 8220234830265469535, guid: 166856f5d94c6bd45921bd9d1a7d6186, type: 3}
 --- !u!4 &233589024
 Transform:
   m_ObjectHideFlags: 0
@@ -839,7 +840,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5.0176396
+  orthographic size: 4.99
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -865,7 +866,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 8.8631, y: 1, z: 1.3051}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

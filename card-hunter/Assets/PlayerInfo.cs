@@ -36,6 +36,7 @@ public class PlayerInfo : MonoBehaviour
 
     public void Initialize()
     {
+        deck = new List<int>();
         Situation = 0;
         curHealth = MaxHealth;
         curCost = MaxCost;

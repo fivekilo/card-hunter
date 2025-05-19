@@ -11,7 +11,9 @@ public class GameManager : MonoBehaviour
     public GameObject WorldMap;
     public GameObject Player;
     public GameObject EventWin;
+    public GameObject AddCardWin;
     public event Action<Choice> Chosed;
+    public event Action<int> AddCard;
     private PlayerInfo playerinfo=new PlayerInfo();
     private RogueMod RM;
     private List<Commission> AcceptedCommission;
@@ -109,6 +111,10 @@ public class GameManager : MonoBehaviour
         GameObject EW = Instantiate(EventWin, Vector3.zero, Quaternion.identity);
         yield return StartCoroutine(EW.GetComponent<EventData>().EventInit(e, Chosed));
     }
+    private void AddToDeck(int CardNum)
+    {
+        shareddata.playerinfo.deck.Add(CardNum);
+    }
     private void ChoiceHandle(Choice choice)
     {
         if (choice.DeleteCard > 0)
@@ -118,6 +124,8 @@ public class GameManager : MonoBehaviour
         if (choice.AddCard > 0)
         {
             //¼ÓÅÆº¯Êý
+            GameObject AW = Instantiate(AddCardWin, Vector3.zero, Quaternion.identity);
+            AW.GetComponent<AddCardWindow>().AddCard(AddCard);
         }
         if (choice.money != 0)
         {
@@ -163,6 +171,7 @@ public class GameManager : MonoBehaviour
         ArriveBattleField += BattleEnter;
         ArriveCamp += CampEnter;
         Chosed += ChoiceHandle;
+        AddCard += AddToDeck;
         ShowStartMenu();
     }
 
