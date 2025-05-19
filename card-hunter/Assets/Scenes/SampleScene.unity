@@ -457,6 +457,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2902820061251023980, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1844501644}
+    - targetCorrespondingSourceObject: {fileID: 2902820061251023980, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1844501645}
   m_SourcePrefab: {fileID: 100100000, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
 --- !u!1 &338198060
 GameObject:
@@ -1917,14 +1920,16 @@ MonoBehaviour:
   _player: {fileID: 0}
   text: {fileID: 0}
   arrowtransform: {fileID: 0}
+  enemybuff: {fileID: 0}
+  name: "\u5927\u8D3C\u9F99"
   _maxHealth: 100
   _currentHealth: 0
   moveRange: 2
   detectionRange: 4
-  moveInterval: 0.3
+  armor: 0
   direction: 0
   skillSystem: {fileID: 0}
-  selfSkills: 010000000200000003000000040000000500000006000000
+  selfSkills: 01000000020000000300000004000000
 --- !u!114 &1844501644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1941,6 +1946,26 @@ MonoBehaviour:
   currentSkillID: 0
   nextSkillID: 0
   availableSkills: 
+  skillselected: 0
+  skill4selected: 0
+  turncount: 0
+--- !u!114 &1844501645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844501639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e8641514d1a61549b118d4e62d7918c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Poison: 0
+  Numbness: 0
+  Wound: 0
+  Dizzy: 0
+  TurntoPlayer: 0
 --- !u!1 &1923255096
 GameObject:
   m_ObjectHideFlags: 0
@@ -1973,6 +1998,7 @@ MonoBehaviour:
   currentState: 0
   Player: {fileID: 0}
   playerBuff: {fileID: 0}
+  enemyBuff: {fileID: 0}
   mapmanager: {fileID: 1151624064}
   BladeLevelSlot: {fileID: 589125591}
   Endbutton: {fileID: 1255822434}

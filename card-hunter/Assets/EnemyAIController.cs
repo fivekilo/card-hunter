@@ -15,6 +15,7 @@ public class EnemyAIController : MonoBehaviour
     public Transform arrowtransform;
     public EnemyBuff enemybuff;
     [Header("基础属性")]
+    [SerializeField] public string name = "";
     [SerializeField] public int _maxHealth = 100;
     [SerializeField] public int _currentHealth;
     [SerializeField] protected int moveRange = 2;//每回合最大移动距离
@@ -173,7 +174,7 @@ public class EnemyAIController : MonoBehaviour
     }
 
     //更新坐标位置
-    void UpdatePosition(Vector2Int newPos)
+    public void UpdatePosition(Vector2Int newPos)
     {
         _currentGridPos = newPos;
         Vector3 newPos3 = _mapManager.GetHexagon(_currentGridPos).transform.position;

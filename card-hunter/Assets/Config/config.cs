@@ -684,8 +684,8 @@ public class GameConfig : ScriptableObject
         public int hittimes;//伤害次数
         public MoveType moveType;
         public int moveDistance;    //移动方式和距离
-        public EnemyBuff enemybuff;
-        public EnemyDebuff enemydebuff;  //怪物的特殊效果
+        public EnemyBuff getbuff;
+        public EnemyDebuff pushdebuff;  //怪物的特殊效果
         public int HPchange;//回复生命值数量（填入负值来回复生命）
         public int armor;//获得护甲数量
     }
@@ -700,8 +700,8 @@ public class GameConfig : ScriptableObject
             hittimes = 0,
             moveType = MoveType.None,
             moveDistance = 0,
-            enemybuff = EnemyBuff.None,
-            enemydebuff = EnemyDebuff.None,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
             HPchange = 0,
             armor=0
         },
@@ -714,8 +714,8 @@ public class GameConfig : ScriptableObject
             hittimes = 1,
             moveType = MoveType.None,
             moveDistance = 0,
-            enemybuff = EnemyBuff.None,
-            enemydebuff = EnemyDebuff.None,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
             HPchange = 0,
             armor=0
         },
@@ -723,13 +723,13 @@ public class GameConfig : ScriptableObject
         {
             skillID = 2,
             skillName = "二连咬",
-            range = new List<Vector2Int>{new Vector2Int(1,0), new Vector2Int(0, 1), new Vector2Int(1, -1) },
-            damage =3,
+            range = new List<Vector2Int>{new Vector2Int(1,0), new Vector2Int(2, 0)},
+            damage =4,
             hittimes = 2,
             moveType = MoveType.None,
             moveDistance = 0,
-            enemybuff = EnemyBuff.TurntoPlayer,
-            enemydebuff = EnemyDebuff.None,
+            getbuff = EnemyBuff.TurntoPlayer,
+            pushdebuff = EnemyDebuff.None,
             HPchange = 0,
             armor=0
         },
@@ -742,8 +742,8 @@ public class GameConfig : ScriptableObject
             hittimes = 1,
             moveType = MoveType.Forward,
             moveDistance = 3,
-            enemybuff = EnemyBuff.None,
-            enemydebuff = EnemyDebuff.None,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
             HPchange = 0,
             armor=0
         },
@@ -756,8 +756,8 @@ public class GameConfig : ScriptableObject
             hittimes = 0,
             moveType = MoveType.None,
             moveDistance = 0,
-            enemybuff = EnemyBuff.None,
-            enemydebuff = EnemyDebuff.None,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
             HPchange = -20,
             armor=0
         },
@@ -765,13 +765,13 @@ public class GameConfig : ScriptableObject
         {
             skillID = 5,
             skillName = "浓痰喷射",
-            range = new List<Vector2Int>{new Vector2Int(1,0), new Vector2Int(0, 1), new Vector2Int(1, -1) },
-            damage =4,
+            range = new List<Vector2Int>{new Vector2Int(2,0), new Vector2Int(3, 0), new Vector2Int(2, 1), new Vector2Int(3, -1)},
+            damage =5,
             hittimes = 1,
             moveType = MoveType.None,
             moveDistance = 0,
-            enemybuff = EnemyBuff.None,
-            enemydebuff = EnemyDebuff.CantMove,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.CantMove,
             HPchange = 0,
             armor=0
         },
@@ -785,23 +785,8 @@ public class GameConfig : ScriptableObject
             hittimes = 1,
             moveType = MoveType.None,
             moveDistance = 0,
-            enemybuff = EnemyBuff.None,
-            enemydebuff = EnemyDebuff.None,
-            HPchange = 0,
-            armor=0
-        },
-        new EnemySkillConfig
-        {
-            skillID = 6,
-            skillName = "下压",
-            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(0,1),new Vector2Int(1,1),
-                new Vector2Int(1,-1),new Vector2Int(2,-1)},
-            damage =9,
-            hittimes = 1,
-            moveType = MoveType.None,
-            moveDistance = 0,
-            enemybuff = EnemyBuff.None,
-            enemydebuff = EnemyDebuff.None,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
             HPchange = 0,
             armor=0
         },
@@ -814,8 +799,8 @@ public class GameConfig : ScriptableObject
             hittimes = 1,
             moveType = MoveType.None,
             moveDistance = 0,
-            enemybuff = EnemyBuff.None,
-            enemydebuff = EnemyDebuff.None,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
             HPchange = 0,
             armor=0
         },
@@ -829,8 +814,8 @@ public class GameConfig : ScriptableObject
             hittimes = 1,
             moveType = MoveType.Forward,
             moveDistance = 2,
-            enemybuff = EnemyBuff.None,
-            enemydebuff = EnemyDebuff.None,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
             HPchange = 0,
             armor=0
         },
@@ -846,8 +831,8 @@ public class GameConfig : ScriptableObject
             hittimes = 0,
             moveType = MoveType.None,
             moveDistance = 0,
-            enemybuff = EnemyBuff.None,
-            enemydebuff = EnemyDebuff.Numbness,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.Numbness,
             HPchange = 0,
             armor=0
         },
@@ -860,8 +845,8 @@ public class GameConfig : ScriptableObject
             hittimes = 1,
             moveType = MoveType.None,
             moveDistance = 0,
-            enemybuff = EnemyBuff.None,
-            enemydebuff = EnemyDebuff.Deterrence,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.Deterrence,
             HPchange = 0,
             armor=0
         },
@@ -875,8 +860,8 @@ public class GameConfig : ScriptableObject
             hittimes = 2,
             moveType = MoveType.Forward,
             moveDistance = 1,
-            enemybuff = EnemyBuff.None,
-            enemydebuff = EnemyDebuff.None, 
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None, 
             HPchange = 0,
             armor=0
         },
@@ -890,8 +875,8 @@ public class GameConfig : ScriptableObject
             hittimes = 1,
             moveType = MoveType.None,
             moveDistance = 0,
-            enemybuff = EnemyBuff.None,
-            enemydebuff = EnemyDebuff.None,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
             HPchange = 0,
             armor=0
         },
@@ -904,8 +889,8 @@ public class GameConfig : ScriptableObject
             hittimes = 2,
             moveType = MoveType.Forward,
             moveDistance = 4,
-            enemybuff = EnemyBuff.None,
-            enemydebuff = EnemyDebuff.None,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
             HPchange = 0,
             armor=0
         }

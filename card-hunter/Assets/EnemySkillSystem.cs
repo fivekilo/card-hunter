@@ -15,6 +15,11 @@ public class EnemySkillSystem : MonoBehaviour
     public List<int> availableSkills =new List<int>();//该怪物有的技能组ID
     //（靠aicontroll在开始时/转形态时主动传入）
 
+    //特判相关组件
+    public int skillselected = 0;//是否已经被选过
+    public int skill4selected = 0;//某个技能是否已经被选过
+    public int turncount = 0;//回合计数器（待编写）
+
     void Awake()
     {
         aiController = GetComponent<EnemyAIController>();
@@ -24,14 +29,29 @@ public class EnemySkillSystem : MonoBehaviour
 
     public void SelectNextSkill()
     {
-        // 简单AI：随机选择下个技能
-        nextSkillID = availableSkills[Random.Range(0, availableSkills.Count)];
-        //特殊判定集：不符合的重新选技能
-        // 特殊判定1：大贼龙的4技能（吞食回血）
-        while(nextSkillID==4 && (float)aiController._currentHealth*2.5>(float)aiController._maxHealth)
+        skillselected = 0;//先置0再选技能
+        // 选择前特判1：大贼龙的4技能（吞食回血转阶段）
+        while (aiController.name=="大贼龙" && (float)aiController._currentHealth * 2.5 < (float)aiController._maxHealth && skill4selected == 0)
         {
-            nextSkillID = availableSkills[Random.Range(0, availableSkills.Count)];
+            nextSkillID = 4;
+            skillselected = 1;
+            skill4selected = 1;
+            availableSkills.Add(5);
+            availableSkills.Add(6);
+            //在这里不能remove，因为技能只是选了还没放出来呢。只能加不能删
+            Debug.Log("大贼龙触发了“进食”技能！");
         }
+        // 简单AI：随机选择下个技能
+        if(skillselected ==0)
+        {
+            do
+            {
+                nextSkillID = availableSkills[Random.Range(0, availableSkills.Count)];
+                skillselected = 1;
+            } while (nextSkillID == 4);
+            // 特判：大贼龙的4技能不能在这里选
+        }
+
 
         //获取技能范围并展示
         GameConfig.EnemySkillConfig nextskillconfig = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == nextSkillID);
@@ -78,13 +98,27 @@ public class EnemySkillSystem : MonoBehaviour
         mapManager.ChangeColorByPos(actualrangepos, color);
 
         // 执行移动
-        //yield return HandleSkillMovement(config);
-        //执行伤害，回血,叠加护甲
+        if (config.moveType!=GameConfig.MoveType.None)
+            yield return HandleSkillMovement(config);
+        //执行伤害并应用debuff，回血,叠加护甲
         yield return Heal(config);
-        yield return ApplySkillDamage(config, actualrangepos);
+        yield return ApplySkill(config, actualrangepos);
         yield return AddArmor(config);
-        // 应用Debuff
-        //ApplyDebuffs(config);
+    }
+
+    private IEnumerator HandleSkillMovement(GameConfig.EnemySkillConfig config)
+    {
+        List<Vector2Int> StdVector = new List<Vector2Int> {new Vector2Int(1,0), new Vector2Int(0,1), new Vector2Int(-1, 1),
+            new Vector2Int(-1, 0), new Vector2Int(0, -1),new Vector2Int(1,-1) };
+        for(int i=1;i<=config.moveDistance;i++)
+        {
+            Vector2Int newpos = aiController._currentGridPos + StdVector[aiController.direction];
+            //如果前面有墙或者人，直接停止
+            if (mapManager.IsPositionOccupied(newpos))  break;
+            aiController._currentGridPos += StdVector[aiController.direction];
+            aiController.UpdatePosition(aiController._currentGridPos);
+            yield return new WaitForSeconds(0.3f);
+        }
     }
 
     private IEnumerator AddArmor(GameConfig.EnemySkillConfig config)
@@ -99,15 +133,19 @@ public class EnemySkillSystem : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
     }
 
-    private IEnumerator ApplySkillDamage(GameConfig.EnemySkillConfig config, List<Vector2Int> actualrangepos)
+    private IEnumerator ApplySkill(GameConfig.EnemySkillConfig config, List<Vector2Int> actualrangepos)
     {
         List<PlayerInfo> players = battleManager.GetTargetsInRange(actualrangepos);
         foreach (PlayerInfo player in players)
         {
-            for (int i = 1; i <= config.hittimes; i++)
+            if(player!=null)
             {
-                battleManager.ApplyDamage(player, config.damage,aiController);
-                yield return new WaitForSeconds(0.2f);
+                for (int i = 1; i <= config.hittimes; i++)
+                {
+                    battleManager.ApplyDamage(player, config.damage, aiController);
+                    battleManager.ApplyDebuff(player, config.pushdebuff, aiController);
+                    yield return new WaitForSeconds(0.2f);
+                }
             }
         }
     }

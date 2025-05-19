@@ -203,7 +203,7 @@ public class BattleManager : MonoBehaviour
              if (enemy != null)
              {
                 //判断麻痹效果
-                if(enemy.enemybuff.Numbness!=0)
+                if (enemy.enemybuff.Numbness == 0)
                     yield return enemy.TakeTurn();
              }
         }
@@ -639,6 +639,15 @@ public class BattleManager : MonoBehaviour
         }
         int temphealth = Player.curHealth - Math.Max(damage - Player.Defence , 0);
         Player.ModifyHealth(temphealth);
+    }
+
+    //怪物对玩家施加debuff
+    public void ApplyDebuff(PlayerInfo target, GameConfig.EnemyDebuff debuff, EnemyAIController origin)
+    {
+        if (debuff == GameConfig.EnemyDebuff.CantMove) 
+            playerBuff.CantMove++;
+        else if  (debuff == GameConfig.EnemyDebuff.Numbness)
+            playerBuff.Numbness++;
     }
 
     public void EndBattle()
