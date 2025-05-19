@@ -7,7 +7,7 @@ using static UnityEditor.PlayerSettings;
 
 public class PlayerInfo : MonoBehaviour
 {
-    public List<int> deck=new List<int> {1,1,2,3,6,7,8,8,1 };//¿¨×é
+    public List<int> deck=new List<int> {1,1,2,3,6,7,8,8 };//¿¨×é
     public int money;//½ðÇ®
     public int MaxHealth = GameConfig.InitialHealth;
     public int curHealth;
