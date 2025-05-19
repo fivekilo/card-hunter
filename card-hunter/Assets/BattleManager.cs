@@ -46,7 +46,7 @@ public class BattleManager : MonoBehaviour
     private List<Card> discardPile = new (); 
     private List<Card> hand = new ();    
     
-    private List<EnemyAIController> _enemies = new ();
+    public List<EnemyAIController> _enemies = new ();
 
     public delegate void BattleEvent(BattleState state);
     public event BattleEvent OnBattleStateChanged; 
@@ -108,7 +108,7 @@ public class BattleManager : MonoBehaviour
     {
         UserIndicator.text = "初始化中";
         OnBladeGasChange?.Invoke(5);
-        OnBladeLevelChange?.Invoke(2);
+        OnBladeLevelChange?.Invoke(3);
 
         InitializeDeck();
 
@@ -119,7 +119,7 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 1; i <= 11; i++)
         {
-            Card newcard = cardManager.CreateCard(22  ,cardManager.transform );
+            Card newcard = cardManager.CreateCard(20  ,cardManager.transform );
             discardPile.Add(newcard);
             CardIntoHand(newcard);
         }
@@ -378,17 +378,7 @@ public class BattleManager : MonoBehaviour
             Player.ModifySituation(1);
             yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback));
         }
-        if (card.DeltaBladeNum != 0)
-        {
-            Player.ModifyBladeNum(Player.curBladeNum + card.DeltaBladeNum);
-            OnBladeGasChange?.Invoke(Player.curBladeNum);
-        }
-
-        if (card.DeltaBladeLevel != 0)
-        {
-            Player.ModifyBladeLevel(Player.curBladeLevel + card.DeltaBladeLevel);
-            OnBladeLevelChange?.Invoke(Player.curBladeLevel);
-        }
+        
 
         if (card.AttackDirection != null)
         {
@@ -421,17 +411,34 @@ public class BattleManager : MonoBehaviour
             {
                 cnt++;
                 Debug.Log("被打第" + cnt.ToString() + "次");
-                enemy.ReduceHealth(CalculateAttack(card.Attack));
+                Vector2Int Attack = card.Attack;
+                if (card.cardNum == 21)
+                {
+                    Attack.y += Player.curBladeLevel;
+                    Debug.Log("登龙造成" + Attack.x + " " + Attack.y);
+                }
+                
+                enemy.ReduceHealth(CalculateAttack(Attack));
                 //      enemy.ReduceHealth(card.Attack.x * card.Attack.y);
-                Debug.Log(card.Attack.x.ToString()  + " " +  card.Attack.y.ToString());
+           //     Debug.Log(card.Attack.x.ToString()  + " " +  card.Attack.y.ToString());
             }
         //    Debug.Log(AttackedMonster.Count);
         }
+        if (card.DeltaBladeNum != 0)
+        {
+            Player.ModifyBladeNum(Player.curBladeNum + card.DeltaBladeNum);
+            OnBladeGasChange?.Invoke(Player.curBladeNum);
+        }
 
-        if(card.Derivation != 0)
+        if (card.DeltaBladeLevel != 0)
+        {
+            Player.ModifyBladeLevel(Player.curBladeLevel + card.DeltaBladeLevel);
+            OnBladeLevelChange?.Invoke(Player.curBladeLevel);
+        }
+        if (card.Derivation != 0)
         {
             Card newCard = cardManager.CreateCard(card.Derivation, cardManager.transform);
-            if (hand.Count < GameConfig.MaxHandCardNum)
+            if (hand.Count < GameConfig.MaxHandCardNum && (newCard.cardNum != 21 || Player.curBladeLevel > 0))
             {
                 hand.Add(newCard);
                 CardIntoHand(newCard);
@@ -478,6 +485,9 @@ public class BattleManager : MonoBehaviour
                         break;
                     case 8:
                         playerBuff.ModifyDL(playerBuff.DL + 1);
+                        break;
+                    case 9:
+                        playerBuff.ModifyExCost(playerBuff.ExCost + 1);
                         break;
                 }
             }
