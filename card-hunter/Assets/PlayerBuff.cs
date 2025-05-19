@@ -13,7 +13,8 @@ public class PlayerBuff : MonoBehaviour
     public int Poison = 0;//中毒 回合结束结算 5
     public int Numbness = 0; //麻痹 回合开始结算 6
     public int CantMove = 0;//这回合不能移动 回合结束减1  7
-    public int DL; //登龙 8
+    public int DL = 0; //登龙 8
+    public int ExCost = 0;//额外费用 回合开始时结算 9;
     void Start()
     {
 
@@ -51,6 +52,11 @@ public class PlayerBuff : MonoBehaviour
     public void ModifyDL(int amount)
     {
         DL = Mathf.Clamp(amount, 0, 999);
+    }
+
+    public void ModifyExCost(int amount)
+    {
+        ExCost = Mathf.Clamp(amount, 0, 999);
     }
     // Update is called once per frame
     void Update()
