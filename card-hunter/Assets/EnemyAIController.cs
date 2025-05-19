@@ -13,12 +13,14 @@ public class EnemyAIController : MonoBehaviour
     public PlayerInfo _player;
     public TextMeshProUGUI text;
     public Transform arrowtransform;
+    public EnemyBuff enemybuff;
     [Header("基础属性")]
     [SerializeField] public int _maxHealth = 100;
     [SerializeField] public int _currentHealth;
     [SerializeField] protected int moveRange = 2;//每回合最大移动距离
     [SerializeField] protected int detectionRange = 4;//检测玩家的最大范围
-    [SerializeField] private float moveInterval = 0.3f; // 移动动画间隔
+    [SerializeField] public int armor = 0;//初始护甲
+    private float moveInterval = 0.3f; // 移动动画间隔
     //方向及方向转换
     public int direction=0;
     private List<Vector2Int> StdVector = new List<Vector2Int> {new Vector2Int(1,0), new Vector2Int(0,1), new Vector2Int(-1, 1),
@@ -40,9 +42,10 @@ public class EnemyAIController : MonoBehaviour
         _currentHealth = _maxHealth;
         text = GetComponentInChildren<TextMeshProUGUI>();
         arrowtransform = transform.Find("Arrow");
-        //传入技能
+        //传入技能和buff
         skillSystem = GetComponent<EnemySkillSystem>();
         skillSystem.availableSkills = selfSkills;
+        enemybuff = GetComponent<EnemyBuff>();
     }
    
     public IEnumerator TakeTurn()//执行回合
@@ -181,6 +184,13 @@ public class EnemyAIController : MonoBehaviour
     //加减血量
     public void ReduceHealth(int num)
     {
+        //优先抵扣护甲
+        if(armor>0)
+        {
+            int deltaarmor = armor-Mathf.Clamp(armor - num, 0, 100);
+            armor = Mathf.Clamp(armor - num, 0, 100);
+            num = num - deltaarmor;
+        }
         _currentHealth = Mathf.Clamp(_currentHealth - num, 0, _maxHealth);
         if (num>=0) 
             Debug.Log("怪物被打了" + num.ToString() + "血");

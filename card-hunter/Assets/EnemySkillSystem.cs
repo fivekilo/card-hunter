@@ -79,10 +79,24 @@ public class EnemySkillSystem : MonoBehaviour
 
         // 执行移动
         //yield return HandleSkillMovement(config);
-        //执行伤害
+        //执行伤害，回血,叠加护甲
+        yield return Heal(config);
         yield return ApplySkillDamage(config, actualrangepos);
+        yield return AddArmor(config);
         // 应用Debuff
         //ApplyDebuffs(config);
+    }
+
+    private IEnumerator AddArmor(GameConfig.EnemySkillConfig config)
+    {
+        aiController.armor += config.armor;
+        yield return new WaitForSeconds(0.2f);
+    }
+
+    private IEnumerator Heal(GameConfig.EnemySkillConfig config)
+    {
+        aiController.ReduceHealth(config.HPchange);
+        yield return new WaitForSeconds(0.2f);
     }
 
     private IEnumerator ApplySkillDamage(GameConfig.EnemySkillConfig config, List<Vector2Int> actualrangepos)
