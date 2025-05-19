@@ -1742,6 +1742,69 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundEffects:
+  - cardNum: 1
+    playSound: {fileID: 8300000, guid: f358fa0c111b9b8419837209709869f7, type: 3}
+    specialSound: {fileID: 0}
+  - cardNum: 2
+    playSound: {fileID: 8300000, guid: f358fa0c111b9b8419837209709869f7, type: 3}
+    specialSound: {fileID: 0}
+  - cardNum: 3
+    playSound: {fileID: 8300000, guid: 560f575c0bdeffc43852b3d04f9c3d5e, type: 3}
+    specialSound: {fileID: 0}
+  - cardNum: 4
+    playSound: {fileID: 8300000, guid: 560f575c0bdeffc43852b3d04f9c3d5e, type: 3}
+    specialSound: {fileID: 0}
+  - cardNum: 5
+    playSound: {fileID: 8300000, guid: 560f575c0bdeffc43852b3d04f9c3d5e, type: 3}
+    specialSound: {fileID: 0}
+  - cardNum: 6
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 7
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 8
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 9
+    playSound: {fileID: 8300000, guid: f358fa0c111b9b8419837209709869f7, type: 3}
+    specialSound: {fileID: 0}
+  - cardNum: 10
+    playSound: {fileID: 8300000, guid: f358fa0c111b9b8419837209709869f7, type: 3}
+    specialSound: {fileID: 0}
+  - cardNum: 11
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 12
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 13
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 14
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 15
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 16
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 17
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 18
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 19
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 20
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 21
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
   - cardNum: 22
     playSound: {fileID: 0}
     specialSound: {fileID: 8300000, guid: 58c2d67f142028e45991fb01d063e47d, type: 3}

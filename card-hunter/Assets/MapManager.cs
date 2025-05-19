@@ -204,6 +204,13 @@ public class MapManager : MonoBehaviour
         Vector2Int D = new Vector2Int();
         List<Vector2Int>accessible = new List<Vector2Int>();
         BattleManager battleManager = GetComponentInParent<BattleManager>();
+        battleManager.FindAllEnemies();
+        List<EnemyAIController> enemies = battleManager._enemies;
+        List<Vector2Int> enemyPos = new();
+        foreach(EnemyAIController enemyAI in enemies)
+        {
+            enemyPos.Add(enemyAI._currentGridPos);
+        }
         battleManager.UserIndicator.text = "请选择移动的地块";
         foreach (Vector2Int pos in ObPosition)
         {
@@ -218,7 +225,7 @@ public class MapManager : MonoBehaviour
             D = direction - player;
             for(int i = length[0]; i <= length[1]; i++)
             {
-                if (ObPosition.Contains(player + D *i))
+                if (ObPosition.Contains(player + D *i) || enemyPos.Contains(player + D * i))
                 {
                     break;
                 }
