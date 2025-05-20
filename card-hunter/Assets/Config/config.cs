@@ -1101,7 +1101,7 @@ public class GameConfig : ScriptableObject
             skillID = 10,
             skillName = "龙吼",
             range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(0,1),new Vector2Int(0,-1),new Vector2Int(1,-1),new Vector2Int(-1,1)},
-            damage =3,
+            damage =7,
             hittimes = 1,
             moveType = MoveType.None,
             moveDistance = 0,
@@ -1116,7 +1116,7 @@ public class GameConfig : ScriptableObject
         {
             skillID = 11,
             skillName = "二连前咬",
-            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(3,0),new Vector2Int(0,1),new Vector2Int(1,1),
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(0,1),new Vector2Int(1,1),
                 new Vector2Int(1,-1),new Vector2Int(2,-1)},
             damage =5,
             hittimes = 2,
@@ -1133,7 +1133,7 @@ public class GameConfig : ScriptableObject
         {
             skillID = 12,
             skillName = "昂头喷火",
-            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(3,0),new Vector2Int(4,0),new Vector2Int(1,1),
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(3,0),new Vector2Int(1,1),
                 new Vector2Int(2,-1)},
             damage =9,
             hittimes = 1,

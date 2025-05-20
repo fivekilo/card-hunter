@@ -250,6 +250,21 @@ public class BattleManager : MonoBehaviour
         ChangeState(BattleState.PlayerDraw);
     }
 
+    //变招前预检测
+    private void BeforeChangeskill()
+    {
+        FindAllEnemies();
+        foreach (var enemy in _enemies)
+        {
+            if (enemy != null)
+            {
+                //判断是不是会变招的怪
+                if (enemy.name == "蛮颚龙")
+                    enemy.skillSystem.ChangeSkillinRealtime(Player.PlayerGridPos);
+            }
+        }
+    }
+
     private IEnumerator PlayerDrawPhase()
     {
         Debug.Log("draw waiting");
@@ -316,7 +331,8 @@ public class BattleManager : MonoBehaviour
         isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
             Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
-            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1,1), callback1 , callback2));
+            Action callback3 = BeforeChangeskill;//把他当成回调函数传出才能正确的使用新坐标！
+            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1,1), callback1 , callback2,callback3));
         Player.ModifySituation(0);
     }
 
@@ -405,6 +421,7 @@ public class BattleManager : MonoBehaviour
             isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
             Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
+            Action callback3 = BeforeChangeskill;
             List<int> newDir = card.Move;
             List<int> AllDir = new List<int> { 0, 1, 2, 3, 4, 5 };
             if (Player.Situation == 0) newDir = AllDir;
@@ -412,7 +429,8 @@ public class BattleManager : MonoBehaviour
                 Player.ModifySituation(0);
             else if (card.EnterState == 2 || (card.EnterState == 0 && Player.Situation == 1))
                 Player.ModifySituation(1);
-            yield return StartCoroutine(mapmanager.MoveCommand(GetAdjacent(newDir), Player.PlayerGridPos, card.MoveLength, callback1, callback2));
+            yield return StartCoroutine(mapmanager.MoveCommand(GetAdjacent(newDir), Player.PlayerGridPos, card.MoveLength, callback1, callback2, callback3));
+            BeforeChangeskill();
         }
 
         if (card.AttackDirection != null && card.Sequence == true)
@@ -514,6 +532,7 @@ public class BattleManager : MonoBehaviour
        {
             OnEndTurnButtonClicked();
        }
+
     }
   /*  public int CalculateAttack(Card card)
     {
@@ -747,7 +766,20 @@ public class BattleManager : MonoBehaviour
         return res;
     }
 
-    public
+    //检测玩家是否在当前的攻击范围里
+    public bool PlayerInRange(List<Vector2Int> actualrangepos)
+    {
+        bool res = false;
+        foreach (Vector2Int pos in actualrangepos)
+        {
+            if (pos == Player.PlayerGridPos)
+            {
+                res = true;
+            }
+        }
+        return res;
+    }
+
     // Update is called once per frame
     void Update()
     {

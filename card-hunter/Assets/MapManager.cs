@@ -196,7 +196,7 @@ public class MapManager : MonoBehaviour
         }
         return true;
     }
-    public IEnumerator MoveCommand(List<Vector2Int> directions, Vector2Int player,Vector2Int length,Action<Vector2Int>callback1 , Action<Vector2Int> callback2)//移动指令
+    public IEnumerator MoveCommand(List<Vector2Int> directions, Vector2Int player,Vector2Int length,Action<Vector2Int>callback1 , Action<Vector2Int> callback2, Action callback3)//移动指令
     {
         
         //还没添加越过障碍物功能
@@ -256,6 +256,7 @@ public class MapManager : MonoBehaviour
         battleManager.isWaitingForPlayerChoose = false;
         callback2(GetNewDir(ClickedPos, player));
         callback1(ClickedPos);
+        callback3();
         //MoveComplete = true;
         battleManager.UserIndicator.text = "玩家回合";
     }
