@@ -104,6 +104,7 @@ public class Card : MonoBehaviour
         DeltaBladeLevel = GameConfig.DeltaBladeLevel[cardNum]; //提升气刃等级
         DeltaHealth = GameConfig.DeltaHealth[cardNum]; //生命值变化
         Sequence = GameConfig.Sequence[cardNum];
+        AttackRange= GameConfig.AttackRange[cardNum];
     }
     public void cardInit()
     {        
