@@ -41,15 +41,25 @@ public class GameConfig : ScriptableObject
         "蓄意破坏",//12
         "侧步",//13
         "弱点突刺",//14
-        "",//15
-        "",//16
-        "",//17
-        "",//18
-        "",//19
+        "战场冥想",//15
+        "精准防御",//16
+        "拔刀二连斩",//17
+        "简易气刃释放",//18
+        "看破斩·旋",//19
         "气刃突刺",//20
         "气刃兜割",//21
         "居合拔刀气刃斩",//22
-        "飞翔爪攻击"//23
+        "飞翔爪攻击",//23
+        "飞身踢",//24
+        "凝气于血",//25
+        "气刃护盾",//26
+        "居登",//27
+        "伤口管理",//28
+        "气刃踏步斩",//29
+        "一字斩",//30
+        "刚气刃斩",//31
+        "",//32
+        "",//33
     }.AsReadOnly();
     public static IReadOnlyList<string> CardImageName=new List<string> 
     {"",//卡图名称
@@ -76,32 +86,52 @@ public class GameConfig : ScriptableObject
         "Gas blade pocket cutting",//21
         "dajv",//22
         "Flying claw attack",//23
+        "Direct slash",//24
+        "Direct slash",//25
+        "Direct slash",//26
+        "Direct slash",//27
+        "Direct slash",//28
+        "Direct slash",//29
+        "Direct slash",//30
+        "Direct slash",//31
+        "",//32
+        "",//33
         }.AsReadOnly();
     public static IReadOnlyList<string> CardText = new List<string>
     { "", //卡牌描述
         "造成6点伤害，回复2格气刃槽" , //1
         "向前移动一格，造成4点伤害，回复1格气刃槽" ,//2
-        "消耗1格气刃槽,造成7点伤害,转向",//3
-        "消耗2格气刃槽，造成两次4点伤害，转向，消耗，虚无",//4
+        "消耗1格气刃槽,造成7点伤害,转向,派生气刃斩2",//3
+        "消耗2格气刃槽，造成两次4点伤害，转向，消耗，虚无，派生气刃大回旋",//4
         "消耗2格气刃槽,对前方三格范围内的敌人造成10点伤害，提升气刃等级，转向，消耗，虚无",//5
         "向任意方向移动一格,进入自由态",//6
-        "限连携，消耗1格气刃槽,从后方三格中选择移动一格，获得一层免伤buff，若下回合开始时见切前角色所处地块或角色被攻击，则获得【气刃大回旋】，回满气刃槽。",//7
+        "限连携，消耗1格气刃槽,从后方三格中选择移动一格，获得一层免伤buff，若下回合开始前角色受到攻击，则获得【气刃大回旋】，回满气刃槽。",//7
         "获得3点格挡",//8
         "造成8点伤害，恢复3格气刃槽后退或水平（前方左右）移动一格，进入自由态。",//9
         "造成5点伤害,获得5点格挡,回复1气刃槽转向",//10
         "造成两次4点伤害，抽1张牌，回复2气刃槽，转向。",//11
-        "造成2点伤害,造成2层【伤口】。",//12
+        "造成2点伤害,造成1层【伤口】。",//12
         "向左边或右边位移一格（无前后），不改变状态",//13
-        "造成6点伤害,回复2气刃槽, 如果有伤口，则降低2层【伤口】造成10点伤害,转向",//14  ！
-        "",//15
-        "",//16
-        "",//17
-        "",//18
-        "",//19
-        "向前移动一格，造成8伤害 恢复1气刃槽。如果有气刃等级，将【气刃兜割】加入手卡",//20 ！
-        "限连携态，根据气刃等级的不同造成不同伤害。白刃：4*5 黄刃：5*5 红刃 6*5。下一回合开始获得1费抽一张牌。",//21 ！
+        "造成6点伤害,回复2气刃槽, 造成2层【伤口】",//14  ！
+        "回复8格气刃槽",//15
+        "获得8点格挡，抽一张牌",//16
+        "仅自由态，造成5*2点伤害，回复3格气刃槽",//17
+        "造成8点伤害，下降气刃等级，获得1费抽一张牌。消耗",//18
+        "消耗1气刃槽，对前方一格造成12点伤害，向后方三格移动一格，获得【见切】buff",//19
+        "造成8伤害 恢复1气刃槽。如果有气刃等级，将【气刃兜割】加入手卡",//20 ！
+        "限连携态，向任意方向移动一格，向任意方向攻击。根据气刃等级造成伤害。白刃：5*4 黄刃：5*5 红刃 5*6。下一回合开始获得1费抽一张牌。下降气刃等级，消耗，虚无",//21 ！
         "自由选择方向后结束你的回合。获得1层【大居合】buff，受到伤害消耗该buff会向人物所面对的方向位移1格，造成5*4点伤害，提升气刃等级。",//22
         "移动两格，造成12点伤害，造成4层【伤口】 ，回复3格气刃槽",//23
+        "限连携态,最多位移2格，如果有气刃等级，将【气刃兜割】加入手牌",//24
+        "消耗1层气刃等级，消耗3点生命值，获得3点费用",//25
+        "提升气刃等级后,获得4点格挡",//26
+        "使用【居合】后，你的下一张【气刃兜割】费用减1",//27
+        "你造成的【伤口】的效果提高一层",//28
+        "向前移动一格，造成8点伤害，消耗3格气刃槽，派生一字斩",//29
+        "对前方造成4点伤害，消耗1格气刃槽，派生刚气刃斩,转向,消耗，虚无",//30
+        "造成8*2点伤害，获得12点格挡，提升气刃等级,转向,消耗，虚无",//31
+        "",//32
+        "",//33
     }.AsReadOnly();
     public static IReadOnlyList<int> CardType = new List<int> 
     { 3,//卡牌类型
@@ -119,8 +149,8 @@ public class GameConfig : ScriptableObject
         0,//12
         2,//13
         0,//14
-        0,//15
-        0,//16
+        1,//15
+        1,//16
         0,//17
         0,//18
         0,//19
@@ -128,7 +158,15 @@ public class GameConfig : ScriptableObject
         0,//21
         0,//22
         0,//23
-    }.AsReadOnly();//0 攻击 1防御 2移动 3能力
+        2,//24
+        1,//25
+        3,//26
+        3,//27
+        3,//28
+        0,//29
+        0,//30
+        0,//31
+    }.AsReadOnly();//0 攻击 1技能 2移动 3能力
     public static IReadOnlyList<int> Cost = new List<int>
     { 3,//费用
         1,//1
@@ -148,12 +186,20 @@ public class GameConfig : ScriptableObject
         1,//15
         1,//16
         1,//17
-        1,//18
-        1,//19
+        0,//18
+        2,//19
         1,//20
-        1,//21
+        2,//21
         2,//22
         2,//23
+        1,//24
+        0,//25
+        1,//26
+        2,//27
+        1,//28
+        1,//29
+        0,//30
+        2,//31
     }.AsReadOnly();
     public static IReadOnlyList<List<int>> Move = new List<List<int>>
     {null,//移动方向
@@ -175,11 +221,19 @@ public class GameConfig : ScriptableObject
         null,//16
         null,//17
         null,//18
-        null,//19
-        new List<int>{0},//20
-        null,//21
+        new List<int>{2,3,4},//19
+        null,//20
+        new List<int>{0,1,2,4,5},//21
         null,//22
-        new List<int>{0 }//23
+        new List<int>{0 },//23
+        new List<int>{0 },//24
+        null,//25
+        null,//26
+        null,//27
+        null,//28
+        new List<int>{0 },//29
+        null,//30
+        null,//31
     }.AsReadOnly();
 
     public static IReadOnlyList<Vector2Int> MoveLength = new List<Vector2Int>
@@ -203,11 +257,19 @@ public class GameConfig : ScriptableObject
         new Vector2Int(0,0),//16
         new Vector2Int(0,0),//17
         new Vector2Int(0,0),//18
-        new Vector2Int(0,0),//19
-        new Vector2Int(1,1),//20
-        new Vector2Int(0,0),//21
+        new Vector2Int(1,1),//19
+        new Vector2Int(0,0),//20
+        new Vector2Int(1,1),//21
         new Vector2Int(0,0),//22
         new Vector2Int(1,2),//23
+        new Vector2Int(1,2),//24
+        new Vector2Int(0,0),//25
+        new Vector2Int(0,0),//26
+        new Vector2Int(0,0),//27
+        new Vector2Int(0,0),//28
+        new Vector2Int(0,1),//29
+        new Vector2Int(0,0),//30
+        new Vector2Int(0,0),//31
     }.AsReadOnly();
 
     public static IReadOnlyList<int> Derivation = new List<int>
@@ -230,11 +292,19 @@ public class GameConfig : ScriptableObject
         0,//16
         0,//17
         0,//18
-        0,//19
+        5,//19
         21,//20
         0,//21
         0,//22
         0,//23
+        21,//24
+        0,//25
+        0,//26
+        0,//27
+        0,//28
+        30,//29
+        31,//30
+        0,//31
     }.AsReadOnly();
 
     public static IReadOnlyList<bool> Consumption = new List<bool>
@@ -256,12 +326,20 @@ public class GameConfig : ScriptableObject
         false,//15
         false,//16
         false,//17
-        false,//18
+        true,//18
         false,//19
         false,//20
         true,//21
         false,//22
         false,//23
+        false,//24
+        true,//25
+        true,//26
+        true,//27
+        true,//28
+        false,//29
+        true,//30
+        true,//31
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DrawCard = new List<int>
@@ -281,14 +359,22 @@ public class GameConfig : ScriptableObject
         0,//13
         0,//14
         0,//15
-        0,//16
+        1,//16
         0,//17
-        0,//18
+        1,//18
         0,//19
         0,//20
         0,//21
         0,//22
         0,//23
+        0,//24
+        0,//25
+        0,//26
+        0,//27
+        0,//28
+        0,//29
+        0,//30
+        0,//31
     }.AsReadOnly();
 
     public static IReadOnlyList<bool> Nothingness = new List<bool>
@@ -313,9 +399,17 @@ public class GameConfig : ScriptableObject
         false,//18
         false,//19
         false,//20
-        false,//21
+        true,//21
         false,//22
         false,//23
+        false,//24
+        false,//25
+        false,//26
+        false,//27
+        false,//28
+        false,//29
+        true,//30
+        true,//31
     }.AsReadOnly();
 
     public static IReadOnlyList<int> OnlyLState = new List<int>
@@ -336,13 +430,21 @@ public class GameConfig : ScriptableObject
         1,//14
         2,//15
         2,//16
-        2,//17
+        0,//17
         2,//18
         2,//19
         2,//20
         1,//21
         2,//22
         2,//23
+        1,//24
+        2,//25
+        2,//26
+        2,//27
+        2,//28
+        2,//29
+        2,//30
+        2,//31
     }.AsReadOnly();
 
     public static IReadOnlyList<int> EnterState = new List<int>
@@ -361,8 +463,8 @@ public class GameConfig : ScriptableObject
         2,//12
         0,//13
         2,//14
-        2,//15
-        2,//16
+        0,//15
+        0,//16
         2,//17
         2,//18
         2,//19
@@ -370,6 +472,15 @@ public class GameConfig : ScriptableObject
         2,//21
         2,//22
         2,//23
+        1,//24
+        0,//25
+        0,//26
+        0,//27
+        0,//28
+        2,//29
+        2,//30
+        2,//31
+
     }.AsReadOnly();
 
     public static IReadOnlyList<List<int>> Buff = new List<List<int>>
@@ -392,11 +503,19 @@ public class GameConfig : ScriptableObject
         null,//16
         null,//17
         null,//18
-        null,//19
+        new List<int>{2},//19
         null,//20
-        null,//21
+        new List<int>{8},//21
         new List<int>{4},//22
         null,//23
+        null,//24
+        null,//25
+        null,//26
+        null,//27
+        null,//28
+        null,//29
+        null,//30
+        null,//31
     }.AsReadOnly();
 
     public static IReadOnlyList<int> Wound = new List<int>
@@ -412,9 +531,9 @@ public class GameConfig : ScriptableObject
         0,//9
         0,//10
         0,//11
-        2,//12
+        1,//12
         0,//13
-        0,//14
+        2,//14
         0,//15
         0,//16
         0,//17
@@ -424,6 +543,14 @@ public class GameConfig : ScriptableObject
         0,//21
         0,//22
         4,//23
+        0,//24
+        0,//25
+        0,//26
+        0,//27
+        0,//28
+        0,//29
+        0,//30
+        0,//31
     }.AsReadOnly();
 
     public static IReadOnlyList<List<int>> AttackDirection = new List<List<int>>
@@ -444,13 +571,21 @@ public class GameConfig : ScriptableObject
         new List<int>{0},//14
         null,//15
         null,//16
-        null,//17
-        null,//18
-        null,//19
+        new List<int>{0},//17
+        new List<int>{0},//18
+        new List<int>{0},//19
         new List<int>{0},//20
-        new List<int>{0},//21
+        new List<int>{0,1,2,3,4,5},//21
         new List<int>{0,1,2,3,4,5},//22
         new List<int>{0},//23
+        null,//24
+        null,//25
+        null,//26
+        null,//27
+        null,//28
+        new List<int>{0},//29
+        new List<int>{0,1,5},//30
+        new List<int>{0,1,5},//31
     }.AsReadOnly();
 
     public static IReadOnlyList<int> AttackLength = new List<int>
@@ -469,8 +604,8 @@ public class GameConfig : ScriptableObject
         1,//12
         0,//13
         1,//14
-        1,//15
-        1,//16
+        0,//15
+        0,//16
         1,//17
         1,//18
         1,//19
@@ -478,6 +613,14 @@ public class GameConfig : ScriptableObject
         1,//21
         1,//22
         1,//23
+        0,//24
+        0,//25
+        0,//26
+        0,//27
+        0,//28
+        1,//29
+        1,//30
+        1,//31
     }.AsReadOnly();
 
     public static IReadOnlyList<Vector2Int> Attack = new List<Vector2Int>
@@ -498,13 +641,21 @@ public class GameConfig : ScriptableObject
         new Vector2Int(6 , 1),//14
         new Vector2Int(0 , 0),//15
         new Vector2Int(0 , 0),//16
-        new Vector2Int(0 , 0),//17
-        new Vector2Int(0 , 0),//18
-        new Vector2Int(0 , 0),//19
+        new Vector2Int(5 , 2),//17
+        new Vector2Int(8 , 1),//18
+        new Vector2Int(12 , 1),//19
         new Vector2Int(8 , 1),//20
         new Vector2Int(5 , 3),//21
         new Vector2Int(0 , 0),//22
         new Vector2Int(12,1),//23
+        new Vector2Int(0 , 0),//24
+        new Vector2Int(0 , 0),//25
+        new Vector2Int(0 , 0),//26
+        new Vector2Int(0 , 0),//27
+        new Vector2Int(0 , 0),//28
+        new Vector2Int(8 , 1),//29
+        new Vector2Int(4 , 1),//30
+        new Vector2Int(8 , 2),//31
     }.AsReadOnly();
 
     public static IReadOnlyList<int> Defence = new List<int>
@@ -524,7 +675,7 @@ public class GameConfig : ScriptableObject
         0,//13
         0,//14
         0,//15
-        0,//16
+        8,//16
         0,//17
         0,//18
         0,//19
@@ -532,6 +683,14 @@ public class GameConfig : ScriptableObject
         0,//21
         0,//22
         0,//23
+        0,//24
+        0,//25
+        0,//26
+        0,//27
+        0,//28
+        0,//29
+        0,//30
+        12,//31
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DeltaCost = new List<int>
@@ -553,12 +712,20 @@ public class GameConfig : ScriptableObject
         0,//15
         0,//16
         0,//17
-        0,//18
+        1,//18
         0,//19
         0,//20
         0,//21
         0,//22
         0,//23
+        0,//24
+        0,//25
+        0,//26
+        0,//27
+        0,//28
+        0,//29
+        0,//30
+        0,//31
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DeltaBladeNum = new List<int>
@@ -577,15 +744,23 @@ public class GameConfig : ScriptableObject
         0,//12
         0,//13
         2,//14
-        0,//15
+        8,//15
         0,//16
-        0,//17
+        3,//17
         0,//18
-        0,//19
+        -1,//19
         1,//20
         0,//21
         0,//22
         3,//23
+        0,//24
+        0,//25
+        0,//26
+        0,//27
+        0,//28
+        -3,//29
+        -1,//30
+        -4,//31
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DeltaBladeLevel = new List<int>
@@ -607,12 +782,20 @@ public class GameConfig : ScriptableObject
         0,//15
         0,//16
         0,//17
-        0,//18
+        -1,//18
         0,//19
         0,//20
         -1,//21
         0,//22
         0,//23
+        0,//24
+        -1,//25
+        0,//26
+        0,//27
+        0,//28
+        0,//29
+        0,//30
+        1,//31
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DeltaHealth = new List<int>
@@ -640,6 +823,14 @@ public class GameConfig : ScriptableObject
         0,//21
         0,//22
         0,//23
+        0,//24
+        -3,//25
+        0,//26
+        0,//27
+        0,//28
+        0,//29
+        0,//30
+        0,//31
     }.AsReadOnly();
 
     public static IReadOnlyList<bool> Sequence = new List<bool>
@@ -662,18 +853,29 @@ public class GameConfig : ScriptableObject
         true,//16
         true,//17
         true,//18
-        true,//19
+        false,//19
         true,//20
         true,//21
         true,//22
         true,//23
+        true,//24
+        true,//25
+        true,//26
+        true,//27
+        true,//28
+        true,//29
+        true,//30
+        true,//31
     }.AsReadOnly();
     
-    public enum MoveType { None, Forward, Backward}
+    public enum MoveType { None, Forward, Backward,Fly}
     //怪物给自己加的buff:转向
     public enum EnemyBuff { None, TurntoPlayer }
-    //怪物给玩家加的debuff:无法移动，麻痹，震慑
-    public enum EnemyDebuff { None, CantMove, Numbness, Deterrence }
+    //怪物给玩家加的debuff:无法移动，麻痹，震慑，冰冻
+    public enum EnemyDebuff { None, CantMove, Numbness, Deterrence,Freezed }
+    public enum SkillType { Normal,Locked}//技能类型：一般，锁定
+    //怪物生成环境要素:熔岩，电球，冰柱
+    public enum AddEnvironment { None, Lava, ElectricBall, Icicle}
     //招式信息内部类
     public class EnemySkillConfig
     {
@@ -688,6 +890,8 @@ public class GameConfig : ScriptableObject
         public EnemyDebuff pushdebuff;  //怪物的特殊效果
         public int HPchange;//回复生命值数量（填入负值来回复生命）
         public int armor;//获得护甲数量
+        public SkillType skilltype;
+        public AddEnvironment addenvironment;
     }
     public static IReadOnlyList<EnemySkillConfig> EnemySkills = new List<EnemySkillConfig>
     {
@@ -703,7 +907,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -717,7 +923,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -731,7 +939,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.TurntoPlayer,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -745,7 +955,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -759,7 +971,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = -20,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -773,7 +987,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.CantMove,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -788,7 +1004,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -802,7 +1020,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -817,7 +1037,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -826,7 +1048,7 @@ public class GameConfig : ScriptableObject
             range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(3,0),new Vector2Int(0,1),
                 new Vector2Int(0,2),new Vector2Int(0,3),new Vector2Int(1,1),new Vector2Int(1,2),new Vector2Int(2,1),
                 new Vector2Int(1,-1),new Vector2Int(2,-1),new Vector2Int(3,-1),new Vector2Int(2,-2),new Vector2Int(3,-2),
-                new Vector2Int(3,-3),},
+                new Vector2Int(3,-3)},
             damage =0,
             hittimes = 0,
             moveType = MoveType.None,
@@ -834,7 +1056,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.Numbness,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -848,7 +1072,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.Deterrence,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -863,7 +1089,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None, 
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -878,7 +1106,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -892,16 +1122,244 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 14,
+            skillName = "背身扫尾",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(1,1),new Vector2Int(1,2),
+                new Vector2Int(2,1),new Vector2Int(2,-1),new Vector2Int(3,-1),new Vector2Int(3,-2)},
+            damage =10,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 15,
+            skillName = "扫火",
+            range = new List<Vector2Int>{new Vector2Int(2,0),new Vector2Int(3,0),new Vector2Int(1,2),new Vector2Int(2,1),
+                new Vector2Int(3,-1),new Vector2Int(3,-2)},
+            damage =10,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 18,
+            skillName = "火球连射",
+            range = new List<Vector2Int>{new Vector2Int(0,0),new Vector2Int(1,0),new Vector2Int(-1,1),new Vector2Int(0,-1)},
+            damage =4,
+            hittimes = 3,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Locked,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 19,
+            skillName = "吞食岩石",
+            range = new List<Vector2Int>(),
+            damage =0,
+            hittimes = 0,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=20,//第一次获得20点护甲，第二次获得40点护甲
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 20,
+            skillName = "岩浆满溢",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(1,1),new Vector2Int(2,-1),
+                new Vector2Int(2,2),new Vector2Int(3,1),new Vector2Int(4,-1),new Vector2Int(3,1),
+                new Vector2Int(4,-1),new Vector2Int(4,-2)},
+            damage =8,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.Lava
+        },
+        new EnemySkillConfig
+        {
+            skillID = 21,
+            skillName = "巨型熔岩球",
+            range = new List<Vector2Int>{new Vector2Int(0,0),new Vector2Int(1,0),new Vector2Int(-1,0),new Vector2Int(0,1),
+                new Vector2Int(-1,1),new Vector2Int(0,-1),new Vector2Int(1,-1)},
+            damage =8,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Locked,
+            addenvironment=AddEnvironment.Lava
+        },
+        new EnemySkillConfig
+        {
+            skillID = 22,
+            skillName = "多重拍击",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(0,1),new Vector2Int(1,1),
+                new Vector2Int(1,-1),new Vector2Int(2,-1)},
+            damage =5,
+            hittimes = 2,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 23,
+            skillName = "甩尾下砸",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(3,0),new Vector2Int(1,1),
+                new Vector2Int(2,1),new Vector2Int(3,1),new Vector2Int(2,-1),new Vector2Int(3,-1),new Vector2Int(4,-1)},
+            damage =12,
+            hittimes = 1,
+            moveType = MoveType.Backward,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 24,
+            skillName = "夺命回旋",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(-1,0),new Vector2Int(-2,0),
+                new Vector2Int(-2,1),new Vector2Int(-1,1),new Vector2Int(0,1),new Vector2Int(1,1),new Vector2Int(-2,2),
+                new Vector2Int(-1,2),new Vector2Int(0,2),new Vector2Int(-1,-1),new Vector2Int(0,-1),new Vector2Int(1,-1),
+                new Vector2Int(2,-1),new Vector2Int(0,-2),new Vector2Int(1,-2),new Vector2Int(2,-2)},
+            damage =12,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 25,
+            skillName = "肩撞",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(3,0),new Vector2Int(0,1),
+                new Vector2Int(1,1),new Vector2Int(1,-1),new Vector2Int(2,-1)},
+            damage =10,
+            hittimes = 1,
+            moveType = MoveType.Forward,
+            moveDistance = 3,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 26,
+            skillName = "积雷怒吼",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(-1,0),new Vector2Int(-1,1),new Vector2Int(0,1),
+                new Vector2Int(0,-1),new Vector2Int(1,-1)},
+            damage =6,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.Deterrence,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 27,
+            skillName = "雷霆一击",
+            range = new List<Vector2Int>{new Vector2Int(0,0),new Vector2Int(1,0),new Vector2Int(-1,0),new Vector2Int(0,1),
+                new Vector2Int(-1,1),new Vector2Int(0,-1),new Vector2Int(1,-1)},
+            damage =18,
+            hittimes = 1,
+            moveType = MoveType.Fly,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Locked,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 28,
+            skillName = "雷球之阵",
+            range = new List<Vector2Int>{new Vector2Int(1,1),new Vector2Int(-1,2),new Vector2Int(-2,1),new Vector2Int(2,-1),
+                new Vector2Int(1,-2),new Vector2Int(-1,-1)},
+            damage =0,
+            hittimes = 0,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.ElectricBall
         }
     }.AsReadOnly();
 
     //GameManager
     public const int CommissionAmount = 7;
+    public static readonly Vector3 CameraNew = new Vector3(100, 100, -10);//摄像机移走位置
+    public static readonly Vector3 CameraDefault = new Vector3(0, 0, -10);//摄像机原本位置
 
     //DeckWin 画图参数
     public const int XBound = 720, YBound = 270;//X,Y界限坐标
     public const int Xdelta = 440, Ydelta = 540;//两卡间隔
+    public static readonly Vector3 hoverScale = new Vector3(2.122892f, 2.54747f, 1f);
+    public static readonly Vector3 normalScale = new Vector3(1.73865f, 2.08638f, 1f);
 
     //RouteRender参数
     public static IReadOnlyList<string> Destinies = new List<string> { "Camp","Forest", "Desert", "Valcano" };

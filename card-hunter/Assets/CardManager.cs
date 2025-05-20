@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.PlayerSettings;
@@ -51,6 +52,10 @@ public class CardManager : MonoBehaviour
         }
 
         return carddata;
+    }
+    public void ReturnCardToPool(Card card)
+    {
+        cardpool.ReturnCard(card.gameObject);
     }
     public void AddCardToHand(Card card,List<Card> cardsInHand)
     {

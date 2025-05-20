@@ -8,6 +8,7 @@ public class PlayerMove : MonoBehaviour
 {
     public delegate IEnumerator EncounterEvent(Event e);
     public event EncounterEvent encounterEvent;
+    public bool Stop = false;//停止移动
     public IEnumerator MoveTo(Vector3 pos,Event e)//这段路需处理事件e
     {
         Vector3 startPos = transform.position;
@@ -17,6 +18,11 @@ public class PlayerMove : MonoBehaviour
         {
             while (elapsedTime < GameConfig.MoveDuration * distance)
             {
+                if (Stop)
+                {
+                    yield return new WaitUntil(() => !Stop);
+                    continue;
+                }
                 transform.position = Vector3.Lerp(startPos, pos, elapsedTime / (GameConfig.MoveDuration * distance)) - new Vector3(0, 0, 1);//play置于地图上
                 elapsedTime += Time.deltaTime;
                 yield return null; // 等待下一帧
@@ -29,6 +35,11 @@ public class PlayerMove : MonoBehaviour
             float EncounterTime = (float)rand.NextDouble()* GameConfig.MoveDuration * distance-0.01f;//留出一点时间,防止事件被跳过
             while (elapsedTime < GameConfig.MoveDuration * distance)
             {
+                if (Stop)
+                {
+                    yield return new WaitUntil(() => !Stop);
+                    continue;
+                }
                 if (elapsedTime > EncounterTime&&!trigger)//触发事件并等待
                 {
                     yield return encounterEvent?.Invoke(e);
