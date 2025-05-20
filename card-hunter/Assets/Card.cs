@@ -115,6 +115,12 @@ public class Card : MonoBehaviour
         CBuse = true;
     }
     
+    public void ChangeCost(int n)
+    {
+        Cost = n;
+        TextMeshProUGUI cardCost = GetComponentsInChildren<TextMeshProUGUI>()[3];
+        cardCost.text = n.ToString();
+    }
  
         void Start()
         {

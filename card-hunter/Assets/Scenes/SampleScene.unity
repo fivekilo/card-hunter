@@ -2092,7 +2092,7 @@ MonoBehaviour:
     playSound: {fileID: 8300000, guid: f358fa0c111b9b8419837209709869f7, type: 3}
     specialSound: {fileID: 0}
   - cardNum: 11
-    playSound: {fileID: 0}
+    playSound: {fileID: 8300000, guid: afba3f4cb5ffa2a4fb367f0ac5be4956, type: 3}
     specialSound: {fileID: 0}
   - cardNum: 12
     playSound: {fileID: 0}
@@ -2101,7 +2101,7 @@ MonoBehaviour:
     playSound: {fileID: 0}
     specialSound: {fileID: 0}
   - cardNum: 14
-    playSound: {fileID: 0}
+    playSound: {fileID: 8300000, guid: f358fa0c111b9b8419837209709869f7, type: 3}
     specialSound: {fileID: 0}
   - cardNum: 15
     playSound: {fileID: 0}
@@ -2110,22 +2110,25 @@ MonoBehaviour:
     playSound: {fileID: 0}
     specialSound: {fileID: 0}
   - cardNum: 17
-    playSound: {fileID: 0}
+    playSound: {fileID: 8300000, guid: afba3f4cb5ffa2a4fb367f0ac5be4956, type: 3}
     specialSound: {fileID: 0}
   - cardNum: 18
-    playSound: {fileID: 0}
+    playSound: {fileID: 8300000, guid: f358fa0c111b9b8419837209709869f7, type: 3}
     specialSound: {fileID: 0}
   - cardNum: 19
     playSound: {fileID: 0}
     specialSound: {fileID: 0}
   - cardNum: 20
-    playSound: {fileID: 0}
+    playSound: {fileID: 8300000, guid: 6763d80deb7e16e4697ccf00d28d6e0a, type: 3}
     specialSound: {fileID: 0}
   - cardNum: 21
-    playSound: {fileID: 0}
+    playSound: {fileID: 8300000, guid: f4623700b1eeda94dab3a95824143237, type: 3}
     specialSound: {fileID: 0}
   - cardNum: 22
-    playSound: {fileID: 0}
+    playSound: {fileID: 8300000, guid: f89b197c43fba9f468048c48d8f911fd, type: 3}
+    specialSound: {fileID: 8300000, guid: 58c2d67f142028e45991fb01d063e47d, type: 3}
+  - cardNum: 23
+    playSound: {fileID: 8300000, guid: f89b197c43fba9f468048c48d8f911fd, type: 3}
     specialSound: {fileID: 8300000, guid: 58c2d67f142028e45991fb01d063e47d, type: 3}
   cardAudioSource: {fileID: 1289596912}
 --- !u!4 &1289596914
@@ -2820,8 +2823,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 2974870984592191552, guid: 73f05b87b91c26d409e3b508e2d9a27b, type: 3}
-  copiesPerCard: 2
-  initialCardTypes: 23
+  copiesPerCard: 1
+  initialCardTypes: 37
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
