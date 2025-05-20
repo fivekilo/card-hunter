@@ -17,6 +17,7 @@ public class MapManager : MonoBehaviour
     private const int ObstacleSup = GameConfig.ObstacleSup;//障碍物生成上限
     int size = GameConfig.size;//地图尺寸
     private bool MoveComplete = false;
+    public AudioManager audioManager;
     public void spawn()//地图初始化
     {
         GameObject[,] Hexs=new GameObject[size,size];
@@ -341,6 +342,7 @@ public class MapManager : MonoBehaviour
         {
             map.ChangeColor(pos, Color.yellow);
         }
+        audioManager.PlayCardPlaySound(card.cardNum);
         yield return new WaitForSeconds(1f);
         foreach (Vector2Int pos in Attacked)
         {

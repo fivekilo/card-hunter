@@ -1553,12 +1553,19 @@ public class GameConfig : ScriptableObject
     //RogueMod
     public static readonly List<Commission> Commissions = new List<Commission> { new Commission(0, "大贼龙", 1, 1,100) };
     public static readonly List<Event> Events = new List<Event> {
-        new Event(1,"剑术大师","剑术大师小作文","3",
+        new Event(1,"剑术大师","年迈的剑术大师，自远方而来，背上的雌火龙太刀闪烁着他过去的功绩。他愿意指点你的狩猎技巧，如果你愿意付出一些代价的话，他甚至能教给你一些失传秘技。","3",
             new List<Choice>{
                 new Choice(1,"[夯实基础]删一张牌",1,0,0,0,new List<int>(),0),
                 new Choice(2,"[学习技巧]获得蓝色稀有度的一张牌",0,1,0,0,new List<int>{1,2,3,6 },0),
                 new Choice(3,"[祖传秘技]花费？？金币，获得一张金色稀有度的卡牌",0,1,-20,0,new List<int>{1,2,3,6 },0)
-            })
+            }),
+                new Event(2,"黑龙","一路上安静的可怕，原本总能见到的小动物全都销声匿迹了，似乎发生了什么不得了的事。\r\n你正怀疑着发生了什么事，突然一阵风压袭来，你险些被吹飞，只能将手臂护在头前。\r\n当风压散去，立在你面前的是一只黑色的威严巨龙，他也看着你。。","3",
+            new List<Choice>{
+                new Choice(1,"[赶紧逃走]随机失去一张牌",1,0,0,0,new List<int>(),0),
+                new Choice(2,"[咬牙坚持]:失去12生命值",0,1,0,12,new List<int>{},0),
+                new Choice(3,"[不惧挑战]:（当牌库中存在金色及以上稀有度的卡时生效）扣20血量，获得黑龙素材。",0,0,0,20,new List<int>{},7)
+            }),
+
     };
     public static readonly Vector2Int EventAmountBounds = new Vector2Int(1, 1);//每层总事件数限制
     public const int EventPerTour = 2;

@@ -40,6 +40,8 @@ public class BattleManager : MonoBehaviour
     public Button Movebutton;
     public CardManager cardManager;
     public TextMeshProUGUI UserIndicator;
+    public TextMeshProUGUI Decknum;
+    public TextMeshProUGUI Dpnum;
     public AudioManager AudioManager;
     public SharedData data;
     // public int i = 1;
@@ -71,6 +73,11 @@ public class BattleManager : MonoBehaviour
     public bool isWaitingForPlayerChoose = false;
     public UnityEvent EndTurnClicked; 
 
+    private void UpdatedeckNum()
+    {
+        Decknum.text = deck.Count.ToString();
+        Dpnum.text = discardPile.Count.ToString();
+    }
     public Vector2Int GenerateSpawn()
     {
         int attemp = 0;
@@ -191,7 +198,7 @@ public class BattleManager : MonoBehaviour
             Card drawnCard = deck[0];
             deck.RemoveAt(0);
             cardManager.AddCardToHand(drawnCard, hand);
-            
+            UpdatedeckNum();
         }
       //  Debug.Log(hand.Count);
     }
@@ -382,6 +389,7 @@ public class BattleManager : MonoBehaviour
         hand.Clear();
     //    Debug.Log("回合结束时手牌数为:" + hand.Count);
         cardManager.UpdateCardPositions(hand);
+        UpdatedeckNum();
     }
     public IEnumerator ConsumeCoRoutine(Card card)
     {
@@ -499,7 +507,7 @@ public class BattleManager : MonoBehaviour
             }
 
        }
-       AudioManager.PlayCardPlaySound(card.cardNum);
+       //AudioManager.PlayCardPlaySound(card.cardNum);
        cardManager.RemoveCardFromHand(card, hand);
        card.transform.position += new Vector3(10000, 0, 0);
         if (card.Consumption == true)//消耗判断
@@ -509,7 +517,8 @@ public class BattleManager : MonoBehaviour
             cardManager.ReturnCardToPool(card);
         }
         else discardPile.Add(card);
-       UserIndicator.text = "玩家回合";
+        UpdatedeckNum();
+        UserIndicator.text = "玩家回合";
        if(card.cardNum == 22)
        {
             OnEndTurnButtonClicked();
@@ -566,11 +575,10 @@ public class BattleManager : MonoBehaviour
 
         Player.ModifyCost(Player.curCost - card.Cost);
         Debug.Log("还剩" + Player.curCost.ToString() + "费！");
+        
 
-      
-        
+
         StartCoroutine(ConsumeCoRoutine(card));
-        
         
     } 
     public void UpdateCards()
