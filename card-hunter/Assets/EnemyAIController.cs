@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
@@ -54,7 +55,7 @@ public class EnemyAIController : MonoBehaviour
     {
 
         //先出上一回合指定的招式
-        yield return skillSystem.ExecuteCurrentSkill();
+        yield return skillSystem.ExecuteCurrentSkill(1);
         //再判断移动
         if (ShouldMoveToPlayer())
         {
@@ -80,7 +81,7 @@ public class EnemyAIController : MonoBehaviour
         int distance = (int)Vector2Int.Distance(_currentGridPos, _player.PlayerGridPos);
         return distance <= detectionRange;
     }
-    //寻路算法（待编写）
+    //寻路算法
     private List<Vector2Int> CalculatePath()
     {
         // BFS寻路算法
@@ -199,6 +200,18 @@ public class EnemyAIController : MonoBehaviour
         else
             Debug.Log("怪物回复生命值了！");
         text.text = $"{_currentHealth}/{_maxHealth}";
+        //特判：蛮颚龙的进暴怒和退暴怒
+        if(name=="蛮颚龙"&& (float)_currentHealth * 5 < (float)_maxHealth)//退暴怒
+        {
+            StartCoroutine(skillSystem.ExecuteCurrentSkill(-1));
+            skillSystem.nextSkillID = 0;
+            Debug.Log("蛮颚龙退出暴怒状态了！");
+        }
+        else if (name == "蛮颚龙" && (float)_currentHealth * 1.25 < (float)_maxHealth)//进暴怒
+        {
+            selfSkills.Add(10);
+            Debug.Log("蛮颚龙进入暴怒状态了！");
+        }
     }
 
     public Vector2Int GetCurrentGridPos() // 公共方法供MapManager调用
