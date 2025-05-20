@@ -117,10 +117,13 @@ public class EnemySkillSystem : MonoBehaviour
         if (inrange == true) return;
 
         //如果发现不在范围里了，进行变招(尽量选用在范围内的招式)
-        //回退之前的范围颜色
+        //1.回退之前的范围颜色
         Debug.Log("触发变招了！");
         ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
         mapManager.ChangeColorByPos(actualrangepos, color);
+        //2.先进行转向(待实现)
+
+        //3.再选新技能
         int someskillID;
         bool OK = false;
         for (int i = 1; i <= 3; i++)//最多随机选3次

@@ -267,7 +267,7 @@ public class BattleManager : MonoBehaviour
             if (enemy != null)
             {
                 //判断是不是会变招的怪
-                if (enemy.name == "蛮颚龙")
+                if (enemy.name == "蛮颚龙"&& (float)enemy._currentHealth * 1.25 < (float)enemy._maxHealth)
                     enemy.skillSystem.ChangeSkillinRealtime(Player.PlayerGridPos);
             }
         }
