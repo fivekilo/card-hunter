@@ -314,8 +314,39 @@ public class MapManager : MonoBehaviour
         
         battleManager.isWaitingForPlayerChoose = false;
         Vector2Int Direction = GetNewDir(ClickedPos , player);
+        //先转向
         callback(Direction);
-        battleManager.Attack(card);
+
+        /*寻找攻击的范围，将其变色*/
+        List<Vector2Int> Attacked = new();
+        int[] dx = { 1, 0, -1, -1, 0, 1 };
+        int[] dy = { 0, 1, 1, 0, -1, -1 };
+        int PlayerDirId = -1;
+        for (int i = 0; i < 6; i++)
+        {
+            if (Direction.x == dx[i] && Direction.y == dy[i]) { PlayerDirId = i; break; }
+        }
+        int Length = card.AttackLength;
+        List<int> AttackRange = card.AttackRange;
+        foreach (int Dir_id in AttackRange)
+        {
+            for (int i = 0; i <= Length; i++)
+            {
+                int newDir = (Dir_id + PlayerDirId) % 6;
+                Vector2Int nowPos = battleManager.Player.PlayerGridPos + new Vector2Int(dx[newDir] * i, dy[newDir] * i);
+                Attacked.Add(nowPos);
+            }
+        }
+        foreach (Vector2Int pos in Attacked)
+        {
+            map.ChangeColor(pos, Color.yellow);
+        }
+        yield return new WaitForSeconds(1f);
+        foreach (Vector2Int pos in Attacked)
+        {
+            map.RollbackColor(pos);
+        }
+        battleManager.AttackConsume(card);
     }
 
     //让指定坐标（地图坐标）的格子变色

@@ -134,8 +134,8 @@ public class BattleManager : MonoBehaviour
     {
         UserIndicator.text = "初始化中";
         OnPositionChanged?.Invoke(GenerateSpawn()); //生成出生位置
-        OnBladeGasChange?.Invoke(0);
-        OnBladeLevelChange?.Invoke(0);
+        OnBladeGasChange?.Invoke(8);
+        OnBladeLevelChange?.Invoke(3);
 
         //人物初始化
         Player.money = data.playerinfo.money;
@@ -602,7 +602,7 @@ public class BattleManager : MonoBehaviour
             card.CBuse = false;
         }
     }
-    public void Attack(Card card)
+    public void AttackConsume(Card card) //伤害结算
     {
         if (card.AttackDirection != null)
         {
@@ -615,9 +615,9 @@ public class BattleManager : MonoBehaviour
             }
             FindAllEnemies();
             List<EnemyAIController> AttackedMonster = new();
-            int length = card.AttackLength;
-         //   List<int> AttackRange = card.AttackRange;
-        /*    foreach (int Dir_id in AttackRange)
+            int Length = card.AttackLength;
+            List<int> AttackRange = card.AttackRange;
+            foreach (int Dir_id in AttackRange)
             {
                 for (int i = 0; i <= Length; i++)
                 {
@@ -631,7 +631,7 @@ public class BattleManager : MonoBehaviour
                         }
                     }
                 }
-            }*/
+            }
             foreach (EnemyAIController enemy in AttackedMonster)
             {
                 Vector2Int Attack = card.Attack;
