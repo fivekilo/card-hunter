@@ -61,7 +61,7 @@ public class GameConfig : ScriptableObject
         "强化纳刀",//32
         "樱花斩",//33
         "炼气解放无双斩",//34
-        "集中突刺【无尽】",//35
+        "集中突刺无尽",//35
         "圆月",//36
         "红刃狂热"//37
     }.AsReadOnly();
@@ -79,12 +79,12 @@ public class GameConfig : ScriptableObject
         "Scabbard attack",//10
         "xiaojv",//11
         "Intentional destruction",//12
-        "Direct slash",//13
-        "Direct slash",//14
+        "13",//13
+        "14",//14
         "Direct slash",//15
         "Direct slash",//16
         "Direct slash",//17
-        "Direct slash",//18
+        "18",//18
         "Direct slash",//19
         "The gas blade pierces",//20
         "Gas blade pocket cutting",//21
@@ -550,6 +550,9 @@ public class GameConfig : ScriptableObject
         2,//32
         2,//33
         1,//34
+        2,//35
+        2,//36
+        2,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<int> EnterState = new List<int>
@@ -1537,6 +1540,9 @@ public class GameConfig : ScriptableObject
     public static readonly Vector3 hoverScale = new Vector3(2.122892f, 2.54747f, 1f);
     public static readonly Vector3 normalScale = new Vector3(1.73865f, 2.08638f, 1f);
 
+    //CommissionBoard 画图参数
+    public const int BoardX = -380,BoardY=0;
+
     //RouteRender参数
     public static IReadOnlyList<string> Destinies = new List<string> { "Camp","Forest", "Desert", "Valcano" };
     public const int RoutePointNum = 2;//路径上的节点
@@ -1545,7 +1551,7 @@ public class GameConfig : ScriptableObject
     public static readonly Vector3 CampRestPos = new Vector3(-0.6819376f, -1.417444f, 0);
 
     //RogueMod
-    public static readonly List<Commission> Commissions = new List<Commission> { new Commission(0, "大贼龙", 1, 1) };
+    public static readonly List<Commission> Commissions = new List<Commission> { new Commission(0, "大贼龙", 1, 1,100) };
     public static readonly List<Event> Events = new List<Event> {
         new Event(1,"剑术大师","剑术大师小作文","3",
             new List<Choice>{
