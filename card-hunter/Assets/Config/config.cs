@@ -280,7 +280,7 @@ public class GameConfig : ScriptableObject
         5,//4
         0,//5
         0,//6
-        5,//7
+        0,//7
         0,//8
         0,//9
         0,//10
@@ -292,7 +292,7 @@ public class GameConfig : ScriptableObject
         0,//16
         0,//17
         0,//18
-        5,//19
+        0,//19
         21,//20
         0,//21
         0,//22
