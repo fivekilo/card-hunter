@@ -134,8 +134,8 @@ public class BattleManager : MonoBehaviour
     {
         UserIndicator.text = "初始化中";
         OnPositionChanged?.Invoke(GenerateSpawn()); //生成出生位置
-        OnBladeGasChange?.Invoke(0);
-        OnBladeLevelChange?.Invoke(0);
+        OnBladeGasChange?.Invoke(8);
+        OnBladeLevelChange?.Invoke(3);
 
         //人物初始化
         Player.money = data.playerinfo.money;
@@ -396,7 +396,7 @@ public class BattleManager : MonoBehaviour
                 List<int> AllDir = new List<int> { 0, 1, 2, 3, 4, 5 };
                 if (Player.Situation == 0) newDir = AllDir;
                 Player.ModifySituation(1);
-                yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback));
+                yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback, card));
             }
         }
         if (card.Move != null && playerBuff.CantMove == 0)
@@ -424,55 +424,11 @@ public class BattleManager : MonoBehaviour
             List<int> AllDir = new List<int> { 0, 1, 2, 3, 4, 5 };
             if (Player.Situation == 0) newDir = AllDir;
             Player.ModifySituation(1);
-            yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback));
+            yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback , card));
         }
         
 
-        if (card.AttackDirection != null)
-        {
-            int[] dx = { 1, 0, -1, -1, 0, 1 };
-            int[] dy = { 0, 1, 1, 0, -1, -1 };
-            int PlayerDirId = -1;
-            for (int i = 0; i < 6; i++)
-            {
-                if (Player.Direction.x == dx[i] && Player.Direction.y == dy[i]) { PlayerDirId = i; break; }
-            }
-            FindAllEnemies();
-            List<EnemyAIController> AttackedMonster = new();
-            foreach (int Dir_id in card.AttackDirection)
-            {
-                for (int i = 0; i <= card.AttackLength; i++)
-                {
-                    int newDir = (Dir_id + PlayerDirId) % 6;
-                    Vector2Int nowPos = Player.PlayerGridPos + new Vector2Int(dx[newDir] * i, dy[newDir] * i);
-                    foreach (EnemyAIController enemyAI in _enemies)
-                    {
-                        if (enemyAI.GetCurrentGridPos() == nowPos && !AttackedMonster.Contains(enemyAI))
-                        {
-                            AttackedMonster.Add(enemyAI);
-                        }
-                    }
-                }
-            }
-            foreach(EnemyAIController enemy in AttackedMonster)
-            {
-                Vector2Int Attack = card.Attack;
-                if (card.cardNum == 21)
-                {
-                    Attack.y += Player.curBladeLevel;
-                }
-                enemy.ReduceHealth(CalculateAttack(Attack, enemy));
-                if (card.cardNum == 14 && enemy.enemybuff.Wound > 2)
-                {
-                    enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound - 2);
-                    enemy.ReduceHealth(CalculateAttack(new(10, 1), enemy));
-                }
-                if (card.Wound > 0)
-                {
-                    enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound + card.Wound);
-                }
-            }
-        }
+        
 
         if (card.DeltaBladeNum != 0)
         {
@@ -646,7 +602,56 @@ public class BattleManager : MonoBehaviour
             card.CBuse = false;
         }
     }
-
+    public void AttackConsume(Card card) //伤害结算
+    {
+        if (card.AttackDirection != null)
+        {
+            int[] dx = { 1, 0, -1, -1, 0, 1 };
+            int[] dy = { 0, 1, 1, 0, -1, -1 };
+            int PlayerDirId = -1;
+            for (int i = 0; i < 6; i++)
+            {
+                if (Player.Direction.x == dx[i] && Player.Direction.y == dy[i]) { PlayerDirId = i; break; }
+            }
+            FindAllEnemies();
+            List<EnemyAIController> AttackedMonster = new();
+            int Length = card.AttackLength;
+            List<int> AttackRange = card.AttackRange;
+            foreach (int Dir_id in AttackRange)
+            {
+                for (int i = 0; i <= Length; i++)
+                {
+                    int newDir = (Dir_id + PlayerDirId) % 6;
+                    Vector2Int nowPos = Player.PlayerGridPos + new Vector2Int(dx[newDir] * i, dy[newDir] * i);
+                    foreach (EnemyAIController enemyAI in _enemies)
+                    {
+                        if (enemyAI.GetCurrentGridPos() == nowPos && !AttackedMonster.Contains(enemyAI))
+                        {
+                            AttackedMonster.Add(enemyAI);
+                        }
+                    }
+                }
+            }
+            foreach (EnemyAIController enemy in AttackedMonster)
+            {
+                Vector2Int Attack = card.Attack;
+                if (card.cardNum == 21)
+                {
+                    Attack.y += Player.curBladeLevel;
+                }
+                enemy.ReduceHealth(CalculateAttack(Attack, enemy));
+                if (card.cardNum == 14 && enemy.enemybuff.Wound > 2)
+                {
+                    enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound - 2);
+                    enemy.ReduceHealth(CalculateAttack(new(10, 1), enemy));
+                }
+                if (card.Wound > 0)
+                {
+                    enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound + card.Wound);
+                }
+            }
+        }
+    }
     //给怪物检测攻击范围内有无玩家
     public List<PlayerInfo> GetTargetsInRange(List<Vector2Int> actualrangepos)
     {
@@ -705,6 +710,7 @@ public class BattleManager : MonoBehaviour
     //怪物对玩家施加debuff
     public void ApplyDebuff(PlayerInfo target, GameConfig.EnemyDebuff debuff, EnemyAIController origin)
     {
+        Debug.Log("玩家被施加了负面效果！");
         if (debuff == GameConfig.EnemyDebuff.CantMove) 
             playerBuff.CantMove++;
         else if  (debuff == GameConfig.EnemyDebuff.Numbness)

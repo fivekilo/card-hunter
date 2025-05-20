@@ -14,7 +14,7 @@ public class GameConfig : ScriptableObject
     public const int InitialHandCardNum = 4; //初始手牌数
     public const int MaxHandCardNum = 8;
     public const int MaxBladeLevel = 3; //最大气刃等级
-    public const int MaxBladeNum = 50;//最大气刃值
+    public const int MaxBladeNum = 8;//最大气刃值
     public const string BackgroundColor = "#aaa58f";//背景颜色
     //地图要素
     public enum Content
@@ -312,7 +312,7 @@ public class GameConfig : ScriptableObject
     {
         new Vector2Int(0,0),//移动长度 下上限
         new Vector2Int(0,0),//1
-        new Vector2Int(1,1),//2
+        new Vector2Int(0,1),//2
         new Vector2Int(0,0),//3
         new Vector2Int(0,0),//4
         new Vector2Int(0,0),//5
@@ -1092,7 +1092,7 @@ public class GameConfig : ScriptableObject
             skillID = 1,
             skillName = "爪击",
             range = new List<Vector2Int>{new Vector2Int(1,0), new Vector2Int(0, 1), new Vector2Int(1, -1) },
-            damage =5,
+            damage =6,
             hittimes = 1,
             moveType = MoveType.None,
             moveDistance = 0,
@@ -1124,7 +1124,7 @@ public class GameConfig : ScriptableObject
             skillID = 3,
             skillName = "龙车",
             range = new List<Vector2Int>{new Vector2Int(1,0), new Vector2Int(2, 0), new Vector2Int(3, 0) },
-            damage =8,
+            damage =9,
             hittimes = 1,
             moveType = MoveType.Forward,
             moveDistance = 3,
@@ -1146,7 +1146,7 @@ public class GameConfig : ScriptableObject
             moveDistance = 0,
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
-            HPchange = -20,
+            HPchange = -25,
             armor=0,
             skilltype=SkillType.Normal,
             addenvironment=AddEnvironment.None
@@ -1156,7 +1156,7 @@ public class GameConfig : ScriptableObject
             skillID = 5,
             skillName = "浓痰喷射",
             range = new List<Vector2Int>{new Vector2Int(2,0), new Vector2Int(3, 0), new Vector2Int(2, 1), new Vector2Int(3, -1)},
-            damage =5,
+            damage =6,
             hittimes = 1,
             moveType = MoveType.None,
             moveDistance = 0,
@@ -1173,7 +1173,7 @@ public class GameConfig : ScriptableObject
             skillName = "下压",
             range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(0,1),new Vector2Int(1,1),
                 new Vector2Int(1,-1),new Vector2Int(2,-1)},
-            damage =9,
+            damage =10,
             hittimes = 1,
             moveType = MoveType.None,
             moveDistance = 0,
@@ -1205,8 +1205,8 @@ public class GameConfig : ScriptableObject
             skillID = 8,
             skillName = "飞扑扫尾",
             range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(3,0),new Vector2Int(1,1),
-                new Vector2Int(2,1),new Vector2Int(2,-1),new Vector2Int(3,1)},
-            damage =8,
+                new Vector2Int(2,1),new Vector2Int(2,-1),new Vector2Int(3,-1)},
+            damage =9,
             hittimes = 1,
             moveType = MoveType.Forward,
             moveDistance = 2,
