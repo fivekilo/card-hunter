@@ -868,11 +868,14 @@ public class GameConfig : ScriptableObject
         true,//31
     }.AsReadOnly();
     
-    public enum MoveType { None, Forward, Backward}
+    public enum MoveType { None, Forward, Backward,Fly}
     //怪物给自己加的buff:转向
     public enum EnemyBuff { None, TurntoPlayer }
-    //怪物给玩家加的debuff:无法移动，麻痹，震慑
-    public enum EnemyDebuff { None, CantMove, Numbness, Deterrence }
+    //怪物给玩家加的debuff:无法移动，麻痹，震慑，冰冻
+    public enum EnemyDebuff { None, CantMove, Numbness, Deterrence,Freezed }
+    public enum SkillType { Normal,Locked}//技能类型：一般，锁定
+    //怪物生成环境要素:熔岩，电球，冰柱
+    public enum AddEnvironment { None, Lava, ElectricBall, Icicle}
     //招式信息内部类
     public class EnemySkillConfig
     {
@@ -887,6 +890,8 @@ public class GameConfig : ScriptableObject
         public EnemyDebuff pushdebuff;  //怪物的特殊效果
         public int HPchange;//回复生命值数量（填入负值来回复生命）
         public int armor;//获得护甲数量
+        public SkillType skilltype;
+        public AddEnvironment addenvironment;
     }
     public static IReadOnlyList<EnemySkillConfig> EnemySkills = new List<EnemySkillConfig>
     {
@@ -902,7 +907,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -916,7 +923,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -930,7 +939,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.TurntoPlayer,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -944,7 +955,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -958,7 +971,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = -20,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -972,7 +987,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.CantMove,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -987,7 +1004,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -1001,7 +1020,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -1016,7 +1037,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -1025,7 +1048,7 @@ public class GameConfig : ScriptableObject
             range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(3,0),new Vector2Int(0,1),
                 new Vector2Int(0,2),new Vector2Int(0,3),new Vector2Int(1,1),new Vector2Int(1,2),new Vector2Int(2,1),
                 new Vector2Int(1,-1),new Vector2Int(2,-1),new Vector2Int(3,-1),new Vector2Int(2,-2),new Vector2Int(3,-2),
-                new Vector2Int(3,-3),},
+                new Vector2Int(3,-3)},
             damage =0,
             hittimes = 0,
             moveType = MoveType.None,
@@ -1033,7 +1056,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.Numbness,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -1047,7 +1072,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.Deterrence,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -1062,7 +1089,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None, 
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -1077,7 +1106,9 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         },
         new EnemySkillConfig
         {
@@ -1091,16 +1122,244 @@ public class GameConfig : ScriptableObject
             getbuff = EnemyBuff.None,
             pushdebuff = EnemyDebuff.None,
             HPchange = 0,
-            armor=0
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 14,
+            skillName = "背身扫尾",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(1,1),new Vector2Int(1,2),
+                new Vector2Int(2,1),new Vector2Int(2,-1),new Vector2Int(3,-1),new Vector2Int(3,-2)},
+            damage =10,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 15,
+            skillName = "扫火",
+            range = new List<Vector2Int>{new Vector2Int(2,0),new Vector2Int(3,0),new Vector2Int(1,2),new Vector2Int(2,1),
+                new Vector2Int(3,-1),new Vector2Int(3,-2)},
+            damage =10,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 18,
+            skillName = "火球连射",
+            range = new List<Vector2Int>{new Vector2Int(0,0),new Vector2Int(1,0),new Vector2Int(-1,1),new Vector2Int(0,-1)},
+            damage =4,
+            hittimes = 3,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Locked,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 19,
+            skillName = "吞食岩石",
+            range = new List<Vector2Int>(),
+            damage =0,
+            hittimes = 0,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=20,//第一次获得20点护甲，第二次获得40点护甲
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 20,
+            skillName = "岩浆满溢",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(1,1),new Vector2Int(2,-1),
+                new Vector2Int(2,2),new Vector2Int(3,1),new Vector2Int(4,-1),new Vector2Int(3,1),
+                new Vector2Int(4,-1),new Vector2Int(4,-2)},
+            damage =8,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.Lava
+        },
+        new EnemySkillConfig
+        {
+            skillID = 21,
+            skillName = "巨型熔岩球",
+            range = new List<Vector2Int>{new Vector2Int(0,0),new Vector2Int(1,0),new Vector2Int(-1,0),new Vector2Int(0,1),
+                new Vector2Int(-1,1),new Vector2Int(0,-1),new Vector2Int(1,-1)},
+            damage =8,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Locked,
+            addenvironment=AddEnvironment.Lava
+        },
+        new EnemySkillConfig
+        {
+            skillID = 22,
+            skillName = "多重拍击",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(0,1),new Vector2Int(1,1),
+                new Vector2Int(1,-1),new Vector2Int(2,-1)},
+            damage =5,
+            hittimes = 2,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 23,
+            skillName = "甩尾下砸",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(3,0),new Vector2Int(1,1),
+                new Vector2Int(2,1),new Vector2Int(3,1),new Vector2Int(2,-1),new Vector2Int(3,-1),new Vector2Int(4,-1)},
+            damage =12,
+            hittimes = 1,
+            moveType = MoveType.Backward,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 24,
+            skillName = "夺命回旋",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(-1,0),new Vector2Int(-2,0),
+                new Vector2Int(-2,1),new Vector2Int(-1,1),new Vector2Int(0,1),new Vector2Int(1,1),new Vector2Int(-2,2),
+                new Vector2Int(-1,2),new Vector2Int(0,2),new Vector2Int(-1,-1),new Vector2Int(0,-1),new Vector2Int(1,-1),
+                new Vector2Int(2,-1),new Vector2Int(0,-2),new Vector2Int(1,-2),new Vector2Int(2,-2)},
+            damage =12,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 25,
+            skillName = "肩撞",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(3,0),new Vector2Int(0,1),
+                new Vector2Int(1,1),new Vector2Int(1,-1),new Vector2Int(2,-1)},
+            damage =10,
+            hittimes = 1,
+            moveType = MoveType.Forward,
+            moveDistance = 3,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 26,
+            skillName = "积雷怒吼",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(-1,0),new Vector2Int(-1,1),new Vector2Int(0,1),
+                new Vector2Int(0,-1),new Vector2Int(1,-1)},
+            damage =6,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.Deterrence,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 27,
+            skillName = "雷霆一击",
+            range = new List<Vector2Int>{new Vector2Int(0,0),new Vector2Int(1,0),new Vector2Int(-1,0),new Vector2Int(0,1),
+                new Vector2Int(-1,1),new Vector2Int(0,-1),new Vector2Int(1,-1)},
+            damage =18,
+            hittimes = 1,
+            moveType = MoveType.Fly,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Locked,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 28,
+            skillName = "雷球之阵",
+            range = new List<Vector2Int>{new Vector2Int(1,1),new Vector2Int(-1,2),new Vector2Int(-2,1),new Vector2Int(2,-1),
+                new Vector2Int(1,-2),new Vector2Int(-1,-1)},
+            damage =0,
+            hittimes = 0,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.ElectricBall
         }
     }.AsReadOnly();
 
     //GameManager
     public const int CommissionAmount = 7;
+    public static readonly Vector3 CameraNew = new Vector3(100, 100, -10);//摄像机移走位置
+    public static readonly Vector3 CameraDefault = new Vector3(0, 0, -10);//摄像机原本位置
 
     //DeckWin 画图参数
     public const int XBound = 720, YBound = 270;//X,Y界限坐标
     public const int Xdelta = 440, Ydelta = 540;//两卡间隔
+    public static readonly Vector3 hoverScale = new Vector3(2.122892f, 2.54747f, 1f);
+    public static readonly Vector3 normalScale = new Vector3(1.73865f, 2.08638f, 1f);
 
     //RouteRender参数
     public static IReadOnlyList<string> Destinies = new List<string> { "Camp","Forest", "Desert", "Valcano" };

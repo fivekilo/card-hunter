@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public GameObject AddCardWin;
     public GameObject DeckBtn;
     public GameObject DeckWin;
+    public GameObject Camera;
     public event Action<Choice> Chosed;
     public event Action<int> AddCard;
     private List<bool> AbleToMove=new List<bool> {false,false };
@@ -158,12 +159,19 @@ public class GameManager : MonoBehaviour
         shareddata.playerinfo.deck.Add(CardNum);
         AbleToMove[0] = true;
     }
+    private void DeleteFromDeck(int CardNum)
+    {
+        Destroy(DW);
+        //摄像机切回原本位置
+        Camera.transform.position = GameConfig.CameraDefault;
+        shareddata.playerinfo.deck.Remove(CardNum);
+        AbleToMove[1] = true;
+    }
     private void ChoiceHandle(Choice choice)
     {
         if (choice.DeleteCard > 0)
         {
-            //删牌函数
-            AbleToMove[1] = true;
+            DeleteCard();
         }
         else//无需删牌
         {
@@ -217,18 +225,29 @@ public class GameManager : MonoBehaviour
     }
     private void CheckDeck()//查看卡组
     {
+        //玩家停止移动
+        Player.GetComponent<PlayerMove>().Stop = true;
         DW = Instantiate(DeckWin, Vector3.zero, Quaternion.identity);
         DW.GetComponent<DeckWin>().Show(shareddata.playerinfo.deck);
-        //改绑为关闭窗口
-        DeckBtn.GetComponent<Btn>().Clicked -= CheckDeck;
-        DeckBtn.GetComponent<Btn>().Clicked += CloseDeck;
+        //摄像头移动防止误触背景
+        Camera.transform.position = GameConfig.CameraNew;
+        //绑定关闭窗口按钮
+        DW.GetComponent<Transform>().Find("Btn").GetComponent<ConfirmBtn>().Confirm += CloseDeck;
     }
     private void CloseDeck()//关闭卡组窗口
     {
         Destroy(DW);
-        //改绑为开启窗口
-        DeckBtn.GetComponent<Btn>().Clicked += CheckDeck;
-        DeckBtn.GetComponent<Btn>().Clicked -= CloseDeck;
+        //摄像机切回原本位置
+        Camera.transform.position = GameConfig.CameraDefault;
+        //玩家继续移动
+        Player.GetComponent<PlayerMove>().Stop = false;
+    }
+    private void DeleteCard()
+    {
+        DW = Instantiate(DeckWin, Vector3.zero, Quaternion.identity);
+        DW.GetComponent<DeckWin>().ShowDelete(shareddata.playerinfo.deck);
+        //绑定删卡事件
+        DW.GetComponent<DeckWin>().DeleteConfirm += DeleteFromDeck;
     }
 
     void Start()

@@ -8,8 +8,6 @@ using UnityEngine.UI;
 
 public class AddCardWindow : MonoBehaviour
 {
-    private Vector3 hoverScale = new Vector3(2.122892f, 2.54747f, 1f);
-    private Vector3 normalScale = new Vector3(1.73865f, 2.08638f, 1f);
     private int ChosedNum;
     private Action<int> addCard;
     private List<GameObject> Cards=new List<GameObject>();
@@ -49,9 +47,9 @@ public class AddCardWindow : MonoBehaviour
         //选中卡变大效果
         foreach(GameObject card in Cards)
         {
-            card.transform.localScale = normalScale;
+            card.transform.localScale = GameConfig.normalScale;
         }
-        Cards[num].transform.localScale = hoverScale;
+        Cards[num].transform.localScale = GameConfig.hoverScale;
         //记录号码
         ChosedNum = num;
     }
