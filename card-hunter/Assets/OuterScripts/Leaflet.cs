@@ -13,8 +13,9 @@ public class Leaflet : MonoBehaviour
     {
         string StrMons = "ÌÖ·¥" + c.monster;
         string StrMoney = "ĞüÉÍ" + c.money + "Ôª";
-        transform.Find("RewardMonster").GetComponent<TextMeshPro>().text = StrMons;
-        transform.Find("RewardMoney").GetComponent<TextMeshPro>().text = StrMoney;
+
+        transform.Find("RewardMonster").GetComponent<TextMeshProUGUI>().text = StrMons;
+        transform.Find("RewardMoney").GetComponent<TextMeshProUGUI>().text = StrMoney;
         //»»¹ÖÎïÍ¼Æ¬
     }
     void Start()

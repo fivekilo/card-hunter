@@ -16,12 +16,14 @@ public class GameManager : MonoBehaviour
     public GameObject DeckBtn;
     public GameObject DeckWin;
     public GameObject Camera;
+    public GameObject Commissionboard;
     public event Action<Choice> Chosed;
     public event Action<int> AddCard;
     private List<bool> AbleToMove=new List<bool> {false,false };
     private PlayerInfo playerinfo=new PlayerInfo();
     private RogueMod RM;
     private GameObject DW;//卡组窗口
+    private GameObject CB;//委托栏
     private List<Commission> AcceptedCommission;
     private event Func<Commission,IEnumerator> ArriveBattleField;
     private event Action ArriveCamp;
@@ -42,15 +44,25 @@ public class GameManager : MonoBehaviour
     {
 
     }
-    private void AcceptCommission()//接取委托（生成随机委托,生成随机事件,完成去程,处理去程中的随机事件）
+    private void GetCommission()
     {
-        //点击后解绑，防止多次接取委托
-        camp.GetComponent<Camp>().ClickEvent -= AcceptCommission;
-
         List<Commission> commissions = GameConfig.Commissions;
-        List<Commission>selected= RM.ChooseCommission(commissions, 1);
-        //显示任务面板,传回所选委托
-        Commission commission = GameConfig.Commissions[0];
+        List<Commission> selected = RM.ChooseCommission(commissions, 1);
+        CB = Instantiate(Commissionboard,Vector3.zero,Quaternion.identity);
+        CB.GetComponent<CommissionBoard>().Init(selected);
+        //摄像头移动防止误触背景
+        Camera.transform.position = GameConfig.CameraNew;
+        //绑定关闭窗口按钮
+        CB.GetComponent<CommissionBoard>().Confirm += AcceptCommission;
+    }
+    private void AcceptCommission(Commission commission)//已接取委托（生成随机事件,完成去程,处理去程中的随机事件）
+    {
+        //销毁委托栏 移回摄像头 解绑触发事件
+        Destroy(CB);
+        Camera.transform.position = GameConfig.CameraDefault;
+        camp.GetComponent<Camp>().ClickEvent -= GetCommission;
+
+
         //去程：获取随机事件
         List<Event> events = RM.GetEvents(PlayerProgress);
         //生成路径
@@ -221,7 +233,7 @@ public class GameManager : MonoBehaviour
     private void CampEnter()
     {
         Debug.Log("回到营地了");
-        camp.GetComponent<Camp>().ClickEvent += AcceptCommission;
+        camp.GetComponent<Camp>().ClickEvent += GetCommission;
     }
     private void CheckDeck()//查看卡组
     {
@@ -259,7 +271,7 @@ public class GameManager : MonoBehaviour
         //初始化SharedData
         shareddata.playerinfo = playerinfo;
 
-        camp.GetComponent<Camp>().ClickEvent += AcceptCommission;
+        camp.GetComponent<Camp>().ClickEvent += GetCommission;
         Player.GetComponent<PlayerMove>().encounterEvent += EventChoose;
         ArriveBattleField += BattleEnter;
         ArriveCamp += CampEnter;
