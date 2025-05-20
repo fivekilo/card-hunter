@@ -28,6 +28,7 @@ public class Card : MonoBehaviour
     public List<int> Buff;//Buff
     public int Wound;//Wound
     public List<int> AttackDirection; //攻击方向
+    public List<int> AttackRange;//攻击范围
     public int AttackLength;//攻击长度
     public int Cost;//费用
     public Vector2Int Attack;//攻击

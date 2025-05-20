@@ -86,6 +86,7 @@ public class CardPool : MonoBehaviour
 
         if (cardPools.ContainsKey(cardNum))
         {
+
             card.SetActive(false);
             cardPools[cardNum].Enqueue(card);
 

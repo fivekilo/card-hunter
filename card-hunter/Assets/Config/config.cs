@@ -14,7 +14,7 @@ public class GameConfig : ScriptableObject
     public const int InitialHandCardNum = 4; //初始手牌数
     public const int MaxHandCardNum = 8;
     public const int MaxBladeLevel = 3; //最大气刃等级
-    public const int MaxBladeNum = 50;//最大气刃值
+    public const int MaxBladeNum = 8;//最大气刃值
     public const string BackgroundColor = "#aaa58f";//背景颜色
     //地图要素
     public enum Content
@@ -236,11 +236,47 @@ public class GameConfig : ScriptableObject
         null,//31
     }.AsReadOnly();
 
+    public static IReadOnlyList<List<int>> AttackRange = new List<List<int>>
+    {   null,//0
+        new List<int>{0},//1
+        new List<int>{0},//2
+        new List<int>{0},//3
+        new List<int>{0},//4
+        new List<int>{0,1,5},//5
+        null,//6
+        null,//7
+        null,//8
+        new List<int>{0},//9
+        new List<int>{0},//10
+        new List<int>{0},//11
+        new List<int>{0},//12
+        null,//13
+        new List<int>{0},//14
+        null,//15
+        null,//16
+        new List<int>{0},//17
+        new List<int>{0},//18
+        new List<int>{0},//19
+        new List<int>{0},//20
+        new List<int>{0},//21
+        new List<int>{0},//22
+        new List<int>{0},//23
+        null,//24
+        null,//25
+        null,//26
+        null,//27
+        null,//28
+        new List<int>{0},//29
+        new List<int>{0},//30
+        new List<int>{0},//31
+    };
+
+
     public static IReadOnlyList<Vector2Int> MoveLength = new List<Vector2Int>
     {
         new Vector2Int(0,0),//移动长度 下上限
         new Vector2Int(0,0),//1
-        new Vector2Int(1,1),//2
+        new Vector2Int(0,1),//2
         new Vector2Int(0,0),//3
         new Vector2Int(0,0),//4
         new Vector2Int(0,0),//5
@@ -280,7 +316,7 @@ public class GameConfig : ScriptableObject
         5,//4
         0,//5
         0,//6
-        5,//7
+        0,//7
         0,//8
         0,//9
         0,//10
@@ -292,7 +328,7 @@ public class GameConfig : ScriptableObject
         0,//16
         0,//17
         0,//18
-        5,//19
+        0,//19
         21,//20
         0,//21
         0,//22
