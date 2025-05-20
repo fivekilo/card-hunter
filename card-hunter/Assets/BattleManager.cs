@@ -134,8 +134,8 @@ public class BattleManager : MonoBehaviour
     {
         UserIndicator.text = "初始化中";
         OnPositionChanged?.Invoke(GenerateSpawn()); //生成出生位置
-        OnBladeGasChange?.Invoke(5);
-        OnBladeLevelChange?.Invoke(3);
+        OnBladeGasChange?.Invoke(0);
+        OnBladeLevelChange?.Invoke(0);
 
         //人物初始化
         Player.money = data.playerinfo.money;
@@ -374,6 +374,8 @@ public class BattleManager : MonoBehaviour
             discardPile.Add(card);
             else
             {
+                CardController cardController = card.GetComponent<CardController>();
+                cardController.OnCardUsed -= PlayCard;
                 cardManager.ReturnCardToPool(card);
             }
         }
@@ -546,6 +548,8 @@ public class BattleManager : MonoBehaviour
        card.transform.position += new Vector3(10000, 0, 0);
         if (card.Consumption == true)//消耗判断
         {
+            CardController cardController = card.GetComponent<CardController>();
+            cardController.OnCardUsed -= PlayCard;
             cardManager.ReturnCardToPool(card);
         }
         else discardPile.Add(card);

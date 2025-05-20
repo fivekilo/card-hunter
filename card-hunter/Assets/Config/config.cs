@@ -236,6 +236,42 @@ public class GameConfig : ScriptableObject
         null,//31
     }.AsReadOnly();
 
+    public static IReadOnlyList<List<int>> AttackRange = new List<List<int>>
+    {   null,//0
+        new List<int>{0},//1
+        new List<int>{0},//2
+        new List<int>{0},//3
+        new List<int>{0},//4
+        new List<int>{0,1,5},//5
+        null,//6
+        null,//7
+        null,//8
+        new List<int>{0},//9
+        new List<int>{0},//10
+        new List<int>{0},//11
+        new List<int>{0},//12
+        null,//13
+        new List<int>{0},//14
+        null,//15
+        null,//16
+        new List<int>{0},//17
+        new List<int>{0},//18
+        new List<int>{0},//19
+        new List<int>{0},//20
+        new List<int>{0},//21
+        new List<int>{0},//22
+        new List<int>{0},//23
+        null,//24
+        null,//25
+        null,//26
+        null,//27
+        null,//28
+        new List<int>{0},//29
+        new List<int>{0},//30
+        new List<int>{0},//31
+    };
+
+
     public static IReadOnlyList<Vector2Int> MoveLength = new List<Vector2Int>
     {
         new Vector2Int(0,0),//移动长度 下上限
