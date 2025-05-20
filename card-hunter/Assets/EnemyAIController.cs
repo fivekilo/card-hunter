@@ -23,13 +23,14 @@ public class EnemyAIController : MonoBehaviour
     [SerializeField] protected int detectionRange = 4;//检测玩家的最大范围
     [SerializeField] public int armor = 0;//初始护甲
     private float moveInterval = 0.3f; // 移动动画间隔
+    public bool havechangedskill=false;//特殊怪物拥有的是否变招
     //方向及方向转换
     public int direction=0;
     private List<Vector2Int> StdVector = new List<Vector2Int> {new Vector2Int(1,0), new Vector2Int(0,1), new Vector2Int(-1, 1),
             new Vector2Int(-1, 0), new Vector2Int(0, -1),new Vector2Int(1,-1) };
 
     public EnemySkillSystem skillSystem;
-    [SerializeField] private List<int> selfSkills = new List<int>();//自身技能组（需要预先在inspector里设置好！）
+    [SerializeField] public List<int> selfSkills = new List<int>();//自身技能组（需要预先在inspector里设置好！）
 
     void Start()
     {
@@ -53,9 +54,9 @@ public class EnemyAIController : MonoBehaviour
    
     public IEnumerator TakeTurn()//执行回合
     {
-
+        havechangedskill = false;//重置变招函数
         //先出上一回合指定的招式
-        yield return skillSystem.ExecuteCurrentSkill(1);
+        yield return skillSystem.ExecuteCurrentSkill(-1);
         //再判断移动
         if (ShouldMoveToPlayer())
         {
@@ -72,7 +73,7 @@ public class EnemyAIController : MonoBehaviour
             yield return WanderRandomly();
         }
         //展示要出的下一招
-        skillSystem.SelectNextSkill();
+        skillSystem.SelectNextSkill(-1);
     }
 
     bool ShouldMoveToPlayer()
@@ -219,7 +220,7 @@ public class EnemyAIController : MonoBehaviour
         return _currentGridPos;
     }
 
-    //调转方向(待编写)
+    //调转方向
     public void ChangeDirection(int newdirection)
     {
         arrowtransform.rotation = Quaternion.Euler(0, 0, 60*newdirection);//调转箭头方向
@@ -232,5 +233,11 @@ public class EnemyAIController : MonoBehaviour
         //以防变身更新了技能组，不断传入新技能
         skillSystem = GetComponent<EnemySkillSystem>();
         skillSystem.availableSkills = selfSkills;
+        
+        //对于有变招的怪物，不断检测玩家的方位，调入变招函数
+        //if (name== "蛮颚龙")
+        //{
+        //    skillSystem.ChangeSkillinRealtime(_player.PlayerGridPos);
+        //}
     }
 }

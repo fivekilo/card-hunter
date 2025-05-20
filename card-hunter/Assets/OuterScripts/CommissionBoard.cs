@@ -8,11 +8,13 @@ using UnityEngine;
 public class CommissionBoard : MonoBehaviour
 {
     public GameObject Leaflet;
-    public event Action<int> Confirm;
+    public event Action<Commission> Confirm;
     private List<GameObject> leaves = new List<GameObject>();
+    private List<Commission> Commissions = new List<Commission>();
     private int ChosedNum = -1;
     public void Init(List<Commission>commissions)
     {
+        Commissions = commissions;
         if (commissions.Count > 3)
         {
             throw new System.Exception("委托数过多");
@@ -37,13 +39,13 @@ public class CommissionBoard : MonoBehaviour
         }
         leaves[num].transform.localScale = new Vector3(1.1f,1.1f,1);
         //记录号码
-        ChosedNum = leaves[num].GetComponent<Card>().cardNum;
+        ChosedNum = leaves[num].GetComponent<Leaflet>().num;
     }
     private void ConfirmHandle()
     {
         if (ChosedNum != -1)
         {
-            Confirm?.Invoke(ChosedNum);
+            Confirm?.Invoke(Commissions[ChosedNum]);
         }
     }
 

@@ -15,6 +15,12 @@ public class PlayerBuff : MonoBehaviour
     public int CantMove = 0;//这回合不能移动 回合结束减1  7
     public int DL = 0; //登龙 8
     public int ExCost = 0;//额外费用 回合开始时结算 9;
+    public int BladeShield = 0; //气刃护盾 能力 10 不结算
+    public int JD = 0;//居登 能力 11 不结算
+    public int WoundManage = 0;//伤口管理 能力 12 不结算 
+    public int RedBladeCrazy = 0;// 红刃狂热 能力 13 不结算
+    public int NextDL = 0; //下一次登龙费用减1 14 打出登龙时结算
+    public int NextDamage = 0;// 下一次造成伤害的额外值 15 打出伤害时结算
     void Start()
     {
 
@@ -57,6 +63,30 @@ public class PlayerBuff : MonoBehaviour
     public void ModifyExCost(int amount)
     {
         ExCost = Mathf.Clamp(amount, 0, 999);
+    }
+    public void ModifyBladeShield(int amount)
+    {
+        BladeShield = Mathf.Clamp(amount, 0, 1);
+    }
+    public void ModifyJD(int amount)
+    {
+        JD = Mathf.Clamp(amount, 0, 1);
+    }
+    public void ModifyWoundManage(int amount)
+    {
+        WoundManage = Mathf.Clamp(amount, 0, 1);
+    }
+    public void ModifyRedBladeCrazy(int amount)
+    {
+        RedBladeCrazy = Mathf.Clamp(amount, 0, 1);
+    }
+    public void ModifyNextDL(int amount)
+    {
+        NextDL = Mathf.Clamp(amount, 0, 1);
+    }
+    public void ModifyNextDamage(int amount)
+    {
+        NextDamage = Mathf.Clamp(amount, 0, 999);
     }
     // Update is called once per frame
     void Update()

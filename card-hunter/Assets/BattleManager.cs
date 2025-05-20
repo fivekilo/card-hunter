@@ -142,12 +142,12 @@ public class BattleManager : MonoBehaviour
         UserIndicator.text = "初始化中";
         OnPositionChanged?.Invoke(GenerateSpawn()); //生成出生位置
         OnBladeGasChange?.Invoke(8);
-        OnBladeLevelChange?.Invoke(3);
+        OnBladeLevelChange?.Invoke(1);
 
         //人物初始化
-        Player.money = data.playerinfo.money;
+     /*   Player.money = data.playerinfo.money;
         Player.MaxCost = data.playerinfo.MaxCost;
-        Player.MaxHealth = data.playerinfo.MaxHealth;
+        Player.MaxHealth = data.playerinfo.MaxHealth;*/
 
         //怪物初始化
 
@@ -158,18 +158,21 @@ public class BattleManager : MonoBehaviour
 
     public void InitializeDeck()
     {
-        foreach (int id in data.playerinfo.deck)
+     /*   foreach (int id in data.playerinfo.deck)
         {
             Card newcard = cardManager.CreateCard(id, cardManager.transform);
             discardPile.Add(newcard);
             CardIntoHand(newcard);
-        }
-     /*   for (int i = 1; i <= 11; i++)
+        }*/
+        for (int i = 1; i <= 3; i++)
         {
-            Card newcard = cardManager.CreateCard(20  ,cardManager.transform );
+            Card newcard = cardManager.CreateCard(24  ,cardManager.transform );
             discardPile.Add(newcard);
             CardIntoHand(newcard);
-        }*/
+        }
+        Card newcard1 = cardManager.CreateCard(1, cardManager.transform);
+        discardPile.Add(newcard1);
+        CardIntoHand(newcard1);
         ShuffleDeck(discardPile);
     }
 
@@ -241,6 +244,7 @@ public class BattleManager : MonoBehaviour
     {
         UserIndicator.text = "怪物回合开始了......";
         Debug.Log("怪物回合开始了!");
+
         yield return new WaitForSeconds(2f);
         FindAllEnemies();
         foreach(var enemy in _enemies)
@@ -248,6 +252,10 @@ public class BattleManager : MonoBehaviour
              if (enemy != null)
              {
                 //判断麻痹效果
+                if(enemy.enemybuff.Wound > 0)
+                {
+                    enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound - 1);
+                }
                 if (enemy.enemybuff.Numbness == 0)
                     yield return enemy.TakeTurn();
              }
@@ -255,6 +263,21 @@ public class BattleManager : MonoBehaviour
         UserIndicator.text = "怪物回合结束了!";
         Debug.Log("怪物回合结束了!");
         ChangeState(BattleState.PlayerDraw);
+    }
+
+    //变招前预检测
+    private void BeforeChangeskill()
+    {
+        FindAllEnemies();
+        foreach (var enemy in _enemies)
+        {
+            if (enemy != null)
+            {
+                //判断是不是会变招的怪
+                if (enemy.name == "蛮颚龙"&& (float)enemy._currentHealth * 1.25 < (float)enemy._maxHealth)
+                    enemy.skillSystem.ChangeSkillinRealtime(Player.PlayerGridPos);
+            }
+        }
     }
 
     private IEnumerator PlayerDrawPhase()
@@ -323,7 +346,8 @@ public class BattleManager : MonoBehaviour
         isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
             Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
-            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1,1), callback1 , callback2));
+            Action callback3 = BeforeChangeskill;//把他当成回调函数传出才能正确的使用新坐标！
+            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1,1), callback1 , callback2,callback3));
         Player.ModifySituation(0);
     }
 
@@ -371,6 +395,7 @@ public class BattleManager : MonoBehaviour
             playerBuff.ModifyCantMove(playerBuff.CantMove - 1);
         }
 
+
         foreach(Card card in hand)
         {
             card.transform.position += new Vector3(10000, 0, 0);
@@ -413,6 +438,7 @@ public class BattleManager : MonoBehaviour
             isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
             Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
+            Action callback3 = BeforeChangeskill;
             List<int> newDir = card.Move;
             List<int> AllDir = new List<int> { 0, 1, 2, 3, 4, 5 };
             if (Player.Situation == 0) newDir = AllDir;
@@ -420,7 +446,8 @@ public class BattleManager : MonoBehaviour
                 Player.ModifySituation(0);
             else if (card.EnterState == 2 || (card.EnterState == 0 && Player.Situation == 1))
                 Player.ModifySituation(1);
-            yield return StartCoroutine(mapmanager.MoveCommand(GetAdjacent(newDir), Player.PlayerGridPos, card.MoveLength, callback1, callback2));
+            yield return StartCoroutine(mapmanager.MoveCommand(GetAdjacent(newDir), Player.PlayerGridPos, card.MoveLength, callback1, callback2, callback3));
+            BeforeChangeskill();
         }
 
         if (card.AttackDirection != null && card.Sequence == true)
@@ -434,44 +461,9 @@ public class BattleManager : MonoBehaviour
             Player.ModifySituation(1);
             yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback , card));
         }
-        
 
-        
-
-        if (card.DeltaBladeNum != 0)
+        if (card.Buff != null)
         {
-            Player.ModifyBladeNum(Player.curBladeNum + card.DeltaBladeNum);
-            OnBladeGasChange?.Invoke(Player.curBladeNum);
-        }
-
-        if (card.DeltaBladeLevel != 0)
-        {
-            Player.ModifyBladeLevel(Player.curBladeLevel + card.DeltaBladeLevel);
-            OnBladeLevelChange?.Invoke(Player.curBladeLevel);
-        }
-        if (card.Derivation != 0)
-        {
-            Card newCard = cardManager.CreateCard(card.Derivation, cardManager.transform);
-            if (hand.Count < GameConfig.MaxHandCardNum && (newCard.cardNum != 21 || Player.curBladeLevel > 0))
-            {
-                hand.Add(newCard);
-                CardIntoHand(newCard);
-                cardManager.UpdateCardPositions(hand);
-            }
-        }
-       
-       if(card.DrawCard != 0)
-       {
-            DrawCard(card.DrawCard);
-       }
-
-       if(card.Defence != 0)
-       {
-            Player.ModifyDefence(Player.Defence + card.Defence);
-       }
-
-       if(card.Buff != null)
-       {
             foreach (int Buf_id in card.Buff)
             {
                 switch (Buf_id)
@@ -503,11 +495,67 @@ public class BattleManager : MonoBehaviour
                     case 9:
                         playerBuff.ModifyExCost(playerBuff.ExCost + 1);
                         break;
+                    case 10:
+                        playerBuff.ModifyBladeShield(playerBuff.BladeShield + 1);
+                        break;
+                    case 11:
+                        playerBuff.ModifyJD(playerBuff.JD + 1);
+                        break;
+                    case 12:
+                        playerBuff.ModifyWoundManage(playerBuff.WoundManage + 1);
+                        break;
+                    case 13:
+                        playerBuff.ModifyRedBladeCrazy(playerBuff.RedBladeCrazy + 1);
+                        break;
+                    case 14:
+                        playerBuff.ModifyNextDL(playerBuff.NextDL + 1);
+                        break;
+                    case 15:
+                        //特判了
+                        break;
                 }
             }
 
+        }
+
+
+        if (card.DeltaBladeNum != 0)
+        {
+            Player.ModifyBladeNum(Player.curBladeNum + card.DeltaBladeNum);
+            OnBladeGasChange?.Invoke(Player.curBladeNum);
+        }
+
+        if (card.DeltaBladeLevel != 0)
+        {
+            if(card.DeltaBladeLevel > 0 && playerBuff.BladeShield > 0 && Player.curBladeLevel < 3) Player.ModifyDefence(Player.Defence + 4);
+            Player.ModifyBladeLevel(Player.curBladeLevel + card.DeltaBladeLevel);
+            OnBladeLevelChange?.Invoke(Player.curBladeLevel);
+        }
+        if (card.Derivation != 0)
+        {
+            Card newCard = cardManager.CreateCard(card.Derivation, cardManager.transform);
+            if (hand.Count < GameConfig.MaxHandCardNum && 
+                (card.cardNum != 20 || Player.curBladeLevel > 0) && 
+                (card.cardNum != 24 || Player.curBladeLevel > 0))
+            {
+                hand.Add(newCard);
+                CardIntoHand(newCard);
+                cardManager.UpdateCardPositions(hand);
+            }
+        }
+       
+       if(card.DrawCard != 0)
+       {
+            DrawCard(card.DrawCard);
        }
-       //AudioManager.PlayCardPlaySound(card.cardNum);
+
+       if(card.Defence != 0 || playerBuff.RedBladeCrazy == 0)
+       {
+            Player.ModifyDefence(Player.Defence + card.Defence);
+       }
+
+       
+      // AudioManager.PlayCardPlaySound(card.cardNum);
        cardManager.RemoveCardFromHand(card, hand);
        card.transform.position += new Vector3(10000, 0, 0);
         if (card.Consumption == true)//消耗判断
@@ -518,11 +566,21 @@ public class BattleManager : MonoBehaviour
         }
         else discardPile.Add(card);
         UpdatedeckNum();
-        UserIndicator.text = "玩家回合";
+       UserIndicator.text = "玩家回合";
+       if(card.cardNum == 32)
+       {
+            playerBuff.ModifyNextDamage(Player.curBladeNum * 2);
+
+       }
+       if(card.cardNum == 11 || card.cardNum == 22)
+       {
+            playerBuff.ModifyNextDL(playerBuff.NextDL + 1);
+       }
        if(card.cardNum == 22)
        {
             OnEndTurnButtonClicked();
        }
+
     }
   /*  public int CalculateAttack(Card card)
     {
@@ -561,11 +619,12 @@ public class BattleManager : MonoBehaviour
                 BladeLevelBuff = 1.3f;
                 break;
             case 3:
-                BladeLevelBuff = 1.6f;
+                BladeLevelBuff = (playerBuff.RedBladeCrazy > 0 ? 2.1f : 1.6f);
                 break;
         }
         int res = 1;
         res = (int)((Attack.x + playerBuff.Power) * BladeLevelBuff * Attack.y * (enemy.enemybuff.Wound > 0 ? 1.5f : 1.0f));
+        
         return res;
     }
     public void PlayCard(Card card)
@@ -647,15 +706,21 @@ public class BattleManager : MonoBehaviour
                 {
                     Attack.y += Player.curBladeLevel;
                 }
-                enemy.ReduceHealth(CalculateAttack(Attack, enemy));
-                if (card.cardNum == 14 && enemy.enemybuff.Wound > 2)
+                int atknum = CalculateAttack(Attack, enemy);
+                if(atknum > 0)
                 {
-                    enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound - 2);
-                    enemy.ReduceHealth(CalculateAttack(new(10, 1), enemy));
+                    atknum += playerBuff.NextDamage;
+                    playerBuff.ModifyNextDamage(0);
+                }
+                enemy.ReduceHealth(atknum);
+                if (card.cardNum == 35 && enemy.enemybuff.Wound >= 3)
+                {
+                    enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound - 3);
+                    enemy.ReduceHealth(15);
                 }
                 if (card.Wound > 0)
                 {
-                    enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound + card.Wound);
+                    enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound + card.Wound + playerBuff.WoundManage);
                 }
             }
         }
@@ -755,7 +820,20 @@ public class BattleManager : MonoBehaviour
         return res;
     }
 
-    public
+    //检测玩家是否在当前的攻击范围里
+    public bool PlayerInRange(List<Vector2Int> actualrangepos)
+    {
+        bool res = false;
+        foreach (Vector2Int pos in actualrangepos)
+        {
+            if (pos == Player.PlayerGridPos)
+            {
+                res = true;
+            }
+        }
+        return res;
+    }
+
     // Update is called once per frame
     void Update()
     {

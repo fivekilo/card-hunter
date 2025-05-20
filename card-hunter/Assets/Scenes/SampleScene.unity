@@ -532,7 +532,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2902820061251023980, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4934754776702706311, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       propertyPath: m_Color.a
@@ -896,6 +896,7 @@ MonoBehaviour:
   skillselected: 0
   skill4selected: 0
   turncount: 0
+  oldplayerinrange: 0
 --- !u!114 &463359432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -913,11 +914,12 @@ MonoBehaviour:
   arrowtransform: {fileID: 0}
   enemybuff: {fileID: 0}
   name: "\u86EE\u989A\u9F99"
-  _maxHealth: 95
+  _maxHealth: 90
   _currentHealth: 0
   moveRange: 2
   detectionRange: 4
   armor: 0
+  havechangedskill: 0
   direction: 0
   skillSystem: {fileID: 0}
   selfSkills: 000000000a0000000b0000000c0000000d000000
@@ -2428,7 +2430,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2902820061251023980, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4934754776702706311, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       propertyPath: m_Color.a
@@ -3040,6 +3042,7 @@ MonoBehaviour:
   skillselected: 0
   skill4selected: 0
   turncount: 0
+  oldplayerinrange: 0
 --- !u!114 &1581889129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3062,6 +3065,7 @@ MonoBehaviour:
   moveRange: 2
   detectionRange: 4
   armor: 0
+  havechangedskill: 0
   direction: 0
   skillSystem: {fileID: 0}
   selfSkills: 070000000800000009000000
@@ -3097,6 +3101,7 @@ MonoBehaviour:
   moveRange: 2
   detectionRange: 4
   armor: 0
+  havechangedskill: 0
   direction: 0
   skillSystem: {fileID: 0}
   selfSkills: 01000000020000000300000004000000
@@ -3119,6 +3124,7 @@ MonoBehaviour:
   skillselected: 0
   skill4selected: 0
   turncount: 0
+  oldplayerinrange: 0
 --- !u!114 &1844501645
 MonoBehaviour:
   m_ObjectHideFlags: 0
