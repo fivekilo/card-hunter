@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -334,6 +335,10 @@ public class BattleManager : MonoBehaviour
         {
             if(card.Nothingness == false)
             discardPile.Add(card);
+            else
+            {
+                cardManager.ReturnCardToPool(card);
+            }
         }
         hand.Clear();
     //    Debug.Log("回合结束时手牌数为:" + hand.Count);
@@ -500,8 +505,11 @@ public class BattleManager : MonoBehaviour
        AudioManager.PlayCardPlaySound(card.cardNum);
        cardManager.RemoveCardFromHand(card, hand);
        card.transform.position += new Vector3(10000, 0, 0);
-       if(card.Consumption != true) //消耗判断
-       discardPile.Add(card);
+        if (card.Consumption == true)//消耗判断
+        {
+            cardManager.ReturnCardToPool(card);
+        }
+        else discardPile.Add(card);
        UserIndicator.text = "玩家回合";
        if(card.cardNum == 22)
        {
