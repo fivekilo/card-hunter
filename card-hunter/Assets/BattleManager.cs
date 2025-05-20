@@ -70,7 +70,25 @@ public class BattleManager : MonoBehaviour
     public bool isWaitingForPlayerChoose = false;
     public UnityEvent EndTurnClicked; 
 
-    
+    public Vector2Int GenerateSpawn()
+    {
+        int attemp = 0;
+        Vector2Int res = new();
+        System.Random rand = new System.Random();
+        while (attemp < 100)
+        {
+            int xplusy = rand.Next(0 , GameConfig.size - 2);
+            int x = rand.Next(0, xplusy + 1);
+            if(mapmanager.isObstacle(new(x , xplusy - x)) == false)
+            {
+                res = new(x, xplusy - x);
+                Debug.Log("生成在" + x + " " + (xplusy - x));
+                break;
+            }
+            attemp++;
+        }
+        return res;
+    }
     private void Start()
     {
 
@@ -78,6 +96,8 @@ public class BattleManager : MonoBehaviour
         mapmanager = GetComponentInChildren<MapManager>();
         playerBuff = GetComponentInChildren<PlayerBuff>();
         enemyBuff = GetComponentInChildren<EnemyBuff>();
+
+
         OnBladeGasChange += Player.ModifyBladeNum;
         OnBladeGasChange += BladeLevelSlot.ShowBladeGas;
 
@@ -93,6 +113,8 @@ public class BattleManager : MonoBehaviour
 
         Endbutton.onClick.AddListener(OnEndTurnButtonClicked);
         Movebutton.onClick.AddListener(OnMoveButtonClicked);
+
+ 
         /*  Endbutton.onClick.AddListener(() => {
              Card newcard= cardManager.CreateCard(i, cardManager.transform);
               cardManager.AddCardToHand(newcard , hand);
@@ -110,8 +132,17 @@ public class BattleManager : MonoBehaviour
     private void InitializeBattle()
     {
         UserIndicator.text = "初始化中";
+        OnPositionChanged?.Invoke(GenerateSpawn()); //生成出生位置
         OnBladeGasChange?.Invoke(5);
         OnBladeLevelChange?.Invoke(3);
+
+        //人物初始化
+        Player.money = data.playerinfo.money;
+        Player.MaxCost = data.playerinfo.MaxCost;
+        Player.MaxHealth = data.playerinfo.MaxHealth;
+
+        //怪物初始化
+
         InitializeDeck();
   //      data
         ChangeState(BattleState.PlayerDraw);
@@ -119,12 +150,18 @@ public class BattleManager : MonoBehaviour
 
     public void InitializeDeck()
     {
-        for (int i = 1; i <= 11; i++)
+        foreach (int id in data.playerinfo.deck)
+        {
+            Card newcard = cardManager.CreateCard(id, cardManager.transform);
+            discardPile.Add(newcard);
+            CardIntoHand(newcard);
+        }
+     /*   for (int i = 1; i <= 11; i++)
         {
             Card newcard = cardManager.CreateCard(20  ,cardManager.transform );
             discardPile.Add(newcard);
             CardIntoHand(newcard);
-        }
+        }*/
         ShuffleDeck(discardPile);
     }
 
@@ -133,7 +170,7 @@ public class BattleManager : MonoBehaviour
         _enemies = new List<EnemyAIController>(FindObjectsOfType<EnemyAIController>());
     }
 
-    public void CardIntoHand(Card card) //只有初始化 衍生物 boss塞牌才调用
+    public void CardIntoHand(Card card) //只有初始化 衍生物 boss塞牌才调用 用于绑定事件
     {
         CardController cardController = card.GetComponent<CardController>();
         cardController.OnCardUsed += PlayCard;
@@ -418,7 +455,7 @@ public class BattleManager : MonoBehaviour
                     Attack.y += Player.curBladeLevel;
                 }
                 enemy.ReduceHealth(CalculateAttack(Attack, enemy));
-                if (card.cardNum == 14 && enemy.enemybuff.Wound > 0)
+                if (card.cardNum == 14 && enemy.enemybuff.Wound > 2)
                 {
                     enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound - 2);
                     enemy.ReduceHealth(CalculateAttack(new(10, 1), enemy));

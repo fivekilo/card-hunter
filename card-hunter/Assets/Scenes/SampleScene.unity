@@ -2069,7 +2069,9 @@ MonoBehaviour:
   cardManager: {fileID: 2051032136}
   UserIndicator: {fileID: 1351588226}
   AudioManager: {fileID: 1289596913}
+  data: {fileID: 11400000, guid: 564b0fb8ae3b947448d1292a6fd07d65, type: 2}
   discardPile: []
+  _enemies: []
   isWaitingForPlayerChoose: 0
   EndTurnClicked:
     m_PersistentCalls:
