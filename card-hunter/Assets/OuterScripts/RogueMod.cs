@@ -51,12 +51,14 @@ public class Commission//á÷ÁÔÎ¯ÍÐ
     public string monster;
     public int difficulty;
     public int place;//1:É­ÁÖ 2:»ÄÄ® 3:»ðÉ½
-    public Commission(int id, string monster, int difficulty, int place)
+    public int money;
+    public Commission(int id, string monster, int difficulty, int place,int money)
     {
         this.id = id;
         this.monster = monster;
         this.difficulty = difficulty;
         this.place = place;
+        this.money = money;
     }
 }
 public class RogueMod : MonoBehaviour

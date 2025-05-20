@@ -8,7 +8,7 @@ public class DeckWin : MonoBehaviour
     public GameObject cardWin;
     public event Action<int> DeleteConfirm;
     private List<GameObject> Cards=new List<GameObject>();
-    private int ChosedNum;
+    private int ChosedNum=-1;
 
     public void Show(List<int>deck)
     {
@@ -49,7 +49,10 @@ public class DeckWin : MonoBehaviour
 
     private void ConfirmHandle()
     {
-        DeleteConfirm?.Invoke(ChosedNum);
+        if (ChosedNum != -1)
+        {
+            DeleteConfirm?.Invoke(ChosedNum);
+        }
     }
 
     private void ClickHandler(int num)
