@@ -48,8 +48,8 @@ public class EnemySkillSystem : MonoBehaviour
             {
                 nextSkillID = availableSkills[Random.Range(0, availableSkills.Count)];
                 skillselected = 1;
-            } while (nextSkillID == 4);
-            // 特判：大贼龙的4技能不能在这里选
+            } while (nextSkillID == 4 || nextSkillID == 0 || nextSkillID == 10);
+            // 特判：大贼龙的4技能,0技能力竭,蛮颚龙的10技能龙吼不能在这里选
         }
 
 
@@ -85,7 +85,7 @@ public class EnemySkillSystem : MonoBehaviour
     }
 
     //执行技能
-    public IEnumerator ExecuteCurrentSkill()
+    public IEnumerator ExecuteCurrentSkill(int cut)
     {
         currentSkillID = nextSkillID;//获取上回合选定的技能
         GameConfig.EnemySkillConfig config = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == currentSkillID);
@@ -96,6 +96,9 @@ public class EnemySkillSystem : MonoBehaviour
         List<Vector2Int> actualrangepos = GetSkillRange(config, enemypos, enemydirection);
         ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
         mapManager.ChangeColorByPos(actualrangepos, color);
+
+        //当cut=-1时，打断剩余部分
+        if (cut ==-1) yield break;
 
         // 执行移动
         if (config.moveType!=GameConfig.MoveType.None)
@@ -114,13 +117,17 @@ public class EnemySkillSystem : MonoBehaviour
         {
             Vector2Int newpos = aiController._currentGridPos + StdVector[aiController.direction];
             //如果前面有墙或者人，直接停止
-            if (mapManager.IsPositionOccupied(newpos))  break;
+            if (!checkPosValid(newpos) || mapManager.IsPositionOccupied(newpos))  break;
             aiController._currentGridPos += StdVector[aiController.direction];
             aiController.UpdatePosition(aiController._currentGridPos);
             yield return new WaitForSeconds(0.3f);
         }
     }
-
+    private bool checkPosValid(Vector2Int Pos)
+    {
+        if (Pos.x < 0 || Pos.x >= GameConfig.size || Pos.y < 0 || Pos.y >= GameConfig.size) return false;
+        return true;
+    }
     private IEnumerator AddArmor(GameConfig.EnemySkillConfig config)
     {
         aiController.armor += config.armor;
@@ -140,10 +147,11 @@ public class EnemySkillSystem : MonoBehaviour
         {
             if(player!=null)
             {
+                if (config.pushdebuff != GameConfig.EnemyDebuff.None)
+                    battleManager.ApplyDebuff(player, config.pushdebuff, aiController);
                 for (int i = 1; i <= config.hittimes; i++)
                 {
                     battleManager.ApplyDamage(player, config.damage, aiController);
-                    battleManager.ApplyDebuff(player, config.pushdebuff, aiController);
                     yield return new WaitForSeconds(0.2f);
                 }
             }

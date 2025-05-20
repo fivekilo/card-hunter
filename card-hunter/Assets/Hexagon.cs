@@ -46,6 +46,8 @@ public class Hexagon : MonoBehaviour
     public void ContentRemove()
     {
         AddImage("background");
+        ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
+        ChangeColor(color);
         this.tag = "Untagged";
     }
     public void ObstacleAdd()

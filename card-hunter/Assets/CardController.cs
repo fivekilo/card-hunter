@@ -88,6 +88,7 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         if (!isDragging)
         {
             transform.localScale = hoverScale;
+            transform.position += new Vector3(0, 50);
             // 提高层级确保悬停卡牌在最上方
             canvas2.sortingOrder += 5;
         }
@@ -98,6 +99,7 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
         if (!isDragging)
         {
             transform.localScale = normalScale;
+            transform.position -= new Vector3(0, 50);
             // 恢复层级
             canvas2.sortingOrder -= 5;
         }
