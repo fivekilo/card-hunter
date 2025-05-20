@@ -710,6 +710,7 @@ public class BattleManager : MonoBehaviour
     //怪物对玩家施加debuff
     public void ApplyDebuff(PlayerInfo target, GameConfig.EnemyDebuff debuff, EnemyAIController origin)
     {
+        Debug.Log("玩家被施加了负面效果！");
         if (debuff == GameConfig.EnemyDebuff.CantMove) 
             playerBuff.CantMove++;
         else if  (debuff == GameConfig.EnemyDebuff.Numbness)
