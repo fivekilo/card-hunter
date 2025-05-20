@@ -114,13 +114,17 @@ public class EnemySkillSystem : MonoBehaviour
         {
             Vector2Int newpos = aiController._currentGridPos + StdVector[aiController.direction];
             //如果前面有墙或者人，直接停止
-            if (mapManager.IsPositionOccupied(newpos))  break;
+            if (!checkPosValid(newpos) || mapManager.IsPositionOccupied(newpos))  break;
             aiController._currentGridPos += StdVector[aiController.direction];
             aiController.UpdatePosition(aiController._currentGridPos);
             yield return new WaitForSeconds(0.3f);
         }
     }
-
+    private bool checkPosValid(Vector2Int Pos)
+    {
+        if (Pos.x < 0 || Pos.x >= GameConfig.size || Pos.y < 0 || Pos.y >= GameConfig.size) return false;
+        return true;
+    }
     private IEnumerator AddArmor(GameConfig.EnemySkillConfig config)
     {
         aiController.armor += config.armor;
