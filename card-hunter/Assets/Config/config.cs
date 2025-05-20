@@ -14,7 +14,7 @@ public class GameConfig : ScriptableObject
     public const int InitialHandCardNum = 4; //初始手牌数
     public const int MaxHandCardNum = 8;
     public const int MaxBladeLevel = 3; //最大气刃等级
-    public const int MaxBladeNum = 50;//最大气刃值
+    public const int MaxBladeNum = 8;//最大气刃值
     public const string BackgroundColor = "#aaa58f";//背景颜色
     //地图要素
     public enum Content
@@ -240,7 +240,7 @@ public class GameConfig : ScriptableObject
     {
         new Vector2Int(0,0),//移动长度 下上限
         new Vector2Int(0,0),//1
-        new Vector2Int(1,1),//2
+        new Vector2Int(0,1),//2
         new Vector2Int(0,0),//3
         new Vector2Int(0,0),//4
         new Vector2Int(0,0),//5
@@ -280,7 +280,7 @@ public class GameConfig : ScriptableObject
         5,//4
         0,//5
         0,//6
-        5,//7
+        0,//7
         0,//8
         0,//9
         0,//10

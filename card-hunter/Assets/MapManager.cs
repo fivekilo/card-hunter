@@ -260,7 +260,7 @@ public class MapManager : MonoBehaviour
         battleManager.UserIndicator.text = "玩家回合";
     }
 
-    public IEnumerator AttackCommand(List<Vector2Int> directions, Vector2Int player, Vector2Int length, Action<Vector2Int> callback)//移动指令
+    public IEnumerator AttackCommand(List<Vector2Int> directions, Vector2Int player, Vector2Int length, Action<Vector2Int> callback , Card card)//移动指令
     {
 
        /* yield return new WaitUntil(() => MoveComplete == true);
@@ -315,6 +315,7 @@ public class MapManager : MonoBehaviour
         battleManager.isWaitingForPlayerChoose = false;
         Vector2Int Direction = GetNewDir(ClickedPos , player);
         callback(Direction);
+        battleManager.Attack(card);
     }
 
     //让指定坐标（地图坐标）的格子变色

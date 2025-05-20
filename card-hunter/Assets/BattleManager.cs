@@ -394,7 +394,7 @@ public class BattleManager : MonoBehaviour
                 List<int> AllDir = new List<int> { 0, 1, 2, 3, 4, 5 };
                 if (Player.Situation == 0) newDir = AllDir;
                 Player.ModifySituation(1);
-                yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback));
+                yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback, card));
             }
         }
         if (card.Move != null && playerBuff.CantMove == 0)
@@ -422,55 +422,11 @@ public class BattleManager : MonoBehaviour
             List<int> AllDir = new List<int> { 0, 1, 2, 3, 4, 5 };
             if (Player.Situation == 0) newDir = AllDir;
             Player.ModifySituation(1);
-            yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback));
+            yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback , card));
         }
         
 
-        if (card.AttackDirection != null)
-        {
-            int[] dx = { 1, 0, -1, -1, 0, 1 };
-            int[] dy = { 0, 1, 1, 0, -1, -1 };
-            int PlayerDirId = -1;
-            for (int i = 0; i < 6; i++)
-            {
-                if (Player.Direction.x == dx[i] && Player.Direction.y == dy[i]) { PlayerDirId = i; break; }
-            }
-            FindAllEnemies();
-            List<EnemyAIController> AttackedMonster = new();
-            foreach (int Dir_id in card.AttackDirection)
-            {
-                for (int i = 0; i <= card.AttackLength; i++)
-                {
-                    int newDir = (Dir_id + PlayerDirId) % 6;
-                    Vector2Int nowPos = Player.PlayerGridPos + new Vector2Int(dx[newDir] * i, dy[newDir] * i);
-                    foreach (EnemyAIController enemyAI in _enemies)
-                    {
-                        if (enemyAI.GetCurrentGridPos() == nowPos && !AttackedMonster.Contains(enemyAI))
-                        {
-                            AttackedMonster.Add(enemyAI);
-                        }
-                    }
-                }
-            }
-            foreach(EnemyAIController enemy in AttackedMonster)
-            {
-                Vector2Int Attack = card.Attack;
-                if (card.cardNum == 21)
-                {
-                    Attack.y += Player.curBladeLevel;
-                }
-                enemy.ReduceHealth(CalculateAttack(Attack, enemy));
-                if (card.cardNum == 14 && enemy.enemybuff.Wound > 2)
-                {
-                    enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound - 2);
-                    enemy.ReduceHealth(CalculateAttack(new(10, 1), enemy));
-                }
-                if (card.Wound > 0)
-                {
-                    enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound + card.Wound);
-                }
-            }
-        }
+        
 
         if (card.DeltaBladeNum != 0)
         {
@@ -642,7 +598,56 @@ public class BattleManager : MonoBehaviour
             card.CBuse = false;
         }
     }
-
+    public void Attack(Card card)
+    {
+        if (card.AttackDirection != null)
+        {
+            int[] dx = { 1, 0, -1, -1, 0, 1 };
+            int[] dy = { 0, 1, 1, 0, -1, -1 };
+            int PlayerDirId = -1;
+            for (int i = 0; i < 6; i++)
+            {
+                if (Player.Direction.x == dx[i] && Player.Direction.y == dy[i]) { PlayerDirId = i; break; }
+            }
+            FindAllEnemies();
+            List<EnemyAIController> AttackedMonster = new();
+            int length = card.AttackLength;
+         //   List<int> AttackRange = card.AttackRange;
+        /*    foreach (int Dir_id in AttackRange)
+            {
+                for (int i = 0; i <= Length; i++)
+                {
+                    int newDir = (Dir_id + PlayerDirId) % 6;
+                    Vector2Int nowPos = Player.PlayerGridPos + new Vector2Int(dx[newDir] * i, dy[newDir] * i);
+                    foreach (EnemyAIController enemyAI in _enemies)
+                    {
+                        if (enemyAI.GetCurrentGridPos() == nowPos && !AttackedMonster.Contains(enemyAI))
+                        {
+                            AttackedMonster.Add(enemyAI);
+                        }
+                    }
+                }
+            }*/
+            foreach (EnemyAIController enemy in AttackedMonster)
+            {
+                Vector2Int Attack = card.Attack;
+                if (card.cardNum == 21)
+                {
+                    Attack.y += Player.curBladeLevel;
+                }
+                enemy.ReduceHealth(CalculateAttack(Attack, enemy));
+                if (card.cardNum == 14 && enemy.enemybuff.Wound > 2)
+                {
+                    enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound - 2);
+                    enemy.ReduceHealth(CalculateAttack(new(10, 1), enemy));
+                }
+                if (card.Wound > 0)
+                {
+                    enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound + card.Wound);
+                }
+            }
+        }
+    }
     //给怪物检测攻击范围内有无玩家
     public List<PlayerInfo> GetTargetsInRange(List<Vector2Int> actualrangepos)
     {
