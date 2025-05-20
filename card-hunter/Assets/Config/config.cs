@@ -61,7 +61,7 @@ public class GameConfig : ScriptableObject
         "强化纳刀",//32
         "樱花斩",//33
         "炼气解放无双斩",//34
-        "集中突刺【无尽】",//35
+        "集中突刺无尽",//35
         "圆月",//36
         "红刃狂热"//37
     }.AsReadOnly();
@@ -79,12 +79,12 @@ public class GameConfig : ScriptableObject
         "Scabbard attack",//10
         "xiaojv",//11
         "Intentional destruction",//12
-        "Direct slash",//13
-        "Direct slash",//14
+        "13",//13
+        "14",//14
         "Direct slash",//15
         "Direct slash",//16
         "Direct slash",//17
-        "Direct slash",//18
+        "18",//18
         "Direct slash",//19
         "The gas blade pierces",//20
         "Gas blade pocket cutting",//21
@@ -141,7 +141,7 @@ public class GameConfig : ScriptableObject
         "向任意方向最多移动两格，进入自由态。清空气刃槽，每清空一格下一次攻击伤害提高2。",//32
         "最多位移3格，对沿途的怪物造成6*3伤害，位移可以穿过怪物，提升气刃等级，进入自由态。",//33
         "限连携态，有两层气刃等级时使用。消耗两层气刃等级，造成7*6伤害，获得30点格挡，进入自由态。消耗",//34
-        "造成8点伤害，回复2气刃槽，如果有至少3层【伤口】，消耗3层，造成15点伤害并提升一级气刃等级 转向 。",//35
+        "造成8点伤害，回复2气刃槽，如果有至少3层【伤口】，消耗3层，造成15点伤害并提升一级气刃等级 转向 ",//35
         "向角色的各个方向各两格展开一个圆形区域，持续三回合。在该区域内，角色的气刃槽锁定为8格，【见切】和【居合】所需费用降低1点。在离开圆月时气刃槽清空",//36
         "提升在红色气刃等级下伤害的倍率0.5，在红刃时不能获得任何格挡值"//37
     }.AsReadOnly();
@@ -550,6 +550,9 @@ public class GameConfig : ScriptableObject
         2,//32
         2,//33
         1,//34
+        2,//35
+        2,//36
+        2,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<int> EnterState = new List<int>
