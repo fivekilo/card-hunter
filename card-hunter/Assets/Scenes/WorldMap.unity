@@ -278,6 +278,7 @@ MonoBehaviour:
   AddCardWin: {fileID: 8220234830265469535, guid: 166856f5d94c6bd45921bd9d1a7d6186, type: 3}
   DeckBtn: {fileID: 422816720}
   DeckWin: {fileID: 6351952056174906358, guid: fc0f7dcd39514c2478ed3fac7cb5dd72, type: 3}
+  Camera: {fileID: 1621727204}
 --- !u!4 &233589024
 Transform:
   m_ObjectHideFlags: 0
@@ -1089,6 +1090,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23e8a7336fcfb374996a504accc4e847, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Stop: 0
 --- !u!1 &2136577884
 GameObject:
   m_ObjectHideFlags: 0

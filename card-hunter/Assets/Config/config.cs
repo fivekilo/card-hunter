@@ -898,10 +898,14 @@ public class GameConfig : ScriptableObject
 
     //GameManager
     public const int CommissionAmount = 7;
+    public static readonly Vector3 CameraNew = new Vector3(100, 100, -10);//摄像机移走位置
+    public static readonly Vector3 CameraDefault = new Vector3(0, 0, -10);//摄像机原本位置
 
     //DeckWin 画图参数
     public const int XBound = 720, YBound = 270;//X,Y界限坐标
     public const int Xdelta = 440, Ydelta = 540;//两卡间隔
+    public static readonly Vector3 hoverScale = new Vector3(2.122892f, 2.54747f, 1f);
+    public static readonly Vector3 normalScale = new Vector3(1.73865f, 2.08638f, 1f);
 
     //RouteRender参数
     public static IReadOnlyList<string> Destinies = new List<string> { "Camp","Forest", "Desert", "Valcano" };
