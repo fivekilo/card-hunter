@@ -58,8 +58,12 @@ public class GameConfig : ScriptableObject
         "气刃踏步斩",//29
         "一字斩",//30
         "刚气刃斩",//31
-        "",//32
-        "",//33
+        "强化纳刀",//32
+        "樱花斩",//33
+        "炼气解放无双斩",//34
+        "集中突刺【无尽】",//35
+        "圆月",//36
+        "红刃狂热"//37
     }.AsReadOnly();
     public static IReadOnlyList<string> CardImageName=new List<string> 
     {"",//卡图名称
@@ -94,8 +98,12 @@ public class GameConfig : ScriptableObject
         "Direct slash",//29
         "Direct slash",//30
         "Direct slash",//31
-        "",//32
-        "",//33
+        "Direct slash",//32
+        "Direct slash",//33
+        "Direct slash",//34
+        "Direct slash",//35
+        "Direct slash",//36
+        "Direct slash",//37
         }.AsReadOnly();
     public static IReadOnlyList<string> CardText = new List<string>
     { "", //卡牌描述
@@ -130,8 +138,12 @@ public class GameConfig : ScriptableObject
         "向前移动一格，造成8点伤害，消耗3格气刃槽，派生一字斩",//29
         "对前方造成4点伤害，消耗1格气刃槽，派生刚气刃斩,转向,消耗，虚无",//30
         "造成8*2点伤害，获得12点格挡，提升气刃等级,转向,消耗，虚无",//31
-        "",//32
-        "",//33
+        "向任意方向最多移动两格，进入自由态。清空气刃槽，每清空一格下一次攻击伤害提高2。",//32
+        "最多位移3格，对沿途的怪物造成6*3伤害，位移可以穿过怪物，提升气刃等级，进入自由态。",//33
+        "限连携态，有两层气刃等级时使用。消耗两层气刃等级，造成7*6伤害，获得30点格挡，进入自由态。消耗",//34
+        "造成8点伤害，回复2气刃槽，如果有至少3层【伤口】，消耗3层，造成15点伤害并提升一级气刃等级 转向 。",//35
+        "向角色的各个方向各两格展开一个圆形区域，持续三回合。在该区域内，角色的气刃槽锁定为8格，【见切】和【居合】所需费用降低1点。在离开圆月时气刃槽清空",//36
+        "提升在红色气刃等级下伤害的倍率0.5，在红刃时不能获得任何格挡值"//37
     }.AsReadOnly();
     public static IReadOnlyList<int> CardType = new List<int> 
     { 3,//卡牌类型
@@ -166,6 +178,12 @@ public class GameConfig : ScriptableObject
         0,//29
         0,//30
         0,//31
+        2,//32
+        0,//33
+        0,//34
+        0,//35
+        1,//36
+        3,//37
     }.AsReadOnly();//0 攻击 1技能 2移动 3能力
     public static IReadOnlyList<int> Cost = new List<int>
     { 3,//费用
@@ -200,6 +218,12 @@ public class GameConfig : ScriptableObject
         1,//29
         0,//30
         2,//31
+        1,//32
+        2,//33
+        3,//34
+        1,//35
+        2,//36
+        1,//37
     }.AsReadOnly();
     public static IReadOnlyList<List<int>> Move = new List<List<int>>
     {null,//移动方向
@@ -234,6 +258,12 @@ public class GameConfig : ScriptableObject
         new List<int>{0 },//29
         null,//30
         null,//31
+        new List<int>{0,1,2,4,5},//32
+        new List<int>{0,1,2,4,5},//33
+        null,//34
+        null,//35
+        null,//36
+        null,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<List<int>> AttackRange = new List<List<int>>
@@ -269,6 +299,12 @@ public class GameConfig : ScriptableObject
         new List<int>{0},//29
         new List<int>{0},//30
         new List<int>{0},//31
+        null,//32
+        new List<int>{0},//33
+        new List<int>{0},//34
+        new List<int>{0},//35
+        null,//36
+        null,//37
     };
 
 
@@ -306,6 +342,12 @@ public class GameConfig : ScriptableObject
         new Vector2Int(0,1),//29
         new Vector2Int(0,0),//30
         new Vector2Int(0,0),//31
+        new Vector2Int(0,2),//32
+        new Vector2Int(0,3),//33
+        new Vector2Int(0,0),//34
+        new Vector2Int(0,0),//35
+        new Vector2Int(0,0),//36
+        new Vector2Int(0,0),//37
     }.AsReadOnly();
 
     public static IReadOnlyList<int> Derivation = new List<int>
@@ -341,6 +383,12 @@ public class GameConfig : ScriptableObject
         30,//29
         31,//30
         0,//31
+        0,//32
+        0,//33
+        0,//34
+        0,//35
+        0,//36
+        0,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<bool> Consumption = new List<bool>
@@ -376,6 +424,12 @@ public class GameConfig : ScriptableObject
         false,//29
         true,//30
         true,//31
+        false,//32
+        false,//33
+        true,//34
+        false,//35
+        false,//36
+        false,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DrawCard = new List<int>
@@ -411,6 +465,12 @@ public class GameConfig : ScriptableObject
         0,//29
         0,//30
         0,//31
+        0,//32
+        0,//33
+        0,//34
+        0,//35
+        0,//36
+        0,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<bool> Nothingness = new List<bool>
@@ -446,6 +506,12 @@ public class GameConfig : ScriptableObject
         false,//29
         true,//30
         true,//31
+        false,//32
+        false,//33
+        false,//34
+        false,//35
+        false,//36
+        false,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<int> OnlyLState = new List<int>
@@ -481,6 +547,9 @@ public class GameConfig : ScriptableObject
         2,//29
         2,//30
         2,//31
+        2,//32
+        2,//33
+        1,//34
     }.AsReadOnly();
 
     public static IReadOnlyList<int> EnterState = new List<int>
@@ -516,7 +585,12 @@ public class GameConfig : ScriptableObject
         2,//29
         2,//30
         2,//31
-
+        1,//32
+        1,//33
+        1,//34
+        2,//34
+        0,//36
+        0,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<List<int>> Buff = new List<List<int>>
@@ -546,12 +620,18 @@ public class GameConfig : ScriptableObject
         null,//23
         null,//24
         null,//25
-        null,//26
-        null,//27
-        null,//28
+        new List<int>{10},//26 气刃护盾10
+        new List<int>{11},//27 居登11
+        new List<int>{12},//28 伤口管理12
         null,//29
         null,//30
         null,//31
+        null,//32
+        null,//33
+        null,//34
+        null,//35
+        null,//36
+        new List<int>{13},//37 红刃狂热13
     }.AsReadOnly();
 
     public static IReadOnlyList<int> Wound = new List<int>
@@ -587,6 +667,12 @@ public class GameConfig : ScriptableObject
         0,//29
         0,//30
         0,//31
+        0,//32
+        0,//33
+        0,//34
+        0,//35
+        0,//36
+        0,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<List<int>> AttackDirection = new List<List<int>>
@@ -622,6 +708,12 @@ public class GameConfig : ScriptableObject
         new List<int>{0},//29
         new List<int>{0,1,5},//30
         new List<int>{0,1,5},//31
+        null,//32
+        new List<int>{3},//33
+        new List<int>{0},//34
+        new List<int>{0},//35
+        null,//36
+        null,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<int> AttackLength = new List<int>
@@ -657,6 +749,12 @@ public class GameConfig : ScriptableObject
         1,//29
         1,//30
         1,//31
+        0,//32
+        3,//33
+        1,//34
+        1,//35
+        0,//36
+        0,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<Vector2Int> Attack = new List<Vector2Int>
@@ -692,6 +790,12 @@ public class GameConfig : ScriptableObject
         new Vector2Int(8 , 1),//29
         new Vector2Int(4 , 1),//30
         new Vector2Int(8 , 2),//31
+        new Vector2Int(0 , 0),//32
+        new Vector2Int(6 , 3),//33
+        new Vector2Int(6 , 7),//34
+        new Vector2Int(8 , 1),//35
+        new Vector2Int(0,0),//36
+        new Vector2Int(0,0),//37
     }.AsReadOnly();
 
     public static IReadOnlyList<int> Defence = new List<int>
@@ -727,6 +831,12 @@ public class GameConfig : ScriptableObject
         0,//29
         0,//30
         12,//31
+        0,//32
+        0,//33
+        30,//34
+        0,//35
+        0,//36
+        0,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DeltaCost = new List<int>
@@ -762,6 +872,12 @@ public class GameConfig : ScriptableObject
         0,//29
         0,//30
         0,//31
+        0,//32
+        0,//33
+        0,//34
+        0,//35
+        0,//36
+        0,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DeltaBladeNum = new List<int>
@@ -797,6 +913,12 @@ public class GameConfig : ScriptableObject
         -3,//29
         -1,//30
         -4,//31
+        0,//32
+        0,//33
+        0,//34
+        2,//35
+        0,//36
+        0,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DeltaBladeLevel = new List<int>
@@ -832,6 +954,12 @@ public class GameConfig : ScriptableObject
         0,//29
         0,//30
         1,//31
+        0,//32
+        1,//33
+        -2,//34
+        0,//35
+        0,//36
+        0,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DeltaHealth = new List<int>
@@ -867,6 +995,12 @@ public class GameConfig : ScriptableObject
         0,//29
         0,//30
         0,//31
+        0,//32
+        0,//33
+        0,//34
+        0,//35
+        0,//36
+        0,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<bool> Sequence = new List<bool>
@@ -902,6 +1036,12 @@ public class GameConfig : ScriptableObject
         true,//29
         true,//30
         true,//31
+        true,//32
+        false,//33
+        true,//34
+        true,//35
+        true,//36
+        true,//37
     }.AsReadOnly();
     
     public enum MoveType { None, Forward, Backward,Fly}
