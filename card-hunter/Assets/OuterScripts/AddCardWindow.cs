@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class AddCardWindow : MonoBehaviour
 {
-    private int ChosedNum;
+    private int ChosedNum=-1;
     private Action<int> addCard;
     private List<GameObject> Cards=new List<GameObject>();
     public void AddCard(Action<int>addCard,List<int>CardsID)//接口函数
@@ -38,9 +38,12 @@ public class AddCardWindow : MonoBehaviour
     }
     private void Confirm()
     {
-        addCard?.Invoke(ChosedNum);
-        //销毁当前窗口
-        Destroy(this.gameObject);
+        if (ChosedNum != -1)
+        {
+            addCard?.Invoke(ChosedNum);
+            //销毁当前窗口
+            Destroy(this.gameObject);
+        }
     }
     private void ClickHandler(int num)
     {
