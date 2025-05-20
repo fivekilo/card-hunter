@@ -40,6 +40,7 @@ public class BattleManager : MonoBehaviour
     public CardManager cardManager;
     public TextMeshProUGUI UserIndicator;
     public AudioManager AudioManager;
+    public SharedData data;
     // public int i = 1;
     private List<Card> InitialDeck = new(); 
     private List<Card> deck = new ();      
@@ -111,9 +112,8 @@ public class BattleManager : MonoBehaviour
         UserIndicator.text = "初始化中";
         OnBladeGasChange?.Invoke(5);
         OnBladeLevelChange?.Invoke(3);
-
         InitializeDeck();
-
+  //      data
         ChangeState(BattleState.PlayerDraw);
     }
 
@@ -355,7 +355,7 @@ public class BattleManager : MonoBehaviour
                 yield return StartCoroutine(mapmanager.AttackCommand(GetAdjacent(newDir), Player.PlayerGridPos, new(0, card.AttackLength), callback));
             }
         }
-        if (card.Move != null)
+        if (card.Move != null && playerBuff.CantMove == 0)
         {
             //  OnPositionChange?.Invoke(this, new PlayerWantMoveEventArgs(GetAdjacent(card.Move) , /*card.MoveDistance*/1));
             isWaitingForPlayerChoose = true;
@@ -410,24 +410,26 @@ public class BattleManager : MonoBehaviour
                     }
                 }
             }
-            int cnt = 0;
             foreach(EnemyAIController enemy in AttackedMonster)
             {
-                cnt++;
-                Debug.Log("被打第" + cnt.ToString() + "次");
                 Vector2Int Attack = card.Attack;
                 if (card.cardNum == 21)
                 {
                     Attack.y += Player.curBladeLevel;
-                    Debug.Log("登龙造成" + Attack.x + " " + Attack.y);
                 }
-                
-                enemy.ReduceHealth(CalculateAttack(Attack));
-                //      enemy.ReduceHealth(card.Attack.x * card.Attack.y);
-           //     Debug.Log(card.Attack.x.ToString()  + " " +  card.Attack.y.ToString());
+                enemy.ReduceHealth(CalculateAttack(Attack, enemy));
+                if (card.cardNum == 14 && enemy.enemybuff.Wound > 0)
+                {
+                    enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound - 2);
+                    enemy.ReduceHealth(CalculateAttack(new(10, 1), enemy));
+                }
+                if (card.Wound > 0)
+                {
+                    enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound + card.Wound);
+                }
             }
-        //    Debug.Log(AttackedMonster.Count);
         }
+
         if (card.DeltaBladeNum != 0)
         {
             Player.ModifyBladeNum(Player.curBladeNum + card.DeltaBladeNum);
@@ -530,7 +532,7 @@ public class BattleManager : MonoBehaviour
         res = (int)((card.Attack.x + playerBuff.Power )* BladeLevelBuff) * card.Attack.y;
         return res;
     }*/
-    public int CalculateAttack(Vector2Int Attack)
+    public int CalculateAttack(Vector2Int Attack , EnemyAIController enemy)
     {
         float BladeLevelBuff = 1;
         switch (Player.curBladeLevel)
@@ -549,7 +551,7 @@ public class BattleManager : MonoBehaviour
                 break;
         }
         int res = 1;
-        res = (int)((Attack.x + playerBuff.Power) * BladeLevelBuff) * Attack.y;
+        res = (int)((Attack.x + playerBuff.Power) * BladeLevelBuff * Attack.y * (enemy.enemybuff.Wound > 0 ? 1.5f : 1.0f));
         return res;
     }
     public void PlayCard(Card card)
@@ -622,7 +624,7 @@ public class BattleManager : MonoBehaviour
                 if (enemy.GetCurrentGridPos() == newPos) CanMove = false;
             }
             if (CanMove) OnPositionChanged?.Invoke(newPos);
-            origin.ReduceHealth(CalculateAttack(new(5 , 4)));
+            origin.ReduceHealth(CalculateAttack(new(5 , 4) , origin));
             OnBladeLevelChange?.Invoke(Player.curBladeLevel + 1);
             AudioManager.PlayCardSpecialSound(22);
             return;
