@@ -140,10 +140,11 @@ public class EnemySkillSystem : MonoBehaviour
         {
             if(player!=null)
             {
+                if (config.pushdebuff != GameConfig.EnemyDebuff.None)
+                    battleManager.ApplyDebuff(player, config.pushdebuff, aiController);
                 for (int i = 1; i <= config.hittimes; i++)
                 {
                     battleManager.ApplyDamage(player, config.damage, aiController);
-                    battleManager.ApplyDebuff(player, config.pushdebuff, aiController);
                     yield return new WaitForSeconds(0.2f);
                 }
             }

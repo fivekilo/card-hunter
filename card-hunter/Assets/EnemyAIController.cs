@@ -42,6 +42,7 @@ public class EnemyAIController : MonoBehaviour
         _player= FindObjectOfType<PlayerInfo>();
         _currentHealth = _maxHealth;
         text = GetComponentInChildren<TextMeshProUGUI>();
+        text.text = $"{_currentHealth}/{_maxHealth}";
         arrowtransform = transform.Find("Arrow");
         //传入技能和buff
         skillSystem = GetComponent<EnemySkillSystem>();
