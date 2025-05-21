@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
@@ -327,7 +328,19 @@ public class GameManager : MonoBehaviour
         Destroy(SP);
         Camp.SetActive(true);
     }
-
+    private void RefreshShop()
+    {
+        HashSet<column>Set = new HashSet<column>();
+        System.Random rand = new System.Random();
+        while (Set.Count < 4)
+        {
+            int r=rand.Next(GameConfig.CardColumnNormal.Count);
+            Set.Add(GameConfig.CardColumnNormal[r]);
+        }
+        int _=rand.Next(GameConfig.CardcolumnRare.Count);
+        Set.Add(GameConfig.CardColumnNormal[_]);
+        CardsInShop=Set.ToList();
+    }
     void Start()
     {
         //初始化Rogue Mod
@@ -337,6 +350,9 @@ public class GameManager : MonoBehaviour
         //初始化SharedData
         shareddata.playerinfo = playerinfo;
         shareddata.Complete = false;
+
+        RefreshShop();
+
         camp.GetComponent<Camp>().ClickEvent += GetCommission;
         Player.GetComponent<PlayerMove>().encounterEvent += EventChoose;
         ArriveBattleField += BattleEnter;
