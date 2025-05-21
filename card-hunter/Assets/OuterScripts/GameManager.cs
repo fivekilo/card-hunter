@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     public GameObject DeckWin;
     public GameObject Camera;
     public GameObject Commissionboard;
+    public GameObject StartMenu;
+    public GameObject InCamp;
+    public GameObject ExitBtn;
     public event Action<Choice> Chosed;
     public event Action<int> AddCard;
     private List<bool> AbleToMove=new List<bool> {false,false };
@@ -24,17 +27,30 @@ public class GameManager : MonoBehaviour
     private RogueMod RM;
     private GameObject DW;//卡组窗口
     private GameObject CB;//委托栏
+    private GameObject SM;//开始菜单
+    private GameObject Camp;//营地菜单
     private List<Commission> AcceptedCommission;
     private event Func<Commission,IEnumerator> ArriveBattleField;
     private event Action ArriveCamp;
     private int PlayerProgress = 0;//玩家进度,标识行程
     private void ShowStartMenu()//显示起始界面
     {
+        //移开摄像头
+        Camera.transform.position = GameConfig.CameraNew;
 
+        SM=Instantiate(StartMenu,Vector3.zero,Quaternion.identity);
+        SM.transform.Find("Background/Start").GetComponent<ConfirmBtn>().Confirm += GameStart;
+        SM.transform.Find("Background/Exit").GetComponent<ConfirmBtn>().Confirm += Exit;
+    }
+    private void EnterCamp()
+    {
+        Camp = Instantiate(InCamp, Vector3.zero, Quaternion.identity);
     }
     private void GameStart()//游戏启动
     {
-
+        Destroy(SM);
+        Camp=Instantiate(InCamp,Vector3.zero,Quaternion.identity);
+        Camp.transform.Find("Commission").GetComponent<ConfirmBtn>().Confirm += GetCommission;
     }
     private void Save()//存档
     {
@@ -42,10 +58,14 @@ public class GameManager : MonoBehaviour
     }
     private void Exit()//退出游戏
     {
-
+        Application.Quit();
     }
     private void GetCommission()
     {
+        //移回镜头
+        Camera.transform.position = GameConfig.CameraDefault;
+        Destroy(Camp);
+
         List<Commission> commissions = GameConfig.Commissions;
         List<Commission> selected = RM.ChooseCommission(commissions, 1);
         CB = Instantiate(Commissionboard,Vector3.zero,Quaternion.identity);
@@ -278,6 +298,7 @@ public class GameManager : MonoBehaviour
         Chosed += ChoiceHandle;
         AddCard += AddToDeck;
         DeckBtn.GetComponent<Btn>().Clicked += CheckDeck;
+        ExitBtn.GetComponent<Btn>().Clicked += Exit;
         ShowStartMenu();
     }
 

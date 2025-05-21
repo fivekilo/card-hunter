@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using TMPro;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
@@ -32,6 +33,10 @@ public class EnemyAIController : MonoBehaviour
     public EnemySkillSystem skillSystem;
     [SerializeField] public List<int> selfSkills = new List<int>();//自身技能组（需要预先在inspector里设置好！）
 
+    //形态指示器：蛮颚龙，雷狼龙，冰咒龙
+    public int enemystate = 0;
+    public bool isdead = false;//是否死亡
+
     void Start()
     {
         _battleManager = GetComponentInParent<BattleManager>();
@@ -54,6 +59,13 @@ public class EnemyAIController : MonoBehaviour
    
     public IEnumerator TakeTurn()//执行回合
     {
+        if (isdead == true)
+        {
+            havechangedskill = false;//重置变招函数
+            yield return skillSystem.ExecuteCurrentSkill(1);
+            yield break;
+        }//判定怪物死亡
+
         havechangedskill = false;//重置变招函数
         //先出上一回合指定的招式
         yield return skillSystem.ExecuteCurrentSkill(-1);
@@ -201,15 +213,24 @@ public class EnemyAIController : MonoBehaviour
         else
             Debug.Log("怪物回复生命值了！");
         text.text = $"{_currentHealth}/{_maxHealth}";
-        //特判：蛮颚龙的进暴怒和退暴怒
-        if(name=="蛮颚龙"&& (float)_currentHealth * 5 < (float)_maxHealth)//退暴怒
+        if (_currentHealth == 0)
         {
+            isdead = true;
+            Debug.Log("怪物死亡了！");
+            return;
+        }
+        //在怪物存活时进行特判
+        //特判：蛮颚龙的进暴怒和退暴怒
+        if(name=="蛮颚龙"&& (float)_currentHealth * 5 < (float)_maxHealth && enemystate == 1)//退暴怒
+        {
+            enemystate = 0;
             StartCoroutine(skillSystem.ExecuteCurrentSkill(-1));
             skillSystem.nextSkillID = 0;
             Debug.Log("蛮颚龙退出暴怒状态了！");
         }
-        else if (name == "蛮颚龙" && (float)_currentHealth * 1.25 < (float)_maxHealth)//进暴怒
+        else if (name == "蛮颚龙" && (float)_currentHealth * 1.25 < (float)_maxHealth && (float)_currentHealth * 5 > (float)_maxHealth &&enemystate==0)//进暴怒
         {
+            enemystate = 1;
             selfSkills.Add(10);
             Debug.Log("蛮颚龙进入暴怒状态了！");
         }
