@@ -157,15 +157,20 @@ public class BattleManager : MonoBehaviour
             discardPile.Add(newcard);
             CardIntoHand(newcard);
         }*/
-        for (int i = 1; i <= 3; i++)
+        for (int i = 1; i <= 5; i++)
         {
-            Card newcard = cardManager.CreateCard(24  ,cardManager.transform );
+            Card newcard = cardManager.CreateCard(21  ,cardManager.transform );
             discardPile.Add(newcard);
             CardIntoHand(newcard);
         }
-        Card newcard1 = cardManager.CreateCard(1, cardManager.transform);
+        Card newcard1 = cardManager.CreateCard(11, cardManager.transform);
         discardPile.Add(newcard1);
         CardIntoHand(newcard1);
+
+        Card newcard2 = cardManager.CreateCard(27, cardManager.transform);
+        discardPile.Add(newcard2);
+        CardIntoHand(newcard2);
+
         ShuffleDeck(discardPile);
     }
 
@@ -545,10 +550,18 @@ public class BattleManager : MonoBehaviour
             playerBuff.ModifyNextDamage(Player.curBladeNum * 2);
 
        }
+
        if(card.cardNum == 11 || card.cardNum == 22)
        {
+            if(playerBuff.JD > 0)
             playerBuff.ModifyNextDL(playerBuff.NextDL + 1);
        }
+
+       if(card.cardNum == 21)
+       {
+            playerBuff.ModifyNextDL(0);
+       }
+
        if(card.cardNum == 22)
        {
             OnEndTurnButtonClicked();
@@ -617,7 +630,13 @@ public class BattleManager : MonoBehaviour
     {
         foreach(Card card in hand)
         {
-            
+            if(card.cardNum == 21)
+            {
+                if (playerBuff.NextDL > 0)
+                    card.ChangeCost(1);
+                else card.ChangeCost(2);
+            }
+
             if(Player.curCost < card.Cost || 
                 Player.curBladeNum < -card.DeltaBladeNum ||
                 Player.curBladeLevel < -card.DeltaBladeLevel || 
