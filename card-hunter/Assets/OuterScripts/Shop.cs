@@ -25,6 +25,7 @@ public class column
 public class Shop : MonoBehaviour
 {
     public GameObject Column;
+    public SharedData sharedData;
     public List<GameObject> Cols=new List<GameObject>();
     public event Action<int, bool> Purchase;
     public event Action Exit;
@@ -65,16 +66,34 @@ public class Shop : MonoBehaviour
 
     private void ClickHandle(column column,int num)
     {
-
-        Purchase?.Invoke(column.ID, column.IsCard);
-        GameObject c = Cols[num];
-        Cols.Remove(c);
-        Destroy(c);
-        for(int i = num; i < Cols.Count; i++)
+        if (sharedData.playerinfo.money >= column.Money&&column.IsCard)//Âò¿¨
         {
-            Cols[i].transform.position -= new Vector3(0, GameConfig.ShopDeltaY, 0);
-            Cols[i].GetComponent<ColumnWin>().num--;
+            Purchase?.Invoke(column.ID, column.IsCard);
+            sharedData.playerinfo.money -= column.Money;
+            GameObject c = Cols[num];
+            Cols.Remove(c);
+            Destroy(c);
+            for (int i = num; i < Cols.Count; i++)
+            {
+                Cols[i].transform.position -= new Vector3(0, GameConfig.ShopDeltaY, 0);
+                Cols[i].GetComponent<ColumnWin>().num--;
+            }
         }
+        if(sharedData.playerinfo.money >= column.Money && sharedData.playerinfo.Material[column.ID] > 0 && !column.IsCard)
+        {
+            Purchase?.Invoke(column.ID, column.IsCard);
+            sharedData.playerinfo.money -= column.Money;
+            sharedData.playerinfo.Material[column.ID] -= 1;
+            GameObject c = Cols[num];
+            Cols.Remove(c);
+            Destroy(c);
+            for (int i = num; i < Cols.Count; i++)
+            {
+                Cols[i].transform.position -= new Vector3(0, GameConfig.ShopDeltaY, 0);
+                Cols[i].GetComponent<ColumnWin>().num--;
+            }
+        }
+
     }
 
     private void ExitHandle()
