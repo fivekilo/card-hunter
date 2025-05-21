@@ -1592,7 +1592,7 @@ public class GameConfig : ScriptableObject
             }),
                 new Event(6,"风言风语","“你知道吗，有人在森林发现了冰呪龙的踪迹！”“真的假的，那可是未知的古龙啊”早上村里人的闲聊吸引了你的注意。尽管你不太相信，但前去一探也可能会有所收获。","3",
             new List<Choice>{
-                new Choice(1,"[前去一探]",7,false,0,0,0,0,new List<int>(),0),
+                new Choice(1,"[前去一探]",0,false,7,0,0,0,new List<int>(),0),
                 new Choice(2,"[不予理会]：无",0,false,0,0,0,0,new List<int>{},0),
             }),
                  new Event(7,"惊现共斗大神","“在路上，你听见与怪物打斗的声音，靠近一看，一个年轻的猎人正在讨伐眩鸟。你靠近时，他也注意到了你。\r\n“你，赶紧帮我打怪”他一边向你叫唤着，一边被怪物打得节节败退。你决定：","3",
