@@ -36,8 +36,9 @@ public class EnemySkillSystem : MonoBehaviour
             skillselected = 1;
             nextSkillID = certainskill;
         }
+
         // 选择前特判1：大贼龙的4技能（吞食回血转阶段）
-        while (aiController.name=="大贼龙" && (float)aiController._currentHealth * 2.5 < (float)aiController._maxHealth && skill4selected == 0)
+        if (aiController.ID==1 && (float)aiController._currentHealth * 2.5 < (float)aiController._maxHealth && skill4selected == 0)
         {
             nextSkillID = 4;
             skillselected = 1;
@@ -47,15 +48,32 @@ public class EnemySkillSystem : MonoBehaviour
             //在这里不能remove，因为技能只是选了还没放出来呢。只能加不能删
             Debug.Log("大贼龙触发了“进食”技能！");
         }
+        // 选择前特判2：岩贼龙的两次19技能转阶段（此时回合计数器还没加上）
+        if (aiController.ID == 5 && (aiController.TurnCount==5-1 || aiController.TurnCount==10-1))
+        {
+            nextSkillID = 19;
+            skillselected = 1;
+            if(aiController.TurnCount == 5-1)
+            {
+                aiController.selfSkills.Add(20);
+                aiController.selfSkills.Add(21);
+            }
+            if (aiController.TurnCount == 10-1 &&aiController.enemystate==0)//第二次释放变成双倍伤害形态
+            {
+                aiController.enemystate = 1;
+            }
+            Debug.Log("岩贼龙触发了“吞食岩石”技能！");
+        }
+
         // 简单AI：随机选择下个技能
-        if(skillselected ==0)
+        if (skillselected ==0)
         {
             do
             {
                 nextSkillID = availableSkills[Random.Range(0, availableSkills.Count)];
                 skillselected = 1;
-            } while (nextSkillID == 4 || nextSkillID == 0 );
-            // 特判：大贼龙的4技能,0技能力竭不能在这里选
+            } while (nextSkillID == 4 || nextSkillID == 0 || nextSkillID == 19);
+            // 特判：大贼龙的4技能,0技能力竭，岩贼龙的19技能转阶段不能在这里选
         }
 
 
@@ -99,8 +117,10 @@ public class EnemySkillSystem : MonoBehaviour
     {
         if (aiController.havechangedskill == true) return;//一回合只能变一次
         if (oldplayerinrange == false) return;//如果原来就不在范围里，不进行变招
+        //特判：岩贼龙只能在1，3，6技能中进行变招
+        if (aiController.ID == 5 && nextSkillID != 1 && nextSkillID != 3 && nextSkillID != 6) return;
 
-        GameConfig.EnemySkillConfig nextskillconfig = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == nextSkillID);
+            GameConfig.EnemySkillConfig nextskillconfig = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == nextSkillID);
         Vector2Int enemypos = aiController._currentGridPos;
         int enemydirection = aiController.direction;
         List<Vector2Int> actualrangepos = GetSkillRange(nextskillconfig, enemypos, enemydirection);
@@ -121,6 +141,7 @@ public class EnemySkillSystem : MonoBehaviour
         Debug.Log("触发变招了！");
         ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
         mapManager.ChangeColorByPos(actualrangepos, color);
+
         //2.先进行转向(待实现)
 
         //3.再选新技能
@@ -130,8 +151,15 @@ public class EnemySkillSystem : MonoBehaviour
         {
             do
             {
-                someskillID = availableSkills[Random.Range(0, availableSkills.Count)];
-            } while (someskillID == 4 || someskillID == 0);
+                //特判：岩贼龙只能在1，3，6技能中进行变招
+                if (aiController.ID == 5)
+                {
+                    List<int>  limitedskills= new List<int> { 1, 3, 6};
+                    someskillID = limitedskills[Random.Range(0, limitedskills.Count)];
+                }
+                else
+                    someskillID = availableSkills[Random.Range(0, availableSkills.Count)];
+            } while (someskillID == 4 || someskillID == 0 || someskillID == 19);
             //获取技能范围并展示
             GameConfig.EnemySkillConfig someskillconfig = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == someskillID);
             Vector2Int newenemypos = aiController._currentGridPos;
@@ -198,7 +226,10 @@ public class EnemySkillSystem : MonoBehaviour
     }
     private IEnumerator AddArmor(GameConfig.EnemySkillConfig config)
     {
-        aiController.armor += config.armor;
+        if (aiController.ID==5&&aiController.TurnCount==10)//第二次使用吞食岩石额外获得20甲
+            aiController.armor = aiController.armor+config.armor+20;
+        else
+            aiController.armor = aiController.armor + config.armor;
         yield return new WaitForSeconds(0.2f);
     }
 
