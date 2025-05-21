@@ -181,7 +181,7 @@ public class GameManager : MonoBehaviour
     }
     private void ChoiceHandle(Choice choice)
     {
-        if (choice.DeleteCard > 0)
+        if (choice.modifydeck < 0)
         {
             DeleteCard();
         }
@@ -189,7 +189,7 @@ public class GameManager : MonoBehaviour
         {
             AbleToMove[1] = true;
         }
-        if (choice.AddCard > 0)
+        if (choice.modifydeck > 0)
         {
             //¼ÓÅÆº¯Êý
             GameObject AW = Instantiate(AddCardWin, Vector3.zero, Quaternion.identity);
