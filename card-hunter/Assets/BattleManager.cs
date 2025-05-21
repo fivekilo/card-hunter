@@ -205,7 +205,9 @@ public class BattleManager : MonoBehaviour
             if (hand.Count >= GameConfig.MaxHandCardNum) break;
             Card drawnCard = deck[0];
             deck.RemoveAt(0);
+            Debug.Log("抽牌调用开始");
             cardManager.AddCardToHand(drawnCard, hand);
+            Debug.Log("抽牌调用结束");
             UpdatedeckNum();
         }
       //  Debug.Log(hand.Count);
