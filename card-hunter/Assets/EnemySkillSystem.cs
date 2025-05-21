@@ -172,9 +172,9 @@ public class EnemySkillSystem : MonoBehaviour
         if (config.moveType!=GameConfig.MoveType.None)
             yield return HandleSkillMovement(config);
         //执行伤害并应用debuff，回血,叠加护甲
-        yield return Heal(config);
+        if(config.HPchange!=0)      yield return Heal(config);
         yield return ApplySkill(config, actualrangepos);
-        yield return AddArmor(config);
+        if (config.armor != 0)   yield return AddArmor(config);
     }
 
     private IEnumerator HandleSkillMovement(GameConfig.EnemySkillConfig config)
