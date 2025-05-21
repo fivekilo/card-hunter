@@ -38,6 +38,7 @@ public class EnemyAIController : MonoBehaviour
     public int enemystate = 0;
     public bool isdead = false;//是否死亡
     public int TurnCount = 0;//回合计数器
+    public int FrozenTurnCount = 0;//冰咒龙极寒形态回合计数器
 
     void Start()
     {
@@ -80,6 +81,9 @@ public class EnemyAIController : MonoBehaviour
     public IEnumerator TakeTurn()//执行回合
     {
         TurnCount++;//回合计数+1
+        if (ID == 7)
+            FrozenTurnCount++;
+
         if (isdead == true)
         {
             havechangedskill = false;//重置变招函数
@@ -252,13 +256,33 @@ public class EnemyAIController : MonoBehaviour
     //加减血量
     public void ReduceHealth(int num)
     {
+        //特判：冰咒龙究极冰暴时免疫伤害
+        if (skillSystem.nextSkillID==34 && ID == 7 && enemystate == 1)
+        {
+            num = 0;
+            Debug.Log("冰咒龙高高升天，猎人伤害不到它！");
+        }
+
         //优先抵扣护甲
-        if(armor>0 && num>0)
+        if (armor>0 && num>0)
         {
             int deltaarmor = armor-Mathf.Clamp(armor - num, 0, 999);
             armor = Mathf.Clamp(armor - num, 0, 100);
             num = num - deltaarmor;
         }
+        //特判：冰咒龙的进冰和退冰
+        if (armor==0 && ID ==7 && enemystate==1)
+        {
+            enemystate = 0;
+            StartCoroutine(skillSystem.ExecuteCurrentSkill(-1));
+            skillSystem.nextSkillID = 0;
+            FrozenTurnCount = -1;//保证是每5回合进入一次
+            selfSkills.Remove(34);
+            //selfSkills.Remove(35);
+            //selfSkills.Remove(36);
+            Debug.Log("冰咒龙退出极寒之冰形态了！");
+        }
+
         _currentHealth = Mathf.Clamp(_currentHealth - num, 0, _maxHealth);
         if (num>=0) 
             Debug.Log("怪物被打了" + num.ToString() + "血");
