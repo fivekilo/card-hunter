@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms;
+using UnityEngine.UIElements;
 using static UnityEditor.PlayerSettings;
 
 public class GameManager : MonoBehaviour
@@ -20,6 +22,7 @@ public class GameManager : MonoBehaviour
     public GameObject StartMenu;
     public GameObject InCamp;
     public GameObject ExitBtn;
+    public GameObject Shop;
     public event Action<Choice> Chosed;
     public event Action<int> AddCard;
     private List<bool> AbleToMove=new List<bool> {false,false };
@@ -29,10 +32,12 @@ public class GameManager : MonoBehaviour
     private GameObject CB;//委托栏
     private GameObject SM;//开始菜单
     private GameObject Camp;//营地菜单
+    private GameObject SP;//商店界面
     private List<Commission> AcceptedCommission;
     private event Func<Commission,IEnumerator> ArriveBattleField;
     private event Action ArriveCamp;
     private int PlayerProgress = 0;//玩家进度,标识行程
+    private List<column> CardsInShop = new List<column>();
     private void ShowStartMenu()//显示起始界面
     {
         //移开摄像头
@@ -51,6 +56,8 @@ public class GameManager : MonoBehaviour
         Destroy(SM);
         Camp=Instantiate(InCamp,Vector3.zero,Quaternion.identity);
         Camp.transform.Find("Commission").GetComponent<ConfirmBtn>().Confirm += GetCommission;
+        Camp.transform.Find("Shop").GetComponent <ConfirmBtn>().Confirm += OpenCardShop;
+        Camp.transform.Find("Forge").GetComponent<ConfirmBtn>().Confirm += OpenEquipShop;
     }
     private void Save()//存档
     {
@@ -282,6 +289,36 @@ public class GameManager : MonoBehaviour
         DW.GetComponent<DeckWin>().DeleteConfirm += DeleteFromDeck;
     }
 
+    private void OpenEquipShop()
+    {
+        SP = Instantiate(Shop, Vector3.zero, Quaternion.identity);
+        SP.GetComponent<Shop>().Init(GameConfig.EquipmentsCol);
+        SP.GetComponent<Shop>().Exit += ExitShop;
+        SP.GetComponent<Shop>().Purchase += PurchaseHandle;
+    }
+    private void OpenCardShop()
+    {
+        SP=Instantiate(Shop, Vector3.zero, Quaternion.identity);
+        SP.GetComponent<Shop>().Init(CardsInShop);
+        SP.GetComponent<Shop>().Exit += ExitShop;
+        SP.GetComponent <Shop>().Purchase += PurchaseHandle;
+    }
+    private void PurchaseHandle(int id,bool IsCard)
+    {
+        if(IsCard)
+        {
+            AddToDeck(id);
+        }
+        else
+        {
+            shareddata.playerinfo.Equipments.Add(id);
+        }
+    }
+    private void ExitShop()
+    {
+        Destroy(SP);
+    }
+
     void Start()
     {
         //初始化Rogue Mod
@@ -299,6 +336,7 @@ public class GameManager : MonoBehaviour
         AddCard += AddToDeck;
         DeckBtn.GetComponent<Btn>().Clicked += CheckDeck;
         ExitBtn.GetComponent<Btn>().Clicked += Exit;
+        
         ShowStartMenu();
     }
 

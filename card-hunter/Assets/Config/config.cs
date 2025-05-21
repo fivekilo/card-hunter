@@ -26,7 +26,10 @@ public class GameConfig : ScriptableObject
         Trap,
         Frog,
         DuCao,
-        NaiLiBug
+        NaiLiBug,
+        //Lava, 
+        //ElectricBall, 
+        //Icicle
     }
     public static IReadOnlyList<int> ContentAmount = new List<int> {1,1,2,2,1}.AsReadOnly();
     public static IReadOnlyList<string> CardName = new List<string> {"",//卡牌名称
@@ -1544,6 +1547,9 @@ public class GameConfig : ScriptableObject
     public static readonly Vector3 hoverScale = new Vector3(2.122892f, 2.54747f, 1f);
     public static readonly Vector3 normalScale = new Vector3(1.73865f, 2.08638f, 1f);
 
+    //Shop 画图参数
+    public const int ShopX = 0, ShopY = 400,ShopDeltaY=-400;
+
     //CommissionBoard 画图参数
     public const int BoardX = -380,BoardY=0;
 
@@ -1627,4 +1633,8 @@ public class GameConfig : ScriptableObject
     };
     public static readonly Vector2Int EventAmountBounds = new Vector2Int(1, 1);//每层总事件数限制
     public const int EventPerTour = 2;
+
+    public static readonly List<string> Material = new List<string> { "大贼龙", "眩鸟", "蛮颚龙", "火龙", "岩贼龙", "雷狼龙", "黑龙", "古代遗物" };
+
+    public static readonly List<column> EquipmentsCol = new List<column> { };
 }
