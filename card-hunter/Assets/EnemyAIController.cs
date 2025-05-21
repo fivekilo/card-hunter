@@ -204,9 +204,9 @@ public class EnemyAIController : MonoBehaviour
     public void ReduceHealth(int num)
     {
         //优先抵扣护甲
-        if(armor>0)
+        if(armor>0 && num>0)
         {
-            int deltaarmor = armor-Mathf.Clamp(armor - num, 0, 100);
+            int deltaarmor = armor-Mathf.Clamp(armor - num, 0, 999);
             armor = Mathf.Clamp(armor - num, 0, 100);
             num = num - deltaarmor;
         }
@@ -237,6 +237,15 @@ public class EnemyAIController : MonoBehaviour
             selfSkills.Add(10);
             Debug.Log("蛮颚龙进入暴怒状态了！");
         }
+    }
+
+    //改变护甲
+    public IEnumerator ChangeArmor(int deltaarmor)
+    {
+        armor = Mathf.Clamp(armor + deltaarmor, 0, 999);
+        Debug.Log($"怪物获得了{deltaarmor}点护甲！");
+        text.text = $"{_currentHealth}/{_maxHealth} 护甲：{armor}";
+        yield return new WaitForSeconds(0.2f);
     }
 
     public Vector2Int GetCurrentGridPos() // 公共方法供MapManager调用

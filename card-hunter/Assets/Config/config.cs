@@ -26,7 +26,10 @@ public class GameConfig : ScriptableObject
         Trap,
         Frog,
         DuCao,
-        NaiLiBug
+        NaiLiBug,
+        //Lava, 
+        //ElectricBall, 
+        //Icicle
     }
     public static IReadOnlyList<int> ContentAmount = new List<int> {1,1,2,2,1}.AsReadOnly();
     public static IReadOnlyList<string> CardName = new List<string> {"",//卡牌名称

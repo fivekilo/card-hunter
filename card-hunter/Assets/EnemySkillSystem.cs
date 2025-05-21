@@ -97,16 +97,33 @@ public class EnemySkillSystem : MonoBehaviour
         //标准方向向量  0，1，2，3，4，5
         List<Vector2Int> StdVector = new List<Vector2Int> {new Vector2Int(1,0), new Vector2Int(0,1), new Vector2Int(-1, 1), 
             new Vector2Int(-1, 0), new Vector2Int(0, -1),new Vector2Int(1,-1) };
-        foreach (Vector2Int singlepos in VectorRange)
+
+        //锁定招式直接加真实坐标
+        if (config.skilltype == GameConfig.SkillType.Locked)
         {
-            Vector2Int temp = new Vector2Int();
-            //2.重要推导公式
-            temp.x = singlepos.x * StdVector[0 + enemydirection].x + singlepos.y * StdVector[(5 + enemydirection) % 6].x;
-            temp.y = singlepos.x * StdVector[0 + enemydirection].y + singlepos.y * StdVector[(5 + enemydirection) % 6].y;
-            Vector2Int RangeRealPos = enemypos + temp;
-            //3.防越界
-            if(RangeRealPos.x < GameConfig.size && RangeRealPos.y < GameConfig.size && RangeRealPos.x >= 0 && RangeRealPos.y >= 0)
-                ActualRangePos.Add(RangeRealPos);
+            foreach (Vector2Int singlepos in VectorRange)
+            {
+                Vector2Int playerpos = battleManager.Player.PlayerGridPos;
+                Vector2Int RangeRealPos = playerpos + singlepos;
+                //防越界
+                if (RangeRealPos.x < GameConfig.size && RangeRealPos.y < GameConfig.size && RangeRealPos.x >= 0 && RangeRealPos.y >= 0)
+                    ActualRangePos.Add(RangeRealPos);
+            }
+        }
+        else
+        {
+            //非锁定招式要推导相对向量再加上方向
+            foreach (Vector2Int singlepos in VectorRange)
+            {
+                Vector2Int temp = new Vector2Int();
+                //2.重要推导公式
+                temp.x = singlepos.x * StdVector[0 + enemydirection].x + singlepos.y * StdVector[(5 + enemydirection) % 6].x;
+                temp.y = singlepos.x * StdVector[0 + enemydirection].y + singlepos.y * StdVector[(5 + enemydirection) % 6].y;
+                Vector2Int RangeRealPos = enemypos + temp;
+                //3.防越界
+                if (RangeRealPos.x < GameConfig.size && RangeRealPos.y < GameConfig.size && RangeRealPos.x >= 0 && RangeRealPos.y >= 0)
+                    ActualRangePos.Add(RangeRealPos);
+            }
         }
         return ActualRangePos;
     }
@@ -226,11 +243,10 @@ public class EnemySkillSystem : MonoBehaviour
     }
     private IEnumerator AddArmor(GameConfig.EnemySkillConfig config)
     {
-        if (aiController.ID==5&&aiController.TurnCount==10)//第二次使用吞食岩石额外获得20甲
-            aiController.armor = aiController.armor+config.armor+20;
+        if (aiController.ID == 5 && aiController.TurnCount == 10)//第二次使用吞食岩石额外获得20甲
+            yield return aiController.ChangeArmor(config.armor + 20);
         else
-            aiController.armor = aiController.armor + config.armor;
-        yield return new WaitForSeconds(0.2f);
+            yield return aiController.ChangeArmor(config.armor);
     }
 
     private IEnumerator Heal(GameConfig.EnemySkillConfig config)
