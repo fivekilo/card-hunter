@@ -19,7 +19,8 @@ public class PlayerInfo : MonoBehaviour
     public int curBladeLevel = 0; //气刃等级
     public Vector2Int PlayerGridPos = new (0 , 0); //玩家位置
     public Vector2Int Direction = new Vector2Int(1, 0);
-    
+    public List<int>Material=new List<int>();
+    public List<int>Equipments = new List<int>();
 
 
     public TextMeshProUGUI HP;

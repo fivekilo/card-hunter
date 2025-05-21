@@ -76,7 +76,7 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
     }                                     
     private bool IsDroppedInValidZone(PointerEventData eventData)
     {
-        return eventData.pointerEnter != null &&
+        return 
                rectTransform.anchoredPosition[1] > 100;
     }
 
