@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq; // 添加LINQ命名空间以查找只读表的技能
+using System.Linq;
+using UnityEngine.AI; // 添加LINQ命名空间以查找只读表的技能
 
 public class EnemySkillSystem : MonoBehaviour
 {
@@ -150,12 +151,13 @@ public class EnemySkillSystem : MonoBehaviour
         if (oldplayerinrange == false) return;//如果原来就不在范围里，不进行变招
         //特判：岩贼龙只能在1，3，6技能中进行变招
         if (aiController.ID == 5 && nextSkillID != 1 && nextSkillID != 3 && nextSkillID != 6) return;
-        if (aiController.ID == 5 && currentSkillID != 1 && currentSkillID != 3 && currentSkillID != 6) return;
+        //特判：冰咒龙只能在29，30，31技能中进行变招
+        if (aiController.ID == 7 && nextSkillID != 29 && nextSkillID != 30 && nextSkillID != 31) return;
 
         GameConfig.EnemySkillConfig nextskillconfig = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == nextSkillID);
         Vector2Int enemypos = aiController._currentGridPos;
         int enemydirection = aiController.direction;
-        List<Vector2Int> actualrangepos = GetSkillRange(nextskillconfig, enemypos, enemydirection);
+        List<Vector2Int> actualrangepos = nextskillpos;//用上一次技能已经确定的位置看
         bool inrange = false;
         foreach (Vector2Int pos in actualrangepos)
         {
@@ -179,17 +181,25 @@ public class EnemySkillSystem : MonoBehaviour
         //3.再选新技能
         int someskillID;
         bool OK = false;
+        bool specialchoose = true;
         for (int i = 1; i <= 3; i++)//最多随机选3次
         {
             do
             {
                 //特判：岩贼龙只能变成6技能
                 if (aiController.ID == 5)
-                {
                     someskillID = 6;
-                }
+                else if (aiController.ID == 7 && nextSkillID == 31)//特判：冰咒龙的尾刺只能重新锁定
+                    someskillID = 31;
+                else if (aiController.ID == 7 && nextSkillID == 29)//特判：冰咒龙的两下喷冰只会相互变招
+                    someskillID = 30;
+                else if (aiController.ID == 7 && nextSkillID == 30)
+                    someskillID = 29;
                 else
+                {
                     someskillID = availableSkills[Random.Range(0, availableSkills.Count)];
+                    specialchoose = false;
+                }
             } while (someskillID == 4 || someskillID == 0 || someskillID == 19 || someskillID == 33);
             //获取技能范围并展示
             GameConfig.EnemySkillConfig someskillconfig = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == someskillID);
@@ -198,7 +208,7 @@ public class EnemySkillSystem : MonoBehaviour
             List<Vector2Int> newactualrangepos = GetSkillRange(someskillconfig, newenemypos, newenemydirection);
             foreach (Vector2Int pos in newactualrangepos)
             {
-                if (pos == playergridpos_now) { OK = true; break; }
+                if (pos == playergridpos_now||specialchoose==true) { OK = true; break; }//特判的变招自动通过
             }
             if (OK == true)
             {

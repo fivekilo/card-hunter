@@ -20,7 +20,7 @@ public class EnemyAIController : MonoBehaviour
     [SerializeField] public int ID ;
     [SerializeField] public string name = "";
     [SerializeField] public int _maxHealth = 100;
-    [SerializeField] public int _currentHealth;
+    [SerializeField] public int _currentHealth =100;
     [SerializeField] protected int moveRange = 2;//每回合最大移动距离
     [SerializeField] protected int detectionRange = 4;//检测玩家的最大范围
     [SerializeField] public int armor = 0;//初始护甲
@@ -277,7 +277,7 @@ public class EnemyAIController : MonoBehaviour
             StartCoroutine(skillSystem.ExecuteCurrentSkill(-1));
             skillSystem.nextSkillID = 0;
             FrozenTurnCount = -1;//保证是每5回合进入一次
-            selfSkills.Remove(34);
+            bool isRemoved1=selfSkills.Remove(34);
             //selfSkills.Remove(35);
             //selfSkills.Remove(36);
             Debug.Log("冰咒龙退出极寒之冰形态了！");
