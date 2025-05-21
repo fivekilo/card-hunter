@@ -54,7 +54,7 @@ public class AddCardWindow : MonoBehaviour
         }
         Cards[num].transform.localScale = GameConfig.hoverScale;
         //¼ÇÂ¼ºÅÂë
-        ChosedNum = num;
+        ChosedNum = Cards[num].GetComponent<Card>().cardNum;
     }
     void Start()
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
@@ -213,19 +214,31 @@ public class GameManager : MonoBehaviour
     }
     private void ChoiceHandle(Choice choice)
     {
-        if (choice.modifydeck < 0)
+        if (choice.modifydeck < 0&&!choice.random)
         {
             DeleteCard();
+        }
+        else if(choice.modifydeck < 0 && choice.random)
+        {
+            System.Random random = new System.Random();
+            shareddata.playerinfo.deck.Remove(random.Next(0, playerinfo.deck.Count-1));
+            AbleToMove[1] = true;
         }
         else//无需删牌
         {
             AbleToMove[1] = true;
         }
-        if (choice.modifydeck > 0)
+        if (choice.modifydeck > 0 && !choice.random)
         {
             //加牌函数
             GameObject AW = Instantiate(AddCardWin, Vector3.zero, Quaternion.identity);
             AW.GetComponent<AddCardWindow>().AddCard(AddCard,choice.CardsID);//传入可添加的卡牌范围
+        }
+        else if(choice.modifydeck > 0 && choice.random)
+        {
+            System.Random random = new System.Random();
+            shareddata.playerinfo.deck.Add(choice.CardsID[random.Next(0, choice.CardsID.Count)]);
+            AbleToMove[0] = true;
         }
         else//无需加牌
         {
@@ -239,9 +252,20 @@ public class GameManager : MonoBehaviour
         {
             shareddata.playerinfo.curHealth += choice.health;
         }
-        if (choice.CardsID.Count > 0)
+        if (choice.HPupper != 0)
         {
-            //添牌函数
+            shareddata.playerinfo.MaxHealth += choice.HPupper;
+            if (choice.HPupper > 0)
+            {
+                shareddata.playerinfo.curHealth += choice.HPupper;//回复增加的血量上限的血量
+            }
+            else
+            {
+                if(shareddata.playerinfo.curHealth< shareddata.playerinfo.MaxHealth)
+                {
+                    shareddata.playerinfo.curHealth = shareddata.playerinfo.MaxHealth;
+                }
+            }
         }
         if (choice.equipment > 0)
         {
@@ -256,8 +280,13 @@ public class GameManager : MonoBehaviour
         HideScene();
         SceneManager.LoadScene("SampleScene", LoadSceneMode.Additive);
         yield return new WaitUntil(()=>shareddata.Complete);//调用战斗,返回战斗结果
+        shareddata.Complete = false;
         SceneManager.UnloadSceneAsync("SampleScene");
         ShowScene();
+
+        shareddata.playerinfo.money += shareddata.commission.money;
+        int idx = GameConfig.Material.FindIndex(m => m == c.monster);
+        shareddata.playerinfo.Material[idx] += 1;
 
         //战斗结束，返回营地。返回函数与营地绑定
         camp.GetComponent<Camp>().ClickEvent+=BackToCamp;
@@ -300,6 +329,7 @@ public class GameManager : MonoBehaviour
         SP.GetComponent<Shop>().Init(GameConfig.EquipmentsCol);
         SP.GetComponent<Shop>().Exit += ExitShop;
         SP.GetComponent<Shop>().Purchase += PurchaseHandle;
+        Camp.SetActive(false);
     }
     private void OpenCardShop()
     {
@@ -307,6 +337,8 @@ public class GameManager : MonoBehaviour
         SP.GetComponent<Shop>().Init(CardsInShop);
         SP.GetComponent<Shop>().Exit += ExitShop;
         SP.GetComponent <Shop>().Purchase += PurchaseHandle;
+        //隐藏camp
+        Camp.SetActive(false);
     }
     private void PurchaseHandle(int id,bool IsCard)
     {
@@ -322,8 +354,21 @@ public class GameManager : MonoBehaviour
     private void ExitShop()
     {
         Destroy(SP);
+        Camp.SetActive(true);
     }
-
+    private void RefreshShop()
+    {
+        HashSet<column>Set = new HashSet<column>();
+        System.Random rand = new System.Random();
+        while (Set.Count < 4)
+        {
+            int r=rand.Next(GameConfig.CardColumnNormal.Count);
+            Set.Add(GameConfig.CardColumnNormal[r]);
+        }
+        int _=rand.Next(GameConfig.CardcolumnRare.Count);
+        Set.Add(GameConfig.CardColumnNormal[_]);
+        CardsInShop=Set.ToList();
+    }
     void Start()
     {
         //初始化Rogue Mod
@@ -333,6 +378,9 @@ public class GameManager : MonoBehaviour
         //初始化SharedData
         shareddata.playerinfo = playerinfo;
         shareddata.Complete = false;
+
+        RefreshShop();
+
         camp.GetComponent<Camp>().ClickEvent += GetCommission;
         Player.GetComponent<PlayerMove>().encounterEvent += EventChoose;
         ArriveBattleField += BattleEnter;

@@ -204,6 +204,8 @@ public class BattleManager : MonoBehaviour
         InitializeDeck();
   //      data
         ChangeState(BattleState.PlayerDraw);
+        Decknum.text = deck.Count.ToString();
+        Dpnum.text = "0";
     }
 
     public void InitializeDeck()
@@ -318,8 +320,7 @@ public class BattleManager : MonoBehaviour
                 {
                     enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound - 1);
                 }
-                if (enemy.enemybuff.Numbness == 0)
-                    yield return enemy.TakeTurn();
+                yield return enemy.TakeTurn();
              }
         }
         UserIndicator.text = "怪物回合结束了!";
