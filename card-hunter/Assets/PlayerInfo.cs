@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.PlayerSettings;
-
+[CreateAssetMenu(menuName = "Data/PlayerInfo")]
 public class PlayerInfo : MonoBehaviour
 {
     public List<int> deck=new List<int> {1,1,2,3,6,7,8,8 };//¿¨×é
@@ -69,6 +69,9 @@ public class PlayerInfo : MonoBehaviour
         else
             newSprite = Resources.Load<Sprite>("Link");
         Situationshower.sprite = newSprite;
+        PlayerBuff buff = GetComponent<PlayerBuff>();
+        if (Equipments.Contains(8) && amount == 0)
+            buff.ModifyNextDamage(buff.NextDamage + 2);
     }
     public void ModifyBladeLevel(int amount)
     {

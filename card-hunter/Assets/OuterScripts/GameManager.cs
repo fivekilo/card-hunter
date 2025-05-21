@@ -55,6 +55,11 @@ public class GameManager : MonoBehaviour
     private void GameStart()//”Œœ∑∆Ù∂Ø
     {
         Destroy(SM);
+        shareddata.playerinfo.MaxHealth = GameConfig.InitialHealth;
+        shareddata.playerinfo.curHealth = GameConfig.InitialHealth;
+        shareddata.playerinfo.MaxCost = GameConfig.InitialCost;
+        shareddata.playerinfo.curCost = GameConfig.InitialCost;
+        shareddata.playerinfo.Direction = new(1, 0);
         Camp=Instantiate(InCamp,Vector3.zero,Quaternion.identity);
         Camp.transform.Find("Commission").GetComponent<ConfirmBtn>().Confirm += GetCommission;
         Camp.transform.Find("Shop").GetComponent <ConfirmBtn>().Confirm += OpenCardShop;
