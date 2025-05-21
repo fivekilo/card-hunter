@@ -182,6 +182,8 @@ public class BattleManager : MonoBehaviour
         InitializeDeck();
   //      data
         ChangeState(BattleState.PlayerDraw);
+        Decknum.text = deck.Count.ToString();
+        Dpnum.text = "0";
     }
 
     public void InitializeDeck()
