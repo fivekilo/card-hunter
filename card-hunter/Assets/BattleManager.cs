@@ -190,7 +190,7 @@ public class BattleManager : MonoBehaviour
 
         //怪物初始化
         FindAllEnemies();
-        _enemies[0]._currentHealth = 85;
+        //_enemies[0]._currentHealth = 85;
 
         if (Player.Equipments.Contains(4))
         {
