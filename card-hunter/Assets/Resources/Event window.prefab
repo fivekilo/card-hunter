@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 28, y: 165}
+  m_AnchoredPosition: {x: 28, y: 294}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8657563327568730961
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 0, w: 5.003174}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -168,7 +168,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 176.93079, y: 60}
+  m_AnchoredPosition: {x: 142, y: 138}
   m_SizeDelta: {x: 353.8615, y: 156.61}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2719947441030607597
@@ -262,7 +262,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -223.09924, w: -25.832458}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -302,7 +302,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -233, y: 50}
+  m_AnchoredPosition: {x: -341, y: 55}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8922252688432298286
@@ -370,7 +370,7 @@ RectTransform:
   m_GameObject: {fileID: 7299207582807809542}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 8, y: 4, z: 1}
+  m_LocalScale: {x: 13.187828, y: 6.5622935, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7127206334047806590}
@@ -539,6 +539,6 @@ MonoBehaviour:
   EventImage: {fileID: 8219069045636788603}
   discription: {fileID: 3910488888933141813}
   Name: {fileID: 1548098639958368507}
-  buttonSpace: 40
+  buttonSpace: 80
   button: {fileID: 8177689720617864080, guid: e5a906c5003c6174894d349295f5440a, type: 3}
   Clicked: 0

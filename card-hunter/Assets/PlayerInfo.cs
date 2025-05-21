@@ -25,6 +25,8 @@ public class PlayerInfo : MonoBehaviour
     public TextMeshProUGUI HP;
     public TextMeshProUGUI endurance;
     public TextMeshProUGUI MoveCost;
+    public TextMeshProUGUI DefenceNum;
+    public Image Situationshower;
     // public delegate void CharacterEvent(PlayerInfo Player);
     //public event CharacterEvent OnHealthChanged;
     //public event CharacterEvent OnEnergyChanged;
@@ -59,8 +61,14 @@ public class PlayerInfo : MonoBehaviour
     }
     public void ModifySituation(int amount)
     {
+        Sprite newSprite;
         Situation = Mathf.Clamp(amount, 0, 1);
         MoveCost.text = $"{Situation + 1}";
+        if (amount == 0)
+            newSprite = Resources.Load<Sprite>("Free");
+        else
+            newSprite = Resources.Load<Sprite>("Link");
+        Situationshower.sprite = newSprite;
     }
     public void ModifyBladeLevel(int amount)
     {
@@ -96,7 +104,8 @@ public class PlayerInfo : MonoBehaviour
     public void ModifyDefence(int amount)
     {
         Defence = Mathf.Clamp(amount, 0, 999);
-    }
+        DefenceNum.text = Defence.ToString();
+     }
     void Start()
     {
         curHealth = MaxHealth;

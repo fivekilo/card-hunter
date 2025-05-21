@@ -7,7 +7,7 @@ using static UnityEditor.PlayerSettings;
 
 public class CardManager : MonoBehaviour
 {
-    public float cardSpacing = 100f; // ���Ƽ��
+    private float cardSpacing = 150f; // ���Ƽ��
     public float arcHeight = 50f;    // ���θ߶�
     public float maxRotation = 15f;  // �����ת�Ƕ�
    // public float moveDuration = 0.3f; // �ƶ�����ʱ��

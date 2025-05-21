@@ -40,6 +40,8 @@ public class BattleManager : MonoBehaviour
     public Button Movebutton;
     public CardManager cardManager;
     public TextMeshProUGUI UserIndicator;
+    public TextMeshProUGUI Decknum;
+    public TextMeshProUGUI Dpnum;
     public AudioManager AudioManager;
     public SharedData data;
     // public int i = 1;
@@ -71,6 +73,11 @@ public class BattleManager : MonoBehaviour
     public bool isWaitingForPlayerChoose = false;
     public UnityEvent EndTurnClicked; 
 
+    private void UpdatedeckNum()
+    {
+        Decknum.text = deck.Count.ToString();
+        Dpnum.text = discardPile.Count.ToString();
+    }
     public Vector2Int GenerateSpawn()
     {
         int attemp = 0;
@@ -199,7 +206,7 @@ public class BattleManager : MonoBehaviour
             Card drawnCard = deck[0];
             deck.RemoveAt(0);
             cardManager.AddCardToHand(drawnCard, hand);
-            
+            UpdatedeckNum();
         }
       //  Debug.Log(hand.Count);
     }
@@ -261,6 +268,21 @@ public class BattleManager : MonoBehaviour
         UserIndicator.text = "怪物回合结束了!";
         Debug.Log("怪物回合结束了!");
         ChangeState(BattleState.PlayerDraw);
+    }
+
+    //变招前预检测
+    private void BeforeChangeskill()
+    {
+        FindAllEnemies();
+        foreach (var enemy in _enemies)
+        {
+            if (enemy != null)
+            {
+                //判断是不是会变招的怪
+                if (enemy.name == "蛮颚龙"&& (float)enemy._currentHealth * 1.25 < (float)enemy._maxHealth)
+                    enemy.skillSystem.ChangeSkillinRealtime(Player.PlayerGridPos);
+            }
+        }
     }
 
     private IEnumerator PlayerDrawPhase()
@@ -329,7 +351,8 @@ public class BattleManager : MonoBehaviour
         isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
             Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
-            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1,1), callback1 , callback2));
+            Action callback3 = BeforeChangeskill;//把他当成回调函数传出才能正确的使用新坐标！
+            StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1,1), callback1 , callback2,callback3));
         Player.ModifySituation(0);
     }
 
@@ -396,6 +419,7 @@ public class BattleManager : MonoBehaviour
         hand.Clear();
     //    Debug.Log("回合结束时手牌数为:" + hand.Count);
         cardManager.UpdateCardPositions(hand);
+        UpdatedeckNum();
     }
     public IEnumerator ConsumeCoRoutine(Card card)
     {
@@ -419,6 +443,7 @@ public class BattleManager : MonoBehaviour
             isWaitingForPlayerChoose = true;
             Action<Vector2Int> callback1 = OnPositionChanged.Invoke;
             Action<Vector2Int> callback2 = OnDirectionChanged.Invoke;
+            Action callback3 = BeforeChangeskill;
             List<int> newDir = card.Move;
             List<int> AllDir = new List<int> { 0, 1, 2, 3, 4, 5 };
             if (Player.Situation == 0) newDir = AllDir;
@@ -426,7 +451,8 @@ public class BattleManager : MonoBehaviour
                 Player.ModifySituation(0);
             else if (card.EnterState == 2 || (card.EnterState == 0 && Player.Situation == 1))
                 Player.ModifySituation(1);
-            yield return StartCoroutine(mapmanager.MoveCommand(GetAdjacent(newDir), Player.PlayerGridPos, card.MoveLength, callback1, callback2));
+            yield return StartCoroutine(mapmanager.MoveCommand(GetAdjacent(newDir), Player.PlayerGridPos, card.MoveLength, callback1, callback2, callback3));
+            BeforeChangeskill();
         }
 
         if (card.AttackDirection != null && card.Sequence == true)
@@ -534,7 +560,7 @@ public class BattleManager : MonoBehaviour
        }
 
        
-       AudioManager.PlayCardPlaySound(card.cardNum);
+      // AudioManager.PlayCardPlaySound(card.cardNum);
        cardManager.RemoveCardFromHand(card, hand);
        card.transform.position += new Vector3(10000, 0, 0);
         if (card.Consumption == true)//消耗判断
@@ -544,6 +570,7 @@ public class BattleManager : MonoBehaviour
             cardManager.ReturnCardToPool(card);
         }
         else discardPile.Add(card);
+        UpdatedeckNum();
        UserIndicator.text = "玩家回合";
        if(card.cardNum == 32)
        {
@@ -566,6 +593,7 @@ public class BattleManager : MonoBehaviour
        {
             OnEndTurnButtonClicked();
        }
+
     }
   /*  public int CalculateAttack(Card card)
     {
@@ -619,11 +647,10 @@ public class BattleManager : MonoBehaviour
 
         Player.ModifyCost(Player.curCost - card.Cost);
         Debug.Log("还剩" + Player.curCost.ToString() + "费！");
+        
 
-      
-        
+
         StartCoroutine(ConsumeCoRoutine(card));
-        
         
     } 
     public void UpdateCards()
@@ -812,7 +839,20 @@ public class BattleManager : MonoBehaviour
         return res;
     }
 
-    public
+    //检测玩家是否在当前的攻击范围里
+    public bool PlayerInRange(List<Vector2Int> actualrangepos)
+    {
+        bool res = false;
+        foreach (Vector2Int pos in actualrangepos)
+        {
+            if (pos == Player.PlayerGridPos)
+            {
+                res = true;
+            }
+        }
+        return res;
+    }
+
     // Update is called once per frame
     void Update()
     {

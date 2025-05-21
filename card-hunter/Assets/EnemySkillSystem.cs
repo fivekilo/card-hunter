@@ -19,6 +19,7 @@ public class EnemySkillSystem : MonoBehaviour
     public int skillselected = 0;//是否已经被选过
     public int skill4selected = 0;//某个技能是否已经被选过
     public int turncount = 0;//回合计数器（待编写）
+    public bool oldplayerinrange = false;
 
     void Awake()
     {
@@ -27,17 +28,22 @@ public class EnemySkillSystem : MonoBehaviour
         mapManager = battleManager.mapmanager;
     }
 
-    public void SelectNextSkill()
+    public void SelectNextSkill(int certainskill)
     {
         skillselected = 0;//先置0再选技能
+        if(certainskill!=-1)//可以直接传入固定选用技能
+        {
+            skillselected = 1;
+            nextSkillID = certainskill;
+        }
         // 选择前特判1：大贼龙的4技能（吞食回血转阶段）
         while (aiController.name=="大贼龙" && (float)aiController._currentHealth * 2.5 < (float)aiController._maxHealth && skill4selected == 0)
         {
             nextSkillID = 4;
             skillselected = 1;
             skill4selected = 1;
-            availableSkills.Add(5);
-            availableSkills.Add(6);
+            aiController.selfSkills.Add(5);
+            aiController.selfSkills.Add(6);
             //在这里不能remove，因为技能只是选了还没放出来呢。只能加不能删
             Debug.Log("大贼龙触发了“进食”技能！");
         }
@@ -48,8 +54,8 @@ public class EnemySkillSystem : MonoBehaviour
             {
                 nextSkillID = availableSkills[Random.Range(0, availableSkills.Count)];
                 skillselected = 1;
-            } while (nextSkillID == 4 || nextSkillID == 0 || nextSkillID == 10);
-            // 特判：大贼龙的4技能,0技能力竭,蛮颚龙的10技能龙吼不能在这里选
+            } while (nextSkillID == 4 || nextSkillID == 0 );
+            // 特判：大贼龙的4技能,0技能力竭不能在这里选
         }
 
 
@@ -59,6 +65,9 @@ public class EnemySkillSystem : MonoBehaviour
         int enemydirection = aiController.direction;
         List<Vector2Int> actualrangepos =GetSkillRange(nextskillconfig,enemypos,enemydirection);
         mapManager.ChangeColorByPos(actualrangepos, Color.magenta);//记得改回来
+
+        //检测玩家是否在范围内
+        oldplayerinrange = battleManager.PlayerInRange(actualrangepos);
     }
 
     //获取攻击范围对应的地图坐标
@@ -84,6 +93,65 @@ public class EnemySkillSystem : MonoBehaviour
         return ActualRangePos;
     }
 
+
+    //是否变招（仅特殊怪拥有）
+    public void ChangeSkillinRealtime(Vector2Int playergridpos_now)
+    {
+        if (aiController.havechangedskill == true) return;//一回合只能变一次
+        if (oldplayerinrange == false) return;//如果原来就不在范围里，不进行变招
+
+        GameConfig.EnemySkillConfig nextskillconfig = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == nextSkillID);
+        Vector2Int enemypos = aiController._currentGridPos;
+        int enemydirection = aiController.direction;
+        List<Vector2Int> actualrangepos = GetSkillRange(nextskillconfig, enemypos, enemydirection);
+        bool inrange = false;
+        foreach (Vector2Int pos in actualrangepos)
+        {
+            if (pos == playergridpos_now) 
+            { 
+                inrange = true;
+                Debug.Log($"范围的中的坐标{pos}和玩家坐标{playergridpos_now}相同，不变招");
+                break; 
+            }
+        }
+        if (inrange == true) return;
+
+        //如果发现不在范围里了，进行变招(尽量选用在范围内的招式)
+        //1.回退之前的范围颜色
+        Debug.Log("触发变招了！");
+        ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
+        mapManager.ChangeColorByPos(actualrangepos, color);
+        //2.先进行转向(待实现)
+
+        //3.再选新技能
+        int someskillID;
+        bool OK = false;
+        for (int i = 1; i <= 3; i++)//最多随机选3次
+        {
+            do
+            {
+                someskillID = availableSkills[Random.Range(0, availableSkills.Count)];
+            } while (someskillID == 4 || someskillID == 0);
+            //获取技能范围并展示
+            GameConfig.EnemySkillConfig someskillconfig = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == someskillID);
+            Vector2Int newenemypos = aiController._currentGridPos;
+            int newenemydirection = aiController.direction;
+            List<Vector2Int> newactualrangepos = GetSkillRange(someskillconfig, newenemypos, newenemydirection);
+            foreach (Vector2Int pos in newactualrangepos)
+            {
+                if (pos == playergridpos_now) { OK = true; break; }
+            }
+            if (OK == true)
+            {
+                SelectNextSkill(someskillID);
+                aiController.havechangedskill = true;
+                break;
+            }
+        }
+        if (OK == false)
+            SelectNextSkill(-1);
+    }
+
     //执行技能
     public IEnumerator ExecuteCurrentSkill(int cut)
     {
@@ -97,8 +165,8 @@ public class EnemySkillSystem : MonoBehaviour
         ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
         mapManager.ChangeColorByPos(actualrangepos, color);
 
-        //当cut=-1时，打断剩余部分
-        if (cut ==-1) yield break;
+        //当cut=1时，打断剩余部分
+        if (cut ==1) yield break;
 
         // 执行移动
         if (config.moveType!=GameConfig.MoveType.None)

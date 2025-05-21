@@ -250,7 +250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b62a617cf9f15894b8e83943fc38c3c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Leaflet: {fileID: 0}
+  Leaflet: {fileID: 4704786826665651919, guid: 2c96de189270eb24690f8c95b7fce677, type: 3}
 --- !u!1 &7156272628758829140
 GameObject:
   m_ObjectHideFlags: 0
