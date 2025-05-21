@@ -280,6 +280,7 @@ MonoBehaviour:
   DeckWin: {fileID: 6351952056174906358, guid: fc0f7dcd39514c2478ed3fac7cb5dd72, type: 3}
   Camera: {fileID: 1621727204}
   Commissionboard: {fileID: 5768871435034801354, guid: e879d21a12b19b84b9f887485b0737d5, type: 3}
+  StartMenu: {fileID: 2104167937627659603, guid: 4b86806038ac1a84b9bd8bae7df9af06, type: 3}
 --- !u!4 &233589024
 Transform:
   m_ObjectHideFlags: 0
