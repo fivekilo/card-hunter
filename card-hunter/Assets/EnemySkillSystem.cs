@@ -49,7 +49,7 @@ public class EnemySkillSystem : MonoBehaviour
             //在这里不能remove，因为技能只是选了还没放出来呢。只能加不能删
             Debug.Log("大贼龙触发了“进食”技能！");
         }
-        // 选择前特判2：岩贼龙的两次19技能转阶段（此时回合计数器还没加上）
+        // 选择前特判2：岩贼龙的两次19技能转阶段
         if (aiController.ID == 5 && (aiController.TurnCount==5-1 || aiController.TurnCount==10-1))
         {
             nextSkillID = 19;
@@ -59,22 +59,34 @@ public class EnemySkillSystem : MonoBehaviour
                 aiController.selfSkills.Add(20);
                 aiController.selfSkills.Add(21);
             }
-            if (aiController.TurnCount == 10-1 &&aiController.enemystate==0)//第二次释放变成双倍伤害形态
-            {
-                aiController.enemystate = 1;
-            }
             Debug.Log("岩贼龙触发了“吞食岩石”技能！");
         }
+        // 选择前特判3：冰咒龙的33技能
+        if (aiController.ID == 7 && aiController.FrozenTurnCount ==5-1)
+        {
+            nextSkillID = 33;
+            skillselected = 1;
+            aiController.enemystate = 1;//极寒之冰形态
+            aiController.selfSkills.Add(34);
+            //aiController.selfSkills.Add(35);
+            //aiController.selfSkills.Add(36);
+            Debug.Log("冰咒龙触发了“冰之铠甲”技能！");
+        }
+        // 选择前特判4：冰咒龙的34技能在进冰之后立刻释放
+        if (aiController.ID == 7 && currentSkillID==33)
+        {
+            nextSkillID = 34;
+            skillselected = 1;
+        }
 
-        // 简单AI：随机选择下个技能
         if (skillselected ==0)
         {
             do
             {
                 nextSkillID = availableSkills[Random.Range(0, availableSkills.Count)];
                 skillselected = 1;
-            } while (nextSkillID == 4 || nextSkillID == 0 || nextSkillID == 19);
-            // 特判：大贼龙的4技能,0技能力竭，岩贼龙的19技能转阶段不能在这里选
+            } while (nextSkillID == 4 || nextSkillID == 0 || nextSkillID == 19 || nextSkillID == 33);
+            // 特判：大贼龙的4技能,0技能力竭，岩贼龙的19技能,冰咒龙的33技能不能在这里选
         }
 
 
@@ -178,7 +190,7 @@ public class EnemySkillSystem : MonoBehaviour
                 }
                 else
                     someskillID = availableSkills[Random.Range(0, availableSkills.Count)];
-            } while (someskillID == 4 || someskillID == 0 || someskillID == 19);
+            } while (someskillID == 4 || someskillID == 0 || someskillID == 19 || someskillID == 33);
             //获取技能范围并展示
             GameConfig.EnemySkillConfig someskillconfig = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == someskillID);
             Vector2Int newenemypos = aiController._currentGridPos;
