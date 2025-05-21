@@ -2630,7 +2630,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1923255098}
   - component: {fileID: 1923255097}
-  - component: {fileID: 1923255099}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -2665,12 +2664,25 @@ MonoBehaviour:
   AudioManager: {fileID: 1289596913}
   data: {fileID: 11400000, guid: 564b0fb8ae3b947448d1292a6fd07d65, type: 2}
   discardPile: []
+  Turn: 0
   _enemies: []
   BattleComplete: {fileID: 5702695820695157551, guid: c4890e72c92d9a04c9363973383d2a15, type: 3}
   isWaitingForPlayerChoose: 0
   EndTurnClicked:
     m_PersistentCalls:
       m_Calls: []
+  shareddata: {fileID: 11400000, guid: 564b0fb8ae3b947448d1292a6fd07d65, type: 2}
+  choosetype: 
+  monster: 0
+  prefabMappings:
+  - type: 0
+    prefab: {fileID: 3073593123331695978, guid: 167bd09f5d2cc334da35f96806a3a4d9, type: 3}
+  - type: 1
+    prefab: {fileID: 4149127708922818789, guid: 3c06688e309f9274184ecca41eaeb059, type: 3}
+  - type: 2
+    prefab: {fileID: 8521241374640160546, guid: c4b0bc4166a6dbf4ab8d9b1ba43f4647, type: 3}
+  - type: 3
+    prefab: {fileID: 1403646258829994313, guid: e3b0d0389c833c743ba6b63658d5d081, type: 3}
 --- !u!4 &1923255098
 Transform:
   m_ObjectHideFlags: 0
@@ -2693,30 +2705,6 @@ Transform:
   - {fileID: 7983739992817912425}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1923255099
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1923255096}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbe43dfb0e46fd8488842aa127d99f79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shareddata: {fileID: 11400000, guid: 564b0fb8ae3b947448d1292a6fd07d65, type: 2}
-  choosetype: 
-  monster: 0
-  prefabMappings:
-  - type: 0
-    prefab: {fileID: 3073593123331695978, guid: 167bd09f5d2cc334da35f96806a3a4d9, type: 3}
-  - type: 1
-    prefab: {fileID: 4149127708922818789, guid: 3c06688e309f9274184ecca41eaeb059, type: 3}
-  - type: 2
-    prefab: {fileID: 8521241374640160546, guid: c4b0bc4166a6dbf4ab8d9b1ba43f4647, type: 3}
-  - type: 3
-    prefab: {fileID: 1403646258829994313, guid: e3b0d0389c833c743ba6b63658d5d081, type: 3}
 --- !u!114 &1923434375
 MonoBehaviour:
   m_ObjectHideFlags: 0
