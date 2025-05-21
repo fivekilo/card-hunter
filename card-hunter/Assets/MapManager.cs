@@ -226,12 +226,13 @@ public class MapManager : MonoBehaviour
             D = direction - player;
             for(int i = length[0]; i <= length[1]; i++)
             {
-                if (ObPosition.Contains(player + D *i) || enemyPos.Contains(player + D * i))
+                if (ObPosition.Contains(player + D *i) || !checkPosValid(player + D * i))
                 {
                     break;
                 }
                 else
                 {
+                    if(!enemyPos.Contains(player + D * i))
                     accessible.Add(player + D * i);
                 }
             }
@@ -285,7 +286,7 @@ public class MapManager : MonoBehaviour
             D = direction - player;
             for (int i = length[0]; i <= length[1]; i++)
             {
-                if (ObPosition.Contains(player + D * i))
+                if (ObPosition.Contains(player + D * i) || !checkPosValid(player + D * i))
                 {
                     break;
                 }
@@ -314,7 +315,6 @@ public class MapManager : MonoBehaviour
             map.RollbackColor(pos);
         }
         
-        battleManager.isWaitingForPlayerChoose = false;
         Vector2Int Direction = GetNewDir(ClickedPos , player);
         //先转向
         callback(Direction);
@@ -332,10 +332,11 @@ public class MapManager : MonoBehaviour
         List<int> AttackRange = card.AttackRange;
         foreach (int Dir_id in AttackRange)
         {
-            for (int i = 0; i <= Length; i++)
+            for (int i = 1; i <= Length; i++)
             {
                 int newDir = (Dir_id + PlayerDirId) % 6;
                 Vector2Int nowPos = battleManager.Player.PlayerGridPos + new Vector2Int(dx[newDir] * i, dy[newDir] * i);
+                if(checkPosValid(nowPos))
                 Attacked.Add(nowPos);
             }
         }
@@ -350,6 +351,7 @@ public class MapManager : MonoBehaviour
             map.RollbackColor(pos);
         }
         battleManager.AttackConsume(card);
+        battleManager.isWaitingForPlayerChoose = false;
     }
 
     //让指定坐标（地图坐标）的格子变色
@@ -423,11 +425,26 @@ public class MapManager : MonoBehaviour
         return false;
     }
 
+    public bool checkPosValid(Vector2Int Pos)
+    {
+        if (Pos.x < 0 || Pos.x >= GameConfig.size || Pos.y < 0 || Pos.y >= GameConfig.size) return false;
+        return true;
+    }
     public bool isObstacle(Vector2Int pos)
     {
         if (map.GetHex(pos).tag == "Obstacle") return true;
         return false;
     }
+
+    //怪物主动改变地形要素
+    public void AddMonsterContent(Vector2Int pos, GameConfig.Content content)
+    {
+        //在这里还要检测是不是墙体
+        if (isObstacle(pos)) return;
+        Hexagon hexagon =map.GetHex(pos).GetComponent<Hexagon>();
+        hexagon.ContentChange(content);
+    }
+
     // Start is called before the first frame update
     void Start()
     {

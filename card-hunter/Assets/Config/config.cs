@@ -27,11 +27,11 @@ public class GameConfig : ScriptableObject
         Frog,
         DuCao,
         NaiLiBug,
-        //Lava, 
-        //ElectricBall, 
-        //Icicle
+        Lava,
+        ElectricBall,
+        Icicle
     }
-    public static IReadOnlyList<int> ContentAmount = new List<int> {1,1,2,2,1}.AsReadOnly();
+    public static IReadOnlyList<int> ContentAmount = new List<int> {1,1,2,2,1,0,0,0}.AsReadOnly();
     public static IReadOnlyList<string> CardName = new List<string> {"",//卡牌名称
         "直斩" ,//1
         "踏步斩",//2
@@ -126,7 +126,7 @@ public class GameConfig : ScriptableObject
         "造成两次4点伤害，抽1张牌，回复2气刃槽，转向。",//11
         "造成2点伤害,造成1层【伤口】。",//12
         "向左边或右边位移一格（无前后），不改变状态",//13
-        "造成6点伤害,回复2气刃槽, 造成2层【伤口】",//14  ！
+        "造成6点伤害,回复2气刃槽, 造成2层【伤口】",//14 
         "回复8格气刃槽",//15
         "获得8点格挡，抽一张牌",//16
         "仅自由态，造成5*2点伤害，回复3格气刃槽",//17
@@ -145,7 +145,7 @@ public class GameConfig : ScriptableObject
         "对前方造成4点伤害，消耗1格气刃槽，派生刚气刃斩,转向,消耗，虚无",//30
         "造成8*2点伤害，获得12点格挡，提升气刃等级,转向,消耗，虚无",//31
         "向任意方向最多移动两格，进入自由态。清空气刃槽，每清空一格下一次攻击伤害提高2。",//32 !
-        "最多位移3格，对沿途的怪物造成6*3伤害，位移可以穿过怪物，提升气刃等级，进入自由态。",//33
+        "最多位移3格，对沿途的怪物造成6*3伤害，位移可以穿过怪物，提升气刃等级。",//33
         "限连携态，有两层气刃等级时使用。消耗两层气刃等级，造成7*6伤害，获得30点格挡，进入自由态。消耗",//34 
         "造成8点伤害，回复2气刃槽，如果有至少3层【伤口】，消耗3层，造成15点伤害并提升一级气刃等级 转向 。",//35 !
         "向角色的各个方向各两格展开一个圆形区域，持续三回合。在该区域内，角色的气刃槽锁定为8格，【见切】和【居合】所需费用降低1点。在离开圆月时气刃槽清空",//36 !
@@ -339,7 +339,7 @@ public class GameConfig : ScriptableObject
         new Vector2Int(0,0),//20
         new Vector2Int(1,1),//21
         new Vector2Int(0,0),//22
-        new Vector2Int(1,2),//23
+        new Vector2Int(0,2),//23
         new Vector2Int(1,2),//24
         new Vector2Int(0,0),//25
         new Vector2Int(0,0),//26
@@ -423,7 +423,7 @@ public class GameConfig : ScriptableObject
         false,//22
         false,//23
         false,//24
-        true,//25
+        false,//25
         true,//26
         true,//27
         true,//28
@@ -435,7 +435,7 @@ public class GameConfig : ScriptableObject
         true,//34
         false,//35
         false,//36
-        false,//37
+        true,//37
     }.AsReadOnly();
 
     public static IReadOnlyList<int> DrawCard = new List<int>
@@ -595,9 +595,9 @@ public class GameConfig : ScriptableObject
         2,//30
         2,//31
         1,//32
-        1,//33
+        2,//33
         1,//34
-        2,//34
+        2,//35
         0,//36
         0,//37
     }.AsReadOnly();
@@ -874,7 +874,7 @@ public class GameConfig : ScriptableObject
         0,//22
         0,//23
         0,//24
-        0,//25
+        3,//25
         0,//26
         0,//27
         0,//28
@@ -1046,7 +1046,7 @@ public class GameConfig : ScriptableObject
         true,//30
         true,//31
         true,//32
-        false,//33
+        true,//33
         true,//34
         true,//35
         true,//36

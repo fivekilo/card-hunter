@@ -43,7 +43,7 @@ public class EnemyAIController : MonoBehaviour
     {
         _battleManager = GetComponentInParent<BattleManager>();
         _mapManager = _battleManager.mapmanager;
-        _currentGridPos = new(GameConfig.size/2,GameConfig.size/2); 
+        _currentGridPos = GenerateSpawn(); 
         //初始化位置
         Vector3 InitialPos = _mapManager.GetHexagon(_currentGridPos).transform.position;
         InitialPos.z = -5;
@@ -58,7 +58,25 @@ public class EnemyAIController : MonoBehaviour
         skillSystem.availableSkills = selfSkills;
         enemybuff = GetComponent<EnemyBuff>();
     }
-   
+
+    public Vector2Int GenerateSpawn()
+    {
+        int attemp = 0;
+        Vector2Int res = new();
+        System.Random rand = new System.Random();
+        while (attemp < 100)
+        {
+            int x = rand.Next(0, 6);
+            int y = rand.Next(0, 6);
+            if (x + y < 7|| _mapManager.isObstacle(new(x, y)) == true) continue;
+            res = new(x, y);
+            Debug.Log("怪物生成在" + x + " " + y);
+            break;
+            attemp++;
+        }
+        return res;
+    }
+
     public IEnumerator TakeTurn()//执行回合
     {
         TurnCount++;//回合计数+1
@@ -87,9 +105,22 @@ public class EnemyAIController : MonoBehaviour
         {
             yield return WanderRandomly();
         }
-        //展示要出的下一招
-        skillSystem.SelectNextSkill(-1);
-}
+        //展示要出的下一招（被麻痹了选0）
+        if(enemybuff.Numbness>0)
+        {
+            skillSystem.SelectNextSkill(0);
+            enemybuff.ModifyNumbness(enemybuff.Numbness-1);
+        }
+        else
+            skillSystem.SelectNextSkill(-1);
+        //判定中毒状态
+        if (enemybuff.Poison > 0)
+        {
+            ReduceHealth((int)(_currentHealth*0.02));
+            enemybuff.ModifyPoison(enemybuff.Poison-1);
+        }
+
+    }
 
     bool ShouldMoveToPlayer()
     {
@@ -191,13 +222,31 @@ public class EnemyAIController : MonoBehaviour
         }
     }
 
-    //更新坐标位置
+    //更新坐标位置并判断是否踩到地形要素
     public void UpdatePosition(Vector2Int newPos)
     {
         _currentGridPos = newPos;
         Vector3 newPos3 = _mapManager.GetHexagon(_currentGridPos).transform.position;
         newPos3.z = -5;
         transform.position = newPos3;
+        bool exist = false;
+        GameConfig.Content type = _mapManager.StepContent(newPos, out exist);
+        if (exist == false) return;
+        switch (type)
+        {
+            case GameConfig.Content.Trap:
+                enemybuff.ModifyNumbness(enemybuff.Numbness + 1);
+                _mapManager.GetHexagon(newPos).GetComponent<Hexagon>().ContentRemove();
+                break;
+            case GameConfig.Content.Frog:
+                enemybuff.ModifyNumbness(enemybuff.Numbness + 1);
+                _mapManager.GetHexagon(newPos).GetComponent<Hexagon>().ContentRemove();
+                break;
+            case GameConfig.Content.DuCao:
+                enemybuff.ModifyPoison(enemybuff.Poison + 3);
+                _mapManager.GetHexagon(newPos).GetComponent<Hexagon>().ContentRemove();
+                break;
+        }
     }
     
     //加减血量

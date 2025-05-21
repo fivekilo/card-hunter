@@ -350,7 +350,7 @@ public class GameManager : MonoBehaviour
 
         //≥ı ºªØSharedData
         shareddata.playerinfo = playerinfo;
-
+        shareddata.Complete = false;
         camp.GetComponent<Camp>().ClickEvent += GetCommission;
         Player.GetComponent<PlayerMove>().encounterEvent += EventChoose;
         ArriveBattleField += BattleEnter;
