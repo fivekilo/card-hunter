@@ -88,25 +88,25 @@ public class GameConfig : ScriptableObject
         "Direct slash",//16
         "Direct slash",//17
         "18",//18
-        "Direct slash",//19
+        "19",//19
         "The gas blade pierces",//20
         "Gas blade pocket cutting",//21
         "dajv",//22
         "Flying claw attack",//23
-        "Direct slash",//24
-        "Direct slash",//25
-        "Direct slash",//26
-        "Direct slash",//27
-        "Direct slash",//28
-        "Direct slash",//29
-        "Direct slash",//30
-        "Direct slash",//31
-        "Direct slash",//32
-        "Direct slash",//33
-        "Direct slash",//34
-        "Direct slash",//35
-        "Direct slash",//36
-        "Direct slash",//37
+        "DSB",//24
+        "DSB",//25
+        "DSB",//26
+        "DSB",//27
+        "DSB",//28
+        "29",//29
+        "DSB",//30
+        "DSB",//31
+        "DSB",//32
+        "DSG",//33
+        "34",//34
+        "35",//35
+        "DSG",//36
+        "DSG",//37
         }.AsReadOnly();
     public static IReadOnlyList<string> CardText = new List<string>
     { "", //卡牌描述
