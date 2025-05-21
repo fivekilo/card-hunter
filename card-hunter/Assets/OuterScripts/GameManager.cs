@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public GameObject Camera;
     public GameObject Commissionboard;
     public GameObject StartMenu;
+    public GameObject InCamp;
     public event Action<Choice> Chosed;
     public event Action<int> AddCard;
     private List<bool> AbleToMove=new List<bool> {false,false };
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour
     private GameObject DW;//卡组窗口
     private GameObject CB;//委托栏
     private GameObject SM;//开始菜单
+    private GameObject Camp;//营地菜单
     private List<Commission> AcceptedCommission;
     private event Func<Commission,IEnumerator> ArriveBattleField;
     private event Action ArriveCamp;
@@ -39,12 +41,15 @@ public class GameManager : MonoBehaviour
         SM.transform.Find("Background/Start").GetComponent<ConfirmBtn>().Confirm += GameStart;
         SM.transform.Find("Background/Exit").GetComponent<ConfirmBtn>().Confirm += Exit;
     }
+    private void EnterCamp()
+    {
+        Camp = Instantiate(InCamp, Vector3.zero, Quaternion.identity);
+    }
     private void GameStart()//游戏启动
     {
-        //移回摄像头
-        Camera.transform.position=GameConfig.CameraDefault;
-
         Destroy(SM);
+        Camp=Instantiate(InCamp,Vector3.zero,Quaternion.identity);
+        Camp.transform.Find("Commission").GetComponent<ConfirmBtn>().Confirm += GetCommission;
     }
     private void Save()//存档
     {
@@ -56,6 +61,10 @@ public class GameManager : MonoBehaviour
     }
     private void GetCommission()
     {
+        //移回镜头
+        Camera.transform.position = GameConfig.CameraDefault;
+        Destroy(Camp);
+
         List<Commission> commissions = GameConfig.Commissions;
         List<Commission> selected = RM.ChooseCommission(commissions, 1);
         CB = Instantiate(Commissionboard,Vector3.zero,Quaternion.identity);

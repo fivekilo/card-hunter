@@ -19,7 +19,7 @@ public class AddCardWindow : MonoBehaviour
         System.Random rand = new System.Random();
         while (Set.Count < 3)
         {
-            Set.Add(rand.Next(1, CardsID.Count));
+            Set.Add(CardsID[rand.Next(1, CardsID.Count)]);
         }
         List<int> CardNum = Set.ToList();
         for(int i = 1; i < 4; i++)
@@ -29,7 +29,7 @@ public class AddCardWindow : MonoBehaviour
         //链接处理函数和点击事件 初始化卡牌
         for(int i=0;i<3;i++)
         {
-            Cards[i].GetComponent<Card>().cardNum = CardsID[CardNum[i]];
+            Cards[i].GetComponent<Card>().cardNum = CardNum[i];
             Cards[i].GetComponent<Card>().cardInit();
             Cards[i].GetComponent<CardWin>().Clicked += ClickHandler;
         }
