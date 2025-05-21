@@ -1605,8 +1605,7 @@ public class GameConfig : ScriptableObject
         {
             skillID = 33,
             skillName = "冰之铠甲",
-            range = new List<Vector2Int>{new Vector2Int(0,0),new Vector2Int(1,0),new Vector2Int(-1,0),new Vector2Int(0,1),
-                new Vector2Int(-1,1),new Vector2Int(0,-1),new Vector2Int(1,-1)},
+            range = new List<Vector2Int>(),
             damage =0,
             hittimes = 0,
             moveType = MoveType.None,

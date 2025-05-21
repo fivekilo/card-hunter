@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
@@ -71,7 +72,8 @@ public class BattleManager : MonoBehaviour
     public event DirectionChangedHandler OnDirectionChanged; 
 
     public bool isWaitingForPlayerChoose = false;
-    public UnityEvent EndTurnClicked; 
+    public UnityEvent EndTurnClicked;
+
 
     private void UpdatedeckNum()
     {
@@ -174,10 +176,10 @@ public class BattleManager : MonoBehaviour
         Player.money = data.playerinfo.money;
         Player.MaxCost = data.playerinfo.MaxCost;
         Player.MaxHealth = data.playerinfo.MaxHealth;
+
         //怪物初始化
         FindAllEnemies();
-        _enemies[0]._currentHealth = 85;
-        
+
         StartCoroutine(WaitBattleComplete());
         InitializeDeck();
   //      data
@@ -185,6 +187,7 @@ public class BattleManager : MonoBehaviour
         Decknum.text = deck.Count.ToString();
         Dpnum.text = "0";
     }
+    // 初始化函数
 
     public void InitializeDeck()
     {
@@ -315,7 +318,7 @@ public class BattleManager : MonoBehaviour
             {
                 //判断是不是会变招的怪:蛮颚龙，岩贼龙，冰咒龙
                 if ((enemy.ID==3 && (float)enemy._currentHealth * 1.25 < (float)enemy._maxHealth)
-                    ||(enemy.ID == 5))
+                    ||(enemy.ID == 5)|| (enemy.ID == 7))
                     enemy.skillSystem.ChangeSkillinRealtime(Player.PlayerGridPos);
             }
         }
