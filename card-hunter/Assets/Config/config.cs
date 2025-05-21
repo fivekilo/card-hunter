@@ -1768,8 +1768,8 @@ public class GameConfig : ScriptableObject
             }),
             new Event(13,"雨夜与钢龙","","3",
             new List<Choice>{
-                new Choice(1,"[一探究竟]：删一张牌,失去15点生命值”",-1,false,0,0,-5,0,new List<int>(),0),
-                new Choice(2,"[快速离开]：失去5点生命值",0,false,0,0,-15,0,new List<int>(),0),
+                new Choice(1,"[一探究竟]：删一张牌,失去15点生命值”",-1,false,0,0,-15,0,new List<int>(),0),
+                new Choice(2,"[快速离开]：失去5点生命值",0,false,0,0,-5,0,new List<int>(),0),
             }),
     };
     public static readonly Vector2Int EventAmountBounds = new Vector2Int(1, 1);//每层总事件数限制

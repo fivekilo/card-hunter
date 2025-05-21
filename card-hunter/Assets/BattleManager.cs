@@ -200,6 +200,7 @@ public class BattleManager : MonoBehaviour
         enemyBuff = GetComponentInChildren<EnemyBuff>();
 
 
+
         OnBladeGasChange += Player.ModifyBladeNum;
         OnBladeGasChange += BladeLevelSlot.ShowBladeGas;
 
@@ -253,10 +254,11 @@ public class BattleManager : MonoBehaviour
 
         OnBladeGasChange?.Invoke(0);
         OnBladeLevelChange?.Invoke(0);
-
+        Player.ModifyHealth(Player.MaxHealth);
+        Player.ModifyCost(Player.MaxCost);
         //怪物初始化
         FindAllEnemies();
-        _enemies[0]._currentHealth = 85;
+        //_enemies[0]._currentHealth = 85;
 
         if (Player.Equipments.Contains(4))
         {

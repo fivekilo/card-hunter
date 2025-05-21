@@ -356,18 +356,22 @@ public class GameManager : MonoBehaviour
         Destroy(SP);
         Camp.SetActive(true);
     }
-    private void RefreshShop()
+    private IEnumerator RefreshShop()
     {
-        HashSet<column>Set = new HashSet<column>();
-        System.Random rand = new System.Random();
-        while (Set.Count < 4)
+        while(true)
         {
-            int r=rand.Next(GameConfig.CardColumnNormal.Count);
-            Set.Add(GameConfig.CardColumnNormal[r]);
+            HashSet<column> Set = new HashSet<column>();
+            System.Random rand = new System.Random();
+            while (Set.Count < 4)
+            {
+                int r = rand.Next(GameConfig.CardColumnNormal.Count);
+                Set.Add(GameConfig.CardColumnNormal[r]);
+            }
+            int _ = rand.Next(GameConfig.CardcolumnRare.Count);
+            Set.Add(GameConfig.CardColumnNormal[_]);
+            CardsInShop = Set.ToList();
+            yield return new WaitUntil(() => PlayerProgress % 4 == 0);
         }
-        int _=rand.Next(GameConfig.CardcolumnRare.Count);
-        Set.Add(GameConfig.CardColumnNormal[_]);
-        CardsInShop=Set.ToList();
     }
     void Start()
     {
@@ -379,7 +383,7 @@ public class GameManager : MonoBehaviour
         shareddata.playerinfo = playerinfo;
         shareddata.Complete = false;
 
-        RefreshShop();
+        StartCoroutine(RefreshShop());
 
         camp.GetComponent<Camp>().ClickEvent += GetCommission;
         Player.GetComponent<PlayerMove>().encounterEvent += EventChoose;
