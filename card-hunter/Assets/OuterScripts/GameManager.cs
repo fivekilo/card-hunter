@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
@@ -54,6 +55,11 @@ public class GameManager : MonoBehaviour
     private void GameStart()//”Œœ∑∆Ù∂Ø
     {
         Destroy(SM);
+        shareddata.playerinfo.MaxHealth = GameConfig.InitialHealth;
+        shareddata.playerinfo.curHealth = GameConfig.InitialHealth;
+        shareddata.playerinfo.MaxCost = GameConfig.InitialCost;
+        shareddata.playerinfo.curCost = GameConfig.InitialCost;
+        shareddata.playerinfo.Direction = new(1, 0);
         Camp=Instantiate(InCamp,Vector3.zero,Quaternion.identity);
         Camp.transform.Find("Commission").GetComponent<ConfirmBtn>().Confirm += GetCommission;
         Camp.transform.Find("Shop").GetComponent <ConfirmBtn>().Confirm += OpenCardShop;
@@ -74,7 +80,7 @@ public class GameManager : MonoBehaviour
         Destroy(Camp);
 
         List<Commission> commissions = GameConfig.Commissions;
-        List<Commission> selected = RM.ChooseCommission(commissions, 1);
+        List<Commission> selected = RM.ChooseCommission(commissions, 3);
         CB = Instantiate(Commissionboard,Vector3.zero,Quaternion.identity);
         CB.GetComponent<CommissionBoard>().Init(selected);
         //…„œÒÕ∑“∆∂Ø∑¿÷πŒÛ¥•±≥æ∞
@@ -350,7 +356,19 @@ public class GameManager : MonoBehaviour
         Destroy(SP);
         Camp.SetActive(true);
     }
-
+    private void RefreshShop()
+    {
+        HashSet<column>Set = new HashSet<column>();
+        System.Random rand = new System.Random();
+        while (Set.Count < 4)
+        {
+            int r=rand.Next(GameConfig.CardColumnNormal.Count);
+            Set.Add(GameConfig.CardColumnNormal[r]);
+        }
+        int _=rand.Next(GameConfig.CardcolumnRare.Count);
+        Set.Add(GameConfig.CardColumnNormal[_]);
+        CardsInShop=Set.ToList();
+    }
     void Start()
     {
         //≥ı ºªØRogue Mod
@@ -360,6 +378,9 @@ public class GameManager : MonoBehaviour
         //≥ı ºªØSharedData
         shareddata.playerinfo = playerinfo;
         shareddata.Complete = false;
+
+        RefreshShop();
+
         camp.GetComponent<Camp>().ClickEvent += GetCommission;
         Player.GetComponent<PlayerMove>().encounterEvent += EventChoose;
         ArriveBattleField += BattleEnter;

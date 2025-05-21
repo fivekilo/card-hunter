@@ -96,7 +96,7 @@ public class RogueMod : MonoBehaviour
         {
             idx.Add(random.Next(0, ComCount));
         }
-        while (idx.Count<ComCount);
+        while (idx.Count<amount);
         List<Commission> selections = new List<Commission>();
         foreach(int i in  idx)
         {

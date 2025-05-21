@@ -22,7 +22,7 @@ public class CommissionBoard : MonoBehaviour
         int x = 0;
         foreach(Commission c in commissions)
         {
-            GameObject leaf = Instantiate(Leaflet, new Vector3(GameConfig.BoardX+x*GameConfig.BoardX, 0, 0) + transform.position, Quaternion.identity, transform);
+            GameObject leaf = Instantiate(Leaflet, new Vector3(-GameConfig.BoardX+x*GameConfig.BoardX, 0, 0) + transform.position, Quaternion.identity, transform);
             leaves.Add(leaf);
             leaf.GetComponent<Leaflet>().Init(c);
             leaf.GetComponent<Leaflet>().num=x++;

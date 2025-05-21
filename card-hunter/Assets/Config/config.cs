@@ -1686,7 +1686,7 @@ public class GameConfig : ScriptableObject
     public const int ShopX = 0, ShopY = 400,ShopDeltaY=-400;
 
     //CommissionBoard 画图参数
-    public const int BoardX = -380,BoardY=0;
+    public const int BoardX = 380,BoardY=0;
 
     //RouteRender参数
     public static IReadOnlyList<string> Destinies = new List<string> { "Camp","Forest", "Desert", "Valcano" };
@@ -1696,7 +1696,13 @@ public class GameConfig : ScriptableObject
     public static readonly Vector3 CampRestPos = new Vector3(-0.6819376f, -1.417444f, 0);
     //Choice(int id, string text, int modifydeck,bool random, int battle,int money, int health, int HPupper, List<int> cardsID, int equipment)
     //RogueMod
-    public static readonly List<Commission> Commissions = new List<Commission> { new Commission(0, "大贼龙", 1, 1,100) };
+    public static readonly List<Commission> Commissions = new List<Commission> { new Commission(0, "大贼龙", 1, 1,70),
+        new Commission(1,"眩鸟",1,2,70),
+        new Commission(2,"蛮颚龙",1,1,70),
+        new Commission(3,"岩贼龙",1,3,70),
+        new Commission(4,"雷狼龙",1,1,70),
+        new Commission(5,"冰咒龙",1,1,70)
+    };
     public static readonly List<Event> Events = new List<Event> {
         new Event(1,"剑术大师","年迈的剑术大师，自远方而来，背上的雌火龙太刀闪烁着他过去的功绩。他愿意指点你的狩猎技巧，如果你愿意付出一些代价的话，他甚至能教给你一些失传秘技。","3",
             new List<Choice>{
@@ -1771,5 +1777,113 @@ public class GameConfig : ScriptableObject
 
     public static readonly List<string> Material = new List<string> { "大贼龙", "眩鸟", "蛮颚龙", "火龙", "岩贼龙", "雷狼龙", "黑龙", "古代遗物" };
 
-    public static readonly List<column> EquipmentsCol = new List<column> { };
+    public static readonly List<column> CardColumnNormal = new List<column>
+    {
+        new column(true,9,"dajv",50),
+        new column(true,9,"dajv",50),
+        new column(true,9,"dajv",50),
+        new column(true,10,"dajv",50),
+        new column(true,10,"dajv",50),
+        new column(true,10,"dajv",50),
+        new column(true,11,"dajv",50),
+        new column(true,11,"dajv",50),
+        new column(true,11,"dajv",50),
+        new column(true,12,"dajv",50),
+        new column(true,12,"dajv",50),
+        new column(true,12,"dajv",50),
+        new column(true,13,"dajv",50),
+        new column(true,13,"dajv",50),
+        new column(true,13,"dajv",50),
+        new column(true,14,"dajv",50),
+        new column(true,14,"dajv",50),
+        new column(true,14,"dajv",50),
+        new column(true,15,"dajv",50),
+        new column(true,15,"dajv",50),
+        new column(true,15,"dajv",50),
+        new column(true,16,"dajv",50),
+        new column(true,16,"dajv",50),
+        new column(true,16,"dajv",50),
+        new column(true,17,"dajv",50),
+        new column(true,17,"dajv",50),
+        new column(true,17,"dajv",50),
+        new column(true,18,"dajv",50),
+        new column(true,18,"dajv",50),
+        new column(true,18,"dajv",50),
+        new column(true,19,"dajv",50),
+        new column(true,19,"dajv",50),
+        new column(true,19,"dajv",50),
+        new column(true,20,"dajv",100),
+        new column(true,20,"dajv",100),
+        new column(true,22,"dajv",100),
+        new column(true,22,"dajv",100),
+        new column(true,23,"dajv",100),
+        new column(true,23,"dajv",100),
+        new column(true,24,"dajv",100),
+        new column(true,24,"dajv",100),
+        new column(true,25,"dajv",100),
+        new column(true,25,"dajv",100),
+        new column(true,26,"dajv",100),
+        new column(true,26,"dajv",100),
+        new column(true,27,"dajv",100),
+        new column(true,27,"dajv",100),
+        new column(true,28,"dajv",100),
+        new column(true,28,"dajv",100),
+        new column(true,29,"dajv",100),
+        new column(true,29,"dajv",100),
+        new column(true,32,"dajv",100),
+        new column(true,32,"dajv",100),
+        new column(true,33,"dajv",150),
+        new column(true,34,"dajv",150),
+        new column(true,35,"dajv",150),
+        new column(true,37,"dajv",150),
+    };
+
+    public static readonly List<column> CardcolumnRare = new List<column>
+    {
+        new column(true,20,"dajv",100),
+        new column(true,20,"dajv",100),
+        new column(true,22,"dajv",100),
+        new column(true,22,"dajv",100),
+        new column(true,23,"dajv",100),
+        new column(true,23,"dajv",100),
+        new column(true,24,"dajv",100),
+        new column(true,24,"dajv",100),
+        new column(true,25,"dajv",100),
+        new column(true,25,"dajv",100),
+        new column(true,26,"dajv",100),
+        new column(true,26,"dajv",100),
+        new column(true,27,"dajv",100),
+        new column(true,27,"dajv",100),
+        new column(true,28,"dajv",100),
+        new column(true,28,"dajv",100),
+        new column(true,29,"dajv",100),
+        new column(true,29,"dajv",100),
+        new column(true,32,"dajv",100),
+        new column(true,32,"dajv",100),
+        new column(true,33,"dajv",150),
+        new column(true,34,"dajv",150),
+        new column(true,35,"dajv",150),
+        new column(true,37,"dajv",150),
+    };
+
+    public static readonly List<column> EquipmentsCol = new List<column> {
+        new column(false,0,"3",50),
+        new column(false,1,"3",50),
+        new column(false,2,"3",50),
+        new column(false,3,"3",50),
+        new column(false,4,"3",50),
+        new column(false,5,"3",50),
+        new column(false,6,"3",50),
+        new column(false,7,"3",50)
+    };
+
+    public static readonly Dictionary<string, string> TransToEnglish = new Dictionary<string, string>
+    {
+        ["大贼龙"]= "GreatJagras",
+        ["眩鸟"]= "Tzitzi-Ya-Ku",
+        ["蛮颚龙"]= "Anjanath",
+        ["岩贼龙"]= "Dodogama",
+        ["雷狼龙"]= "Zinogre",
+        ["冰咒龙"]= "Velkhana"
+    };
 }

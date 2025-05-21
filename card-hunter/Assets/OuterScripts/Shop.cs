@@ -12,18 +12,12 @@ public class column
     public bool IsCard;
     public int ID;
     public string image;
-    public string name;
-    public int MaterialID;
-    public int MaterialAmount;
     public int Money;
-    public column(bool IsCard,int ID, string image, string name, int materialID, int materialAmount, int money) 
+    public column(bool IsCard,int ID, string image, int money) 
     {
         this.IsCard = IsCard;
         this.ID = ID;
         this.image = image;
-        this.name = name;
-        MaterialID = materialID;
-        MaterialAmount = materialAmount;
         Money = money;
     }
 }
@@ -31,6 +25,7 @@ public class column
 public class Shop : MonoBehaviour
 {
     public GameObject Column;
+    public SharedData sharedData;
     public List<GameObject> Cols=new List<GameObject>();
     public event Action<int, bool> Purchase;
     public event Action Exit;
@@ -43,17 +38,26 @@ public class Shop : MonoBehaviour
         foreach (column c in columns)
         {
             GameObject g=Instantiate(Column,new Vector3(x,y,0),Quaternion.identity);
+            g.transform.parent= transform;
+            g.transform.position += transform.position;
             Cols.Add(g);
             //设置图片
             Image image= g.transform.Find("Image").GetComponent<Image>();
             Sprite loadedSprite = Resources.Load<Sprite>(c.image);
             image.sprite = loadedSprite;
             //设置文本
-            g.transform.Find("StuffText").GetComponent<TextMeshProUGUI>().text = c.name;
             g.transform.Find("MoneyText").GetComponent<TextMeshProUGUI>().text = c.Money.ToString();
-            g.transform.Find("StuffText").GetComponent<TextMeshProUGUI>().text = "需要" + GameConfig.Material[c.MaterialID] + c.MaterialAmount + "个";
+            if (!c.IsCard)//是装备
+            {
+                g.transform.Find("StuffText").GetComponent<TextMeshProUGUI>().text = GameConfig.Material[c.ID] + "装备";
+                g.transform.Find("MaterialText").GetComponent<TextMeshProUGUI>().text = "需要" + GameConfig.Material[c.ID] +  "1个";
+            }
+            else
+            {
+                g.transform.Find("StuffText").GetComponent<TextMeshProUGUI>().text = GameConfig.CardName[c.ID];
+            }
             g.GetComponent<ColumnWin>().num = idx++;
-            g.GetComponent<ColumnWin>().c.IsCard = c.IsCard;
+            g.GetComponent<ColumnWin>().c = c;
 
             y += GameConfig.ShopDeltaY;
             g.GetComponent<ColumnWin>().Clicked += ClickHandle;
@@ -62,15 +66,34 @@ public class Shop : MonoBehaviour
 
     private void ClickHandle(column column,int num)
     {
-
-        Purchase?.Invoke(column.ID, column.IsCard);
-        GameObject c = Cols[num];
-        Cols.Remove(c);
-        Destroy(c);
-        for(int i = num; i < Cols.Count; i++)
+        if (sharedData.playerinfo.money >= column.Money&&column.IsCard)//买卡
         {
-            Cols[i].transform.position -= new Vector3(0, GameConfig.ShopDeltaY, 0);
+            Purchase?.Invoke(column.ID, column.IsCard);
+            sharedData.playerinfo.money -= column.Money;
+            GameObject c = Cols[num];
+            Cols.Remove(c);
+            Destroy(c);
+            for (int i = num; i < Cols.Count; i++)
+            {
+                Cols[i].transform.position -= new Vector3(0, GameConfig.ShopDeltaY, 0);
+                Cols[i].GetComponent<ColumnWin>().num--;
+            }
         }
+        if(sharedData.playerinfo.money >= column.Money && sharedData.playerinfo.Material[column.ID] > 0 && !column.IsCard)
+        {
+            Purchase?.Invoke(column.ID, column.IsCard);
+            sharedData.playerinfo.money -= column.Money;
+            sharedData.playerinfo.Material[column.ID] -= 1;
+            GameObject c = Cols[num];
+            Cols.Remove(c);
+            Destroy(c);
+            for (int i = num; i < Cols.Count; i++)
+            {
+                Cols[i].transform.position -= new Vector3(0, GameConfig.ShopDeltaY, 0);
+                Cols[i].GetComponent<ColumnWin>().num--;
+            }
+        }
+
     }
 
     private void ExitHandle()

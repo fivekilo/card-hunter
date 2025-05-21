@@ -17,6 +17,9 @@ public class Leaflet : MonoBehaviour
         transform.Find("RewardMonster").GetComponent<TextMeshProUGUI>().text = StrMons;
         transform.Find("RewardMoney").GetComponent<TextMeshProUGUI>().text = StrMoney;
         //ªªπ÷ŒÔÕº∆¨
+        Image image = transform.Find("Monster").GetComponent<Image>();
+        Sprite loadedSprite = Resources.Load<Sprite>(GameConfig.TransToEnglish[c.monster]);
+        image.sprite = loadedSprite;
     }
     void Start()
     {

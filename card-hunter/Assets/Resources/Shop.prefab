@@ -249,4 +249,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Column: {fileID: 5761653012907121704, guid: 2859508f66d0b54449b5e5765af7e9f5, type: 3}
+  sharedData: {fileID: 11400000, guid: 564b0fb8ae3b947448d1292a6fd07d65, type: 2}
   Cols: []
