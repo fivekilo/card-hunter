@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public GameObject Commissionboard;
     public GameObject StartMenu;
     public GameObject InCamp;
+    public GameObject ExitBtn;
     public event Action<Choice> Chosed;
     public event Action<int> AddCard;
     private List<bool> AbleToMove=new List<bool> {false,false };
@@ -200,7 +201,7 @@ public class GameManager : MonoBehaviour
     }
     private void ChoiceHandle(Choice choice)
     {
-        if (choice.DeleteCard > 0)
+        if (choice.modifydeck < 0)
         {
             DeleteCard();
         }
@@ -208,7 +209,7 @@ public class GameManager : MonoBehaviour
         {
             AbleToMove[1] = true;
         }
-        if (choice.AddCard > 0)
+        if (choice.modifydeck > 0)
         {
             //¼ÓÅÆº¯Êý
             GameObject AW = Instantiate(AddCardWin, Vector3.zero, Quaternion.identity);
@@ -297,6 +298,7 @@ public class GameManager : MonoBehaviour
         Chosed += ChoiceHandle;
         AddCard += AddToDeck;
         DeckBtn.GetComponent<Btn>().Clicked += CheckDeck;
+        ExitBtn.GetComponent<Btn>().Clicked += Exit;
         ShowStartMenu();
     }
 

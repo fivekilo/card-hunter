@@ -9,20 +9,26 @@ public class Choice
 {
     public int id;
     public string text;//选项描述
-    public int DeleteCard;//可以删几张牌
-    public int AddCard;//可以加入几张牌
+ //   public int DeleteCard;//可以删几张牌
+//public int AddCard;//可以加入几张牌
+    public int modifydeck;//修改卡组，正增负删
+    public bool random;//是否随机
+    public int battle;//触发与编号为某的怪物战斗
     public int money;//获得/损失金钱
     public int health;//获得/损失生命值
+    public int HPupper;//获得/损失生命值上限 
     public List<int> CardsID;//可添加的卡牌
     public int equipment;//可以获得的装备编号
-    public Choice(int id, string text, int deleteCard, int addCard, int money, int health, List<int> cardsID, int equipment)
+    public Choice(int id, string text, int modifydeck,bool random, int battle,int money, int health, int HPupper, List<int> cardsID, int equipment)
     {
         this.id = id;
         this.text = text;
-        DeleteCard = deleteCard;
-        AddCard = addCard;
+        this.modifydeck = modifydeck;
+        this.random = random;
+        this.battle = battle;
         this.money = money;
         this.health = health;
+        this.HPupper = HPupper;
         CardsID = cardsID;
         this.equipment = equipment;
     }

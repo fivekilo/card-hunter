@@ -5,6 +5,9 @@ using UnityEngine.UIElements;
 [CreateAssetMenu(fileName = "GameConfig", menuName = "Configs/Game Config")]
 public class GameConfig : ScriptableObject
 {
+    public static List<int> normal = new List<int>() { 9,9,9,10,10,10,11,11,11,12,12,12,13,13,13,14,14,14,15,15,15,16,16,16,17,17,17,18,18,18,19,19,19,20,20,22,22,23,23,24,24,25,25,26,26,27,27,28,28,29,29,32,32,33,34,35,37,};
+    public static List<int> rare = new List<int>() { 20, 20, 22, 22, 23, 23, 24, 24, 25, 25, 26, 26, 27, 27, 28, 28, 29, 29, 32, 32, 33, 34, 35, 37, };
+    public static List<int> gold = new List<int>() { 33, 34, 35, 37, };
     public const double ObstacleRate = 0.15;//障碍物生成概率
     public const double ContentRate = 0.2;//地图要素生成概率
     public const int ObstacleSup = 10;//障碍物生成上限
@@ -1549,23 +1552,77 @@ public class GameConfig : ScriptableObject
     public const int PointDistance = 1;//节点间距
     public const float MoveDuration = 1;//移动时长
     public static readonly Vector3 CampRestPos = new Vector3(-0.6819376f, -1.417444f, 0);
-
+    //Choice(int id, string text, int modifydeck,bool random, int battle,int money, int health, int HPupper, List<int> cardsID, int equipment)
     //RogueMod
     public static readonly List<Commission> Commissions = new List<Commission> { new Commission(0, "大贼龙", 1, 1,100) };
     public static readonly List<Event> Events = new List<Event> {
         new Event(1,"剑术大师","年迈的剑术大师，自远方而来，背上的雌火龙太刀闪烁着他过去的功绩。他愿意指点你的狩猎技巧，如果你愿意付出一些代价的话，他甚至能教给你一些失传秘技。","3",
             new List<Choice>{
-                new Choice(1,"[夯实基础]删一张牌",1,0,0,0,new List<int>(),0),
-                new Choice(2,"[学习技巧]获得蓝色稀有度的一张牌",0,1,0,0,new List<int>{1,2,3,6 },0),
-                new Choice(3,"[祖传秘技]花费？？金币，获得一张金色稀有度的卡牌",0,1,-20,0,new List<int>{1,2,3,6 },0)
+                new Choice(1,"[夯实基础]删一张牌",-1,false,0,0,0,0,new List<int>(),0),
+                new Choice(2,"[学习技巧]获得蓝色稀有度的一张牌",1,false,0,0,0,0,rare,0),
+                new Choice(3,"[祖传秘技]花费50金币，获得一张金色稀有度的卡牌",1,false,0,-50,0,0,gold,0)
             }),
                 new Event(2,"黑龙","一路上安静的可怕，原本总能见到的小动物全都销声匿迹了，似乎发生了什么不得了的事。\r\n你正怀疑着发生了什么事，突然一阵风压袭来，你险些被吹飞，只能将手臂护在头前。\r\n当风压散去，立在你面前的是一只黑色的威严巨龙，他也看着你。。","3",
             new List<Choice>{
-                new Choice(1,"[赶紧逃走]随机失去一张牌",1,0,0,0,new List<int>(),0),
-                new Choice(2,"[咬牙坚持]:失去12生命值",0,1,0,12,new List<int>{},0),
-                new Choice(3,"[不惧挑战]:（当牌库中存在金色及以上稀有度的卡时生效）扣20血量，获得黑龙素材。",0,0,0,20,new List<int>{},7)
+                new Choice(1,"[赶紧逃走]随机失去一张牌",-1,true,0,0,0,0,new List<int>(),0),
+                new Choice(2,"[咬牙坚持]:失去12生命值",0,false,0,0,-12,0,new List<int>{},0),
+                new Choice(3,"[不惧挑战]:扣15血量上限，获得黑龙素材。",0,false,0,0,0,-15,new List<int>{},7)
             }),
-
+                new Event(3,"老猎人的遗愿","在返回的路上，你看到了升起的救难信号，便前去一探。可当你到达现场后，已经没有了怪物的踪迹，只有一个奄奄一息的老猎人躺在地上。你把他带回了营地医治，但是他显然命不久矣。临终之际，他将“火龙”的鳞片递给你，问你是否能帮他完成最后的委托。","3",
+            new List<Choice>{
+                new Choice(1,"[接受]触发关于火龙的委托",0,false,4,0,0,0,new List<int>(),0),
+                new Choice(2,"[拒绝]:获得30金币",0,false,0,30,0,0,new List<int>{},0),
+            }),
+                new Event(4,"地盘争夺","蛮颚龙与大贼龙发生地盘争夺！只见蛮颚龙将大贼龙叼在嘴上到处乱甩，而大贼龙没有丝毫抵抗之力。不久后，蛮颚龙将伤痕累累的大贼龙放下了，大贼龙灰溜溜地离开此地。","3",
+            new List<Choice>{
+                new Choice(1,"[[挑战强者]获得一张卡牌，掉10血",1,false,4,0,-10,0,normal,0),
+                new Choice(2,"[追逐弱者]获得大贼龙素材，掉5血",0,false,0,0,-5,0,new List<int>{},1),
+            }),
+                new Event(5,"来自陌生人的邀请","“嘿，那边的猎人！”远方几个友善的猎人正朝你招手，今晚他们的营地准备大摆宴席，邀请你加入。在宴会上，几个猎人又邀请你一起喝酒。","3",
+            new List<Choice>{
+                new Choice(1,"[小酌一杯]：回复20点血量",0,false,0,0,20,0,new List<int>(),0),
+                new Choice(2,"[酩酊大醉]：删一张牌",-1,false,0,0,0,0,new List<int>{},1),
+            }),
+                new Event(6,"风言风语","“你知道吗，有人在森林发现了冰呪龙的踪迹！”“真的假的，那可是未知的古龙啊”早上村里人的闲聊吸引了你的注意。尽管你不太相信，但前去一探也可能会有所收获。","3",
+            new List<Choice>{
+                new Choice(1,"[前去一探]",7,false,0,0,0,0,new List<int>(),0),
+                new Choice(2,"[不予理会]：无",0,false,0,0,0,0,new List<int>{},0),
+            }),
+                 new Event(7,"惊现共斗大神","“在路上，你听见与怪物打斗的声音，靠近一看，一个年轻的猎人正在讨伐眩鸟。你靠近时，他也注意到了你。\r\n“你，赶紧帮我打怪”他一边向你叫唤着，一边被怪物打得节节败退。你决定：","3",
+            new List<Choice>{
+                new Choice(1,"[与其共斗]：触发眩鸟战斗",0,false,2,0,0,0,new List<int>(),0),
+                new Choice(2,"[不予理会]：无",0,false,0,0,0,0,new List<int>{},0),
+            }),
+                 new Event(8,"热情的铁匠","一个热情的龙人族铁匠来到了你的营地，如果你有足够的素材，他很乐意为你打造一件装备。","3",
+            new List<Choice>{
+                new Choice(1,"[让其打造]：免费打造一件装备（需要素材）",0,false,0,0,0,0,new List<int>(),0),//未完成
+                new Choice(2,"[离开]：无",0,false,0,0,0,0,new List<int>{},0),
+            }),
+                new Event(9,"古代遗物","在探索时，你发现了一个奇怪的遗迹，遗迹内有一些神秘的机械材料散落在地，还有一扇神秘的大门。","3",
+            new List<Choice>{
+                new Choice(1,"[拾取材料]：获得特殊素材“古代遗物”",0,false,0,0,0,0,new List<int>(),8),
+                new Choice(2,"[解读符文]：随机获得一张卡",1,true,0,0,0,0,normal,0),
+            }),
+                new Event(10,"蜂蜜采集","桃毛兽王的领地有很多蜂蜜，趁它不在，你可以试着采集一些。","3",
+            new List<Choice>{
+                new Choice(1,"[略微采集]：回复15血”",0,false,0,0,15,0,new List<int>(),0),
+                new Choice(2,"[大肆采集]：回满血但扣除7点血量上限",0,false,0,0,0,-7,new List<int>(),0),
+            }),
+                new Event(11,"森狸人的捕猎技巧","","3",
+            new List<Choice>{
+                new Choice(1,"[学习]：选择并获得一张卡”",0,false,0,0,0,0,normal,0),
+                new Choice(2,"[离开]：无",0,false,0,0,0,0,new List<int>(),0),
+            }),
+            new Event(12,"蘑菇蘑菇蘑菇","咕咕嘎嘎，咕咕嘎嘎","3",
+            new List<Choice>{
+                new Choice(1,"[吃掉蓝色的]：删一张牌”",-1,false,0,0,0,0,new List<int>(),0),
+                new Choice(2,"[吃掉橙色的]：增加8点血量上限",0,false,0,0,0,8,new List<int>(),0),
+            }),
+            new Event(13,"雨夜与钢龙","","3",
+            new List<Choice>{
+                new Choice(1,"[一探究竟]：删一张牌,失去15点生命值”",-1,false,0,0,-5,0,new List<int>(),0),
+                new Choice(2,"[快速离开]：失去5点生命值",0,false,0,0,-15,0,new List<int>(),0),
+            }),
     };
     public static readonly Vector2Int EventAmountBounds = new Vector2Int(1, 1);//每层总事件数限制
     public const int EventPerTour = 2;
