@@ -1533,6 +1533,142 @@ public class GameConfig : ScriptableObject
             armor=0,
             skilltype=SkillType.Normal,
             addenvironment=AddEnvironment.ElectricBall
+        },
+        new EnemySkillConfig
+        {
+            skillID = 29,
+            skillName = "连环寒流吐息",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(3,0),new Vector2Int(4,0),
+                new Vector2Int(5,0)},
+            damage =9,
+            hittimes = 2,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 30,
+            skillName = "寒冰暴雨",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(0,1),new Vector2Int(1,1),
+                new Vector2Int(1,2),new Vector2Int(1,-1),new Vector2Int(2,-1),new Vector2Int(3,-2)},
+            damage =14,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.Freezed,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 31,
+            skillName = "尾刺",
+            range = new List<Vector2Int>{new Vector2Int(0,0)},
+            damage =8,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Locked,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 32,
+            skillName = "霜冻大地",
+            range = new List<Vector2Int>{new Vector2Int(0,0),new Vector2Int(1,0),new Vector2Int(-1,0),new Vector2Int(0,1),
+                new Vector2Int(-1,1),new Vector2Int(0,-1),new Vector2Int(1,-1)},
+            damage =8,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.Freezed,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Locked,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 33,
+            skillName = "冰之铠甲",
+            range = new List<Vector2Int>{new Vector2Int(0,0),new Vector2Int(1,0),new Vector2Int(-1,0),new Vector2Int(0,1),
+                new Vector2Int(-1,1),new Vector2Int(0,-1),new Vector2Int(1,-1)},
+            damage =0,
+            hittimes = 0,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=75,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 34,
+            skillName = "究极冰暴",
+            range = new List<Vector2Int>{new Vector2Int(2,0),new Vector2Int(-1,0),new Vector2Int(-2,0),
+                new Vector2Int(-2,1),new Vector2Int(0,1),new Vector2Int(1,1),new Vector2Int(-2,2),
+                new Vector2Int(-1,2),new Vector2Int(0,2),new Vector2Int(-1,-1),new Vector2Int(1,-1),
+                new Vector2Int(2,-1),new Vector2Int(0,-2),new Vector2Int(1,-2),new Vector2Int(2,-2),
+                new Vector2Int(3,0),new Vector2Int(0,3),new Vector2Int(0,-3),new Vector2Int(-3,0),new Vector2Int(-3,3),new Vector2Int(3,-3)},
+            damage =20,
+            hittimes = 0,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.Freezed,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 35,
+            skillName = "六脉冰柱",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(-2,0),
+                new Vector2Int(0,2),new Vector2Int(0,-1),new Vector2Int(0,-2),new Vector2Int(2,-2),new Vector2Int(-1,1),new Vector2Int(-2,2)},
+            damage =16,
+            hittimes = 0,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.Freezed,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.Icicle
+        },
+        new EnemySkillConfig
+        {
+            skillID = 36,
+            skillName = "寒冬嘶吼",
+            damage =0,
+            hittimes = 0,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         }
     }.AsReadOnly();
 

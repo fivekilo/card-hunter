@@ -937,6 +937,7 @@ MonoBehaviour:
   currentSkillID: 0
   nextSkillID: 0
   availableSkills: 
+  nextskillpos: []
   skillselected: 0
   skill4selected: 0
   turncount: 0
@@ -2047,7 +2048,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2902820061251023980, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4934754776702706311, guid: 862cacfaa248b0442886f951901c0ebd, type: 3}
       propertyPath: m_Color.a
@@ -3376,6 +3377,7 @@ MonoBehaviour:
   currentSkillID: 0
   nextSkillID: 0
   availableSkills: 
+  nextskillpos: []
   skillselected: 0
   skill4selected: 0
   turncount: 0
@@ -3453,6 +3455,7 @@ MonoBehaviour:
   currentSkillID: 0
   nextSkillID: 0
   availableSkills: 
+  nextskillpos: []
   skillselected: 0
   skill4selected: 0
   turncount: 0
@@ -3543,6 +3546,7 @@ MonoBehaviour:
   currentSkillID: 0
   nextSkillID: 0
   availableSkills: 
+  nextskillpos: []
   skillselected: 0
   skill4selected: 0
   turncount: 0
@@ -3679,6 +3683,7 @@ MonoBehaviour:
   currentSkillID: 0
   nextSkillID: 0
   availableSkills: 
+  nextskillpos: []
   skillselected: 0
   skill4selected: 0
   turncount: 0
