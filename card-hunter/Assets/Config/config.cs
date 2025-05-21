@@ -1687,7 +1687,7 @@ public class GameConfig : ScriptableObject
     public const int ShopX = 0, ShopY = 400,ShopDeltaY=-400;
 
     //CommissionBoard 画图参数
-    public const int BoardX = -380,BoardY=0;
+    public const int BoardX = 380,BoardY=0;
 
     //RouteRender参数
     public static IReadOnlyList<string> Destinies = new List<string> { "Camp","Forest", "Desert", "Valcano" };
@@ -1697,7 +1697,13 @@ public class GameConfig : ScriptableObject
     public static readonly Vector3 CampRestPos = new Vector3(-0.6819376f, -1.417444f, 0);
     //Choice(int id, string text, int modifydeck,bool random, int battle,int money, int health, int HPupper, List<int> cardsID, int equipment)
     //RogueMod
-    public static readonly List<Commission> Commissions = new List<Commission> { new Commission(0, "大贼龙", 1, 1,100) };
+    public static readonly List<Commission> Commissions = new List<Commission> { new Commission(0, "大贼龙", 1, 1,70),
+        new Commission(1,"眩鸟",1,2,70),
+        new Commission(2,"蛮颚龙",1,1,70),
+        new Commission(3,"岩贼龙",1,3,70),
+        new Commission(4,"雷狼龙",1,1,70),
+        new Commission(5,"冰咒龙",1,1,70)
+    };
     public static readonly List<Event> Events = new List<Event> {
         new Event(1,"剑术大师","年迈的剑术大师，自远方而来，背上的雌火龙太刀闪烁着他过去的功绩。他愿意指点你的狩猎技巧，如果你愿意付出一些代价的话，他甚至能教给你一些失传秘技。","3",
             new List<Choice>{
@@ -1870,5 +1876,15 @@ public class GameConfig : ScriptableObject
         new column(false,5,"3",50),
         new column(false,6,"3",50),
         new column(false,7,"3",50)
+    };
+
+    public static readonly Dictionary<string, string> TransToEnglish = new Dictionary<string, string>
+    {
+        ["大贼龙"]= "GreatJagras",
+        ["眩鸟"]= "Tzitzi-Ya-Ku",
+        ["蛮颚龙"]= "Anjanath",
+        ["岩贼龙"]= "Dodogama",
+        ["雷狼龙"]= "Zinogre",
+        ["冰咒龙"]= "Velkhana"
     };
 }

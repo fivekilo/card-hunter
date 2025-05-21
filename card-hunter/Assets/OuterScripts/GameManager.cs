@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
         Destroy(Camp);
 
         List<Commission> commissions = GameConfig.Commissions;
-        List<Commission> selected = RM.ChooseCommission(commissions, 1);
+        List<Commission> selected = RM.ChooseCommission(commissions, 3);
         CB = Instantiate(Commissionboard,Vector3.zero,Quaternion.identity);
         CB.GetComponent<CommissionBoard>().Init(selected);
         //…„œÒÕ∑“∆∂Ø∑¿÷πŒÛ¥•±≥æ∞
