@@ -17,6 +17,7 @@ public class EnemyAIController : MonoBehaviour
     public Transform arrowtransform;
     public EnemyBuff enemybuff;
     [Header("基础属性")]
+    [SerializeField] public int ID ;
     [SerializeField] public string name = "";
     [SerializeField] public int _maxHealth = 100;
     [SerializeField] public int _currentHealth;
@@ -36,6 +37,7 @@ public class EnemyAIController : MonoBehaviour
     //形态指示器：蛮颚龙，雷狼龙，冰咒龙
     public int enemystate = 0;
     public bool isdead = false;//是否死亡
+    public int TurnCount = 0;//回合计数器
 
     void Start()
     {
@@ -49,7 +51,7 @@ public class EnemyAIController : MonoBehaviour
         _player= FindObjectOfType<PlayerInfo>();
         _currentHealth = _maxHealth;
         text = GetComponentInChildren<TextMeshProUGUI>();
-        text.text = $"{_currentHealth}/{_maxHealth}";
+        text.text = $"{_currentHealth}/{_maxHealth} 护甲：{armor}";
         arrowtransform = transform.Find("Arrow");
         //传入技能和buff
         skillSystem = GetComponent<EnemySkillSystem>();
@@ -59,6 +61,7 @@ public class EnemyAIController : MonoBehaviour
    
     public IEnumerator TakeTurn()//执行回合
     {
+        TurnCount++;//回合计数+1
         if (isdead == true)
         {
             havechangedskill = false;//重置变招函数
@@ -86,7 +89,7 @@ public class EnemyAIController : MonoBehaviour
         }
         //展示要出的下一招
         skillSystem.SelectNextSkill(-1);
-    }
+}
 
     bool ShouldMoveToPlayer()
     {
@@ -201,9 +204,9 @@ public class EnemyAIController : MonoBehaviour
     public void ReduceHealth(int num)
     {
         //优先抵扣护甲
-        if(armor>0)
+        if(armor>0 && num>0)
         {
-            int deltaarmor = armor-Mathf.Clamp(armor - num, 0, 100);
+            int deltaarmor = armor-Mathf.Clamp(armor - num, 0, 999);
             armor = Mathf.Clamp(armor - num, 0, 100);
             num = num - deltaarmor;
         }
@@ -212,7 +215,7 @@ public class EnemyAIController : MonoBehaviour
             Debug.Log("怪物被打了" + num.ToString() + "血");
         else
             Debug.Log("怪物回复生命值了！");
-        text.text = $"{_currentHealth}/{_maxHealth}";
+        text.text = $"{_currentHealth}/{_maxHealth} 护甲：{armor}";
         if (_currentHealth == 0)
         {
             isdead = true;
@@ -221,19 +224,28 @@ public class EnemyAIController : MonoBehaviour
         }
         //在怪物存活时进行特判
         //特判：蛮颚龙的进暴怒和退暴怒
-        if(name=="蛮颚龙"&& (float)_currentHealth * 5 < (float)_maxHealth && enemystate == 1)//退暴怒
+        if(ID==3&& (float)_currentHealth * 5 < (float)_maxHealth && enemystate == 1)//退暴怒
         {
             enemystate = 0;
             StartCoroutine(skillSystem.ExecuteCurrentSkill(-1));
             skillSystem.nextSkillID = 0;
             Debug.Log("蛮颚龙退出暴怒状态了！");
         }
-        else if (name == "蛮颚龙" && (float)_currentHealth * 1.25 < (float)_maxHealth && (float)_currentHealth * 5 > (float)_maxHealth &&enemystate==0)//进暴怒
+        else if (ID == 3 && (float)_currentHealth * 1.25 < (float)_maxHealth && (float)_currentHealth * 5 > (float)_maxHealth &&enemystate==0)//进暴怒
         {
             enemystate = 1;
             selfSkills.Add(10);
             Debug.Log("蛮颚龙进入暴怒状态了！");
         }
+    }
+
+    //改变护甲
+    public IEnumerator ChangeArmor(int deltaarmor)
+    {
+        armor = Mathf.Clamp(armor + deltaarmor, 0, 999);
+        Debug.Log($"怪物获得了{deltaarmor}点护甲！");
+        text.text = $"{_currentHealth}/{_maxHealth} 护甲：{armor}";
+        yield return new WaitForSeconds(0.2f);
     }
 
     public Vector2Int GetCurrentGridPos() // 公共方法供MapManager调用
@@ -254,11 +266,5 @@ public class EnemyAIController : MonoBehaviour
         //以防变身更新了技能组，不断传入新技能
         skillSystem = GetComponent<EnemySkillSystem>();
         skillSystem.availableSkills = selfSkills;
-        
-        //对于有变招的怪物，不断检测玩家的方位，调入变招函数
-        //if (name== "蛮颚龙")
-        //{
-        //    skillSystem.ChangeSkillinRealtime(_player.PlayerGridPos);
-        //}
     }
 }
