@@ -1533,6 +1533,142 @@ public class GameConfig : ScriptableObject
             armor=0,
             skilltype=SkillType.Normal,
             addenvironment=AddEnvironment.ElectricBall
+        },
+        new EnemySkillConfig
+        {
+            skillID = 29,
+            skillName = "连环寒流吐息",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(3,0),new Vector2Int(4,0),
+                new Vector2Int(5,0)},
+            damage =9,
+            hittimes = 2,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 30,
+            skillName = "寒冰暴雨",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(0,1),new Vector2Int(1,1),
+                new Vector2Int(1,2),new Vector2Int(1,-1),new Vector2Int(2,-1),new Vector2Int(3,-2)},
+            damage =14,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.Freezed,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 31,
+            skillName = "尾刺",
+            range = new List<Vector2Int>{new Vector2Int(0,0)},
+            damage =8,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Locked,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 32,
+            skillName = "霜冻大地",
+            range = new List<Vector2Int>{new Vector2Int(0,0),new Vector2Int(1,0),new Vector2Int(-1,0),new Vector2Int(0,1),
+                new Vector2Int(-1,1),new Vector2Int(0,-1),new Vector2Int(1,-1)},
+            damage =8,
+            hittimes = 1,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.Freezed,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Locked,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 33,
+            skillName = "冰之铠甲",
+            range = new List<Vector2Int>{new Vector2Int(0,0),new Vector2Int(1,0),new Vector2Int(-1,0),new Vector2Int(0,1),
+                new Vector2Int(-1,1),new Vector2Int(0,-1),new Vector2Int(1,-1)},
+            damage =0,
+            hittimes = 0,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=75,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 34,
+            skillName = "究极冰暴",
+            range = new List<Vector2Int>{new Vector2Int(2,0),new Vector2Int(-1,0),new Vector2Int(-2,0),
+                new Vector2Int(-2,1),new Vector2Int(0,1),new Vector2Int(1,1),new Vector2Int(-2,2),
+                new Vector2Int(-1,2),new Vector2Int(0,2),new Vector2Int(-1,-1),new Vector2Int(1,-1),
+                new Vector2Int(2,-1),new Vector2Int(0,-2),new Vector2Int(1,-2),new Vector2Int(2,-2),
+                new Vector2Int(3,0),new Vector2Int(0,3),new Vector2Int(0,-3),new Vector2Int(-3,0),new Vector2Int(-3,3),new Vector2Int(3,-3)},
+            damage =20,
+            hittimes = 0,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.Freezed,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
+        },
+        new EnemySkillConfig
+        {
+            skillID = 35,
+            skillName = "六脉冰柱",
+            range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(-2,0),
+                new Vector2Int(0,2),new Vector2Int(0,-1),new Vector2Int(0,-2),new Vector2Int(2,-2),new Vector2Int(-1,1),new Vector2Int(-2,2)},
+            damage =16,
+            hittimes = 0,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.Freezed,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.Icicle
+        },
+        new EnemySkillConfig
+        {
+            skillID = 36,
+            skillName = "寒冬嘶吼",
+            damage =0,
+            hittimes = 0,
+            moveType = MoveType.None,
+            moveDistance = 0,
+            getbuff = EnemyBuff.None,
+            pushdebuff = EnemyDebuff.None,
+            HPchange = 0,
+            armor=0,
+            skilltype=SkillType.Normal,
+            addenvironment=AddEnvironment.None
         }
     }.AsReadOnly();
 
@@ -1588,11 +1724,11 @@ public class GameConfig : ScriptableObject
                 new Event(5,"来自陌生人的邀请","“嘿，那边的猎人！”远方几个友善的猎人正朝你招手，今晚他们的营地准备大摆宴席，邀请你加入。在宴会上，几个猎人又邀请你一起喝酒。","3",
             new List<Choice>{
                 new Choice(1,"[小酌一杯]：回复20点血量",0,false,0,0,20,0,new List<int>(),0),
-                new Choice(2,"[酩酊大醉]：删一张牌",-1,false,0,0,0,0,new List<int>{},1),
+                new Choice(2,"[大醉方休]：删一张牌",-1,false,0,0,0,0,new List<int>{},1),
             }),
                 new Event(6,"风言风语","“你知道吗，有人在森林发现了冰呪龙的踪迹！”“真的假的，那可是未知的古龙啊”早上村里人的闲聊吸引了你的注意。尽管你不太相信，但前去一探也可能会有所收获。","3",
             new List<Choice>{
-                new Choice(1,"[前去一探]",7,false,0,0,0,0,new List<int>(),0),
+                new Choice(1,"[前去一探]",0,false,7,0,0,0,new List<int>(),0),
                 new Choice(2,"[不予理会]：无",0,false,0,0,0,0,new List<int>{},0),
             }),
                  new Event(7,"惊现共斗大神","“在路上，你听见与怪物打斗的声音，靠近一看，一个年轻的猎人正在讨伐眩鸟。你靠近时，他也注意到了你。\r\n“你，赶紧帮我打怪”他一边向你叫唤着，一边被怪物打得节节败退。你决定：","3",
@@ -1617,7 +1753,7 @@ public class GameConfig : ScriptableObject
             }),
                 new Event(11,"森狸人的捕猎技巧","","3",
             new List<Choice>{
-                new Choice(1,"[学习]：选择并获得一张卡”",0,false,0,0,0,0,normal,0),
+                new Choice(1,"[学习]：选择并获得一张卡”",1,false,0,0,0,0,normal,0),
                 new Choice(2,"[离开]：无",0,false,0,0,0,0,new List<int>(),0),
             }),
             new Event(12,"蘑菇蘑菇蘑菇","咕咕嘎嘎，咕咕嘎嘎","3",

@@ -209,19 +209,31 @@ public class GameManager : MonoBehaviour
     }
     private void ChoiceHandle(Choice choice)
     {
-        if (choice.modifydeck < 0)
+        if (choice.modifydeck < 0&&!choice.random)
         {
             DeleteCard();
+        }
+        else if(choice.modifydeck < 0 && choice.random)
+        {
+            System.Random random = new System.Random();
+            shareddata.playerinfo.deck.Remove(random.Next(0, playerinfo.deck.Count-1));
+            AbleToMove[1] = true;
         }
         else//无需删牌
         {
             AbleToMove[1] = true;
         }
-        if (choice.modifydeck > 0)
+        if (choice.modifydeck > 0 && !choice.random)
         {
             //加牌函数
             GameObject AW = Instantiate(AddCardWin, Vector3.zero, Quaternion.identity);
             AW.GetComponent<AddCardWindow>().AddCard(AddCard,choice.CardsID);//传入可添加的卡牌范围
+        }
+        else if(choice.modifydeck > 0 && choice.random)
+        {
+            System.Random random = new System.Random();
+            shareddata.playerinfo.deck.Add(choice.CardsID[random.Next(0, choice.CardsID.Count)]);
+            AbleToMove[0] = true;
         }
         else//无需加牌
         {
@@ -235,9 +247,20 @@ public class GameManager : MonoBehaviour
         {
             shareddata.playerinfo.curHealth += choice.health;
         }
-        if (choice.CardsID.Count > 0)
+        if (choice.HPupper != 0)
         {
-            //添牌函数
+            shareddata.playerinfo.MaxHealth += choice.HPupper;
+            if (choice.HPupper > 0)
+            {
+                shareddata.playerinfo.curHealth += choice.HPupper;//回复增加的血量上限的血量
+            }
+            else
+            {
+                if(shareddata.playerinfo.curHealth< shareddata.playerinfo.MaxHealth)
+                {
+                    shareddata.playerinfo.curHealth = shareddata.playerinfo.MaxHealth;
+                }
+            }
         }
         if (choice.equipment > 0)
         {

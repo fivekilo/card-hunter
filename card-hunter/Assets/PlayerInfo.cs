@@ -108,9 +108,10 @@ public class PlayerInfo : MonoBehaviour
      }
     void Start()
     {
-        curHealth = MaxHealth;
+        //curHealth = MaxHealth;
         curCost = MaxCost;
         Initialize();
+        HP.text = $"{curHealth}/{MaxHealth}";
         // …Ë÷√≥ı º
     }
     // Update is called once per frame
