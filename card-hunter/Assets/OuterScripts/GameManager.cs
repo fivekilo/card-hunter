@@ -274,8 +274,13 @@ public class GameManager : MonoBehaviour
         HideScene();
         SceneManager.LoadScene("SampleScene", LoadSceneMode.Additive);
         yield return new WaitUntil(()=>shareddata.Complete);//调用战斗,返回战斗结果
+        shareddata.Complete = false;
         SceneManager.UnloadSceneAsync("SampleScene");
         ShowScene();
+
+        shareddata.playerinfo.money += shareddata.commission.money;
+        int idx = GameConfig.Material.FindIndex(m => m == c.monster);
+        shareddata.playerinfo.Material[idx] += 1;
 
         //战斗结束，返回营地。返回函数与营地绑定
         camp.GetComponent<Camp>().ClickEvent+=BackToCamp;
@@ -318,6 +323,7 @@ public class GameManager : MonoBehaviour
         SP.GetComponent<Shop>().Init(GameConfig.EquipmentsCol);
         SP.GetComponent<Shop>().Exit += ExitShop;
         SP.GetComponent<Shop>().Purchase += PurchaseHandle;
+        Camp.SetActive(false);
     }
     private void OpenCardShop()
     {
@@ -325,6 +331,8 @@ public class GameManager : MonoBehaviour
         SP.GetComponent<Shop>().Init(CardsInShop);
         SP.GetComponent<Shop>().Exit += ExitShop;
         SP.GetComponent <Shop>().Purchase += PurchaseHandle;
+        //隐藏camp
+        Camp.SetActive(false);
     }
     private void PurchaseHandle(int id,bool IsCard)
     {
@@ -340,6 +348,7 @@ public class GameManager : MonoBehaviour
     private void ExitShop()
     {
         Destroy(SP);
+        Camp.SetActive(true);
     }
 
     void Start()
