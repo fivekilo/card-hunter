@@ -2937,7 +2937,7 @@ MonoBehaviour:
     specialSound: {fileID: 0}
   - cardNum: 7
     playSound: {fileID: 0}
-    specialSound: {fileID: 0}
+    specialSound: {fileID: 8300000, guid: 6f0e291c855e6744595febf9ac145eb4, type: 3}
   - cardNum: 8
     playSound: {fileID: 0}
     specialSound: {fileID: 0}
@@ -2984,8 +2984,47 @@ MonoBehaviour:
     playSound: {fileID: 8300000, guid: f89b197c43fba9f468048c48d8f911fd, type: 3}
     specialSound: {fileID: 8300000, guid: 58c2d67f142028e45991fb01d063e47d, type: 3}
   - cardNum: 23
-    playSound: {fileID: 8300000, guid: f89b197c43fba9f468048c48d8f911fd, type: 3}
-    specialSound: {fileID: 8300000, guid: 58c2d67f142028e45991fb01d063e47d, type: 3}
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 24
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 25
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 26
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 27
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 28
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 29
+    playSound: {fileID: 8300000, guid: 560f575c0bdeffc43852b3d04f9c3d5e, type: 3}
+    specialSound: {fileID: 0}
+  - cardNum: 30
+    playSound: {fileID: 8300000, guid: 560f575c0bdeffc43852b3d04f9c3d5e, type: 3}
+    specialSound: {fileID: 0}
+  - cardNum: 31
+    playSound: {fileID: 8300000, guid: 560f575c0bdeffc43852b3d04f9c3d5e, type: 3}
+    specialSound: {fileID: 0}
+  - cardNum: 32
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 33
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 34
+    playSound: {fileID: 8300000, guid: 469b56510aea676419f489c04e847585, type: 3}
+    specialSound: {fileID: 0}
+  - cardNum: 35
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
+  - cardNum: 37
+    playSound: {fileID: 0}
+    specialSound: {fileID: 0}
   cardAudioSource: {fileID: 1289596912}
 --- !u!4 &1289596914
 Transform:
