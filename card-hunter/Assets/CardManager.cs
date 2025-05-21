@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.PlayerSettings;
@@ -57,12 +58,11 @@ public class CardManager : MonoBehaviour
     {
         cardpool.ReturnCard(card.gameObject);
     }
-    public void AddCardToHand(Card card,List<Card> cardsInHand)
+    public void AddCardToHand(Card card, List<Card> cardsInHand)
     {
         if (!cardsInHand.Contains(card))
         {
             cardsInHand.Add(card);
-            //card.transform.SetParent(transform);
             UpdateCardPositions(cardsInHand);
         }
     }
@@ -84,18 +84,8 @@ public class CardManager : MonoBehaviour
         {
             Card card = cardsInHand[i];
             card.GetComponentInChildren<Canvas>().sortingOrder = i;
-            //float ratio = (float)i / (cardsInHand.Count - 1);
             float xPos = startX + i * cardSpacing;
-
-            //float yPos = -arcHeight * Mathf.Sin(ratio * Mathf.PI);
-
-            //float rotation = Mathf.Lerp(-maxRotation, maxRotation, ratio);
-
-            //card.transform.Translate(new Vector3(xPos, 0, 0));
             card.transform.position = new Vector3(xPos, 0, 0)+transform.position;
-            //card.transform.Rotate(new Vector3(0, 0, rotation));
-
-            //card.transform.SetSiblingIndex(i);
         }
     }
     private void Awake()
