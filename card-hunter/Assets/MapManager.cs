@@ -428,6 +428,16 @@ public class MapManager : MonoBehaviour
         if (map.GetHex(pos).tag == "Obstacle") return true;
         return false;
     }
+
+    //怪物主动改变地形要素
+    public void AddMonsterContent(Vector2Int pos, GameConfig.Content content)
+    {
+        //在这里还要检测是不是墙体
+        if (isObstacle(pos)) return;
+        Hexagon hexagon =map.GetHex(pos).GetComponent<Hexagon>();
+        hexagon.ContentChange(content);
+    }
+
     // Start is called before the first frame update
     void Start()
     {

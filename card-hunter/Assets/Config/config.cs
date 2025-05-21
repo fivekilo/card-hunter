@@ -27,11 +27,11 @@ public class GameConfig : ScriptableObject
         Frog,
         DuCao,
         NaiLiBug,
-        //Lava, 
-        //ElectricBall, 
-        //Icicle
+        Lava,
+        ElectricBall,
+        Icicle
     }
-    public static IReadOnlyList<int> ContentAmount = new List<int> {1,1,2,2,1}.AsReadOnly();
+    public static IReadOnlyList<int> ContentAmount = new List<int> {1,1,2,2,1,0,0,0}.AsReadOnly();
     public static IReadOnlyList<string> CardName = new List<string> {"",//卡牌名称
         "直斩" ,//1
         "踏步斩",//2

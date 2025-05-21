@@ -261,8 +261,7 @@ public class BattleManager : MonoBehaviour
                 {
                     enemy.enemybuff.ModifyWound(enemy.enemybuff.Wound - 1);
                 }
-                if (enemy.enemybuff.Numbness == 0)
-                    yield return enemy.TakeTurn();
+                yield return enemy.TakeTurn();
              }
         }
         UserIndicator.text = "怪物回合结束了!";
