@@ -13,6 +13,7 @@ public class EnemySkillSystem : MonoBehaviour
     public int currentSkillID;
     public int nextSkillID;
     public List<int> availableSkills =new List<int>();//该怪物有的技能组ID
+    public List<Vector2Int> nextskillpos = new List<Vector2Int>();
     //（靠aicontroll在开始时/转形态时主动传入）
 
     //特判相关组件
@@ -86,6 +87,7 @@ public class EnemySkillSystem : MonoBehaviour
 
         //检测玩家是否在范围内
         oldplayerinrange = battleManager.PlayerInRange(actualrangepos);
+        nextskillpos = actualrangepos;
     }
 
     //获取攻击范围对应的地图坐标
@@ -136,8 +138,9 @@ public class EnemySkillSystem : MonoBehaviour
         if (oldplayerinrange == false) return;//如果原来就不在范围里，不进行变招
         //特判：岩贼龙只能在1，3，6技能中进行变招
         if (aiController.ID == 5 && nextSkillID != 1 && nextSkillID != 3 && nextSkillID != 6) return;
+        if (aiController.ID == 5 && currentSkillID != 1 && currentSkillID != 3 && currentSkillID != 6) return;
 
-            GameConfig.EnemySkillConfig nextskillconfig = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == nextSkillID);
+        GameConfig.EnemySkillConfig nextskillconfig = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == nextSkillID);
         Vector2Int enemypos = aiController._currentGridPos;
         int enemydirection = aiController.direction;
         List<Vector2Int> actualrangepos = GetSkillRange(nextskillconfig, enemypos, enemydirection);
@@ -168,11 +171,10 @@ public class EnemySkillSystem : MonoBehaviour
         {
             do
             {
-                //特判：岩贼龙只能在1，3，6技能中进行变招
+                //特判：岩贼龙只能变成6技能
                 if (aiController.ID == 5)
                 {
-                    List<int>  limitedskills= new List<int> { 1, 3, 6};
-                    someskillID = limitedskills[Random.Range(0, limitedskills.Count)];
+                    someskillID = 6;
                 }
                 else
                     someskillID = availableSkills[Random.Range(0, availableSkills.Count)];
@@ -206,7 +208,7 @@ public class EnemySkillSystem : MonoBehaviour
         //改回攻击范围变的色
         Vector2Int enemypos = aiController._currentGridPos;
         int enemydirection = aiController.direction;
-        List<Vector2Int> actualrangepos = GetSkillRange(config, enemypos, enemydirection);
+        List<Vector2Int> actualrangepos = nextskillpos;
         ColorUtility.TryParseHtmlString(GameConfig.BackgroundColor, out Color color);
         mapManager.ChangeColorByPos(actualrangepos, color);
 
@@ -220,6 +222,24 @@ public class EnemySkillSystem : MonoBehaviour
         if(config.HPchange!=0)      yield return Heal(config);
         yield return ApplySkill(config, actualrangepos);
         if (config.armor != 0)   yield return AddArmor(config);
+        //执行地形生成
+        if(config.addenvironment!= GameConfig.AddEnvironment.None)
+            AddContent(config, actualrangepos);
+    }
+
+    //添加地图要素
+    private void AddContent(GameConfig.EnemySkillConfig config, List<Vector2Int> actualrangepos)
+    {
+        GameConfig.Content newcontent = new GameConfig.Content();
+        if (config.addenvironment == GameConfig.AddEnvironment.Lava) newcontent = GameConfig.Content.Lava;
+        if (config.addenvironment == GameConfig.AddEnvironment.ElectricBall) newcontent = GameConfig.Content.ElectricBall;
+        if (config.addenvironment == GameConfig.AddEnvironment.Icicle) newcontent = GameConfig.Content.Icicle;
+        foreach (Vector2Int pos in actualrangepos)
+        {
+            if(!checkPosValid(pos)) continue;
+            mapManager.AddMonsterContent(pos,newcontent);
+        }
+
     }
 
     private IEnumerator HandleSkillMovement(GameConfig.EnemySkillConfig config)

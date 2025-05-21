@@ -66,10 +66,11 @@ public class CardController : MonoBehaviour, IBeginDragHandler, IDragHandler, IE
             ReturnToOriginalPosition();
         }
         else
-        {
+        {  
+            card.transform.position += new Vector3(10000, 0, 0);//后用对象池实现卡牌消失
             OnCardUsed?.Invoke(card);
             Debug.Log($"{card.cardName}卡牌被使用了");
-            card.transform.position += new Vector3(10000, 0, 0);//后用对象池实现卡牌消失
+
         }
         
     }                                     

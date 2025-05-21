@@ -44,7 +44,6 @@ public class PlayerInfo : MonoBehaviour
         curCost = MaxCost;
         curBladeLevel = 0;
         curBladeNum = 0;
-        PlayerGridPos = new(0, 0);
     }
     public void ModifyHealth(int amount)
     {
