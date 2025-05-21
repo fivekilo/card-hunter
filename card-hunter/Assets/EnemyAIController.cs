@@ -17,6 +17,7 @@ public class EnemyAIController : MonoBehaviour
     public Transform arrowtransform;
     public EnemyBuff enemybuff;
     [Header("»ù´¡ÊôÐÔ")]
+    [SerializeField] public int ID ;
     [SerializeField] public string name = "";
     [SerializeField] public int _maxHealth = 100;
     [SerializeField] public int _currentHealth;

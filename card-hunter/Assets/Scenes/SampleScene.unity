@@ -913,6 +913,7 @@ MonoBehaviour:
   text: {fileID: 0}
   arrowtransform: {fileID: 0}
   enemybuff: {fileID: 0}
+  ID: 3
   name: "\u86EE\u989A\u9F99"
   _maxHealth: 90
   _currentHealth: 0
@@ -3187,6 +3188,7 @@ MonoBehaviour:
   text: {fileID: 0}
   arrowtransform: {fileID: 0}
   enemybuff: {fileID: 0}
+  ID: 5
   name: "\u5CA9\u8D3C\u9F99"
   _maxHealth: 180
   _currentHealth: 0
@@ -3196,7 +3198,7 @@ MonoBehaviour:
   havechangedskill: 0
   direction: 0
   skillSystem: {fileID: 0}
-  selfSkills: 000000000a0000000b0000000c0000000d000000
+  selfSkills: 01000000030000000500000013000000
   enemystate: 0
   isdead: 0
 --- !u!1 &1581889125 stripped
@@ -3262,6 +3264,7 @@ MonoBehaviour:
   text: {fileID: 0}
   arrowtransform: {fileID: 0}
   enemybuff: {fileID: 0}
+  ID: 2
   name: "\u7729\u9E1F"
   _maxHealth: 85
   _currentHealth: 0
@@ -3300,6 +3303,7 @@ MonoBehaviour:
   text: {fileID: 0}
   arrowtransform: {fileID: 0}
   enemybuff: {fileID: 0}
+  ID: 1
   name: "\u5927\u8D3C\u9F99"
   _maxHealth: 100
   _currentHealth: 0
@@ -3483,6 +3487,7 @@ MonoBehaviour:
   text: {fileID: 0}
   arrowtransform: {fileID: 0}
   enemybuff: {fileID: 0}
+  ID: 7
   name: "\u51B0\u5492\u9F99"
   _maxHealth: 210
   _currentHealth: 0

@@ -1049,7 +1049,8 @@ public class GameConfig : ScriptableObject
         true,//36
         true,//37
     }.AsReadOnly();
-    
+
+    public List<int> EnemyID = new List<int> { 1, 2, 3, 4, 5, 6, 7 };
     public enum MoveType { None, Forward, Backward,Fly}
     //怪物给自己加的buff:转向
     public enum EnemyBuff { None, TurntoPlayer }
