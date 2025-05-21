@@ -283,6 +283,7 @@ MonoBehaviour:
   StartMenu: {fileID: 2104167937627659603, guid: 4b86806038ac1a84b9bd8bae7df9af06, type: 3}
   InCamp: {fileID: 1913285967791299099, guid: f54877a74ed26644c99296c6fcebea3c, type: 3}
   ExitBtn: {fileID: 913759286}
+  Shop: {fileID: 4722402591289633436, guid: 23fde8ca6f9664849a25746bd0bff813, type: 3}
 --- !u!4 &233589024
 Transform:
   m_ObjectHideFlags: 0

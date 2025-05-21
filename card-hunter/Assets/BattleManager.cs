@@ -44,13 +44,16 @@ public class BattleManager : MonoBehaviour
     public TextMeshProUGUI Dpnum;
     public AudioManager AudioManager;
     public SharedData data;
+
+
     // public int i = 1;
     private List<Card> InitialDeck = new(); 
     private List<Card> deck = new ();      
     [SerializeField]
     private List<Card> discardPile = new (); 
-    private List<Card> hand = new ();    
-    
+    private List<Card> hand = new ();
+    public int Turn = 0; //回合数
+
     public List<EnemyAIController> _enemies = new ();
 
     public delegate void BattleEvent(BattleState state);
@@ -92,7 +95,8 @@ public class BattleManager : MonoBehaviour
         Button button = battlecomplete.GetComponentInChildren<Button>();
         button.onClick.AddListener(() =>
         {
-         //   data.Complete = false;
+            EndBattle();
+            data.Complete = true;
         });
         if (Player.curHealth == 0)
         {
@@ -167,17 +171,35 @@ public class BattleManager : MonoBehaviour
     {
         UserIndicator.text = "初始化中";
         OnPositionChanged?.Invoke(GenerateSpawn()); //生成出生位置
-        OnBladeGasChange?.Invoke(8);
-        OnBladeLevelChange?.Invoke(1);
+
+
+        Turn = 0;
 
         //人物初始化
         Player.money = data.playerinfo.money;
-        Player.MaxCost = data.playerinfo.MaxCost;
         Player.MaxHealth = data.playerinfo.MaxHealth;
+        Player.curHealth = data.playerinfo.curHealth;
+        Player.MaxCost = data.playerinfo.MaxCost;
+        Player.Material = data.playerinfo.Material;
+        Player.Equipments = data.playerinfo.Equipments;
+
+        OnBladeGasChange?.Invoke(0);
+        OnBladeLevelChange?.Invoke(0);
+
         //怪物初始化
         FindAllEnemies();
         _enemies[0]._currentHealth = 85;
-        
+
+        if (Player.Equipments.Contains(4))
+        {
+            playerBuff.ModifyPower(playerBuff.Power + 1);
+        }
+
+        if(Player.Equipments.Contains(7))
+        {
+            Player.MaxCost = Player.MaxCost + 1;
+        }
+
         StartCoroutine(WaitBattleComplete());
         InitializeDeck();
   //      data
@@ -223,6 +245,7 @@ public class BattleManager : MonoBehaviour
         CardController cardController = card.GetComponent<CardController>();
         cardController.OnCardUsed += PlayCard;
     }
+
     public void DrawCard(int num)
     {
         for (int i = 0;i < num;i ++)
@@ -336,16 +359,25 @@ public class BattleManager : MonoBehaviour
 
     private void StartPlayerTurn()
     {
-        
-        Player.ModifyCost(Player.GetComponent<PlayerInfo>().MaxCost);
+        Turn++;
+        Player.ModifyCost(Player.MaxCost);
         Player.ModifyDefence(0);
         playerBuff.ModifyJQ(playerBuff.JQ - 1);
         playerBuff.ModifyBigJu(playerBuff.BigJu - 1);
         
+        if(Turn == 1 && Player.Equipments.Contains(3))
+        {
+            Player.ModifyCost(Player.curCost + 1);
+        }
+
         if(playerBuff.Numbness > 0)
         {
-            playerBuff.ModifyNumbness(playerBuff.Numbness - 1);
-            Player.ModifyCost(Player.curCost - 2);
+            if (Player.Equipments.Contains(2)) playerBuff.ModifyNumbness(0);
+            else
+            {
+                playerBuff.ModifyNumbness(playerBuff.Numbness - 1);
+                Player.ModifyCost(Player.curCost - 2);
+            }
         }
 
         if(playerBuff.DL > 0)
@@ -573,16 +605,17 @@ public class BattleManager : MonoBehaviour
             Player.ModifyCost(Player.curCost + card.DeltaCost);
         }
 
-        if (card.DeltaBladeNum >= 0)
+        Player.ModifyBladeNum(Player.curBladeNum + card.DeltaBladeNum);
+        if(card.DeltaBladeNum > 0 && Player.Equipments.Contains(5))
         {
-            Player.ModifyBladeNum(Player.curBladeNum + card.DeltaBladeNum);
-            if (card.cardNum == 32)
-            {
-                playerBuff.ModifyNextDamage(Player.curBladeNum * 2);
-                Player.ModifyBladeNum(0);
-            }
-            OnBladeGasChange?.Invoke(Player.curBladeNum);
+            Player.ModifyBladeNum(Player.curBladeNum + 1);
         }
+        if (card.cardNum == 32)
+        {
+            playerBuff.ModifyNextDamage(Player.curBladeNum * 2);
+            Player.ModifyBladeNum(0);
+        }
+        OnBladeGasChange?.Invoke(Player.curBladeNum);
 
         if (card.DeltaBladeLevel != 0)
         {
@@ -593,7 +626,6 @@ public class BattleManager : MonoBehaviour
         if (card.Derivation != 0)
         {
             Card newCard = cardManager.CreateCard(card.Derivation, cardManager.transform);
-            Debug.Log("条件为" + (card.cardNum) + " " + Player.curBladeLevel);
             if (hand.Count < GameConfig.MaxHandCardNum && 
                 (card.cardNum != 20 || Player.curBladeLevel != 0) && 
                 (card.cardNum != 24 || Player.curBladeLevel != 0))
@@ -687,7 +719,9 @@ public class BattleManager : MonoBehaviour
                 break;
         }
         int res = 1;
-        res = (int)((Attack.x + playerBuff.Power) * BladeLevelBuff * Attack.y * (enemy.enemybuff.Wound > 0 ? 1.5f : 1.0f));
+        int Power = playerBuff.Power;
+        if (Player.curHealth <= (0.5f * Player.MaxHealth) && Player.Equipments.Contains(6)) Power += 3;
+        res = (int)((Attack.x + Power) * BladeLevelBuff * Attack.y * (enemy.enemybuff.Wound > 0 ? 1.5f : 1.0f));
         
         return res;
     }
@@ -864,7 +898,16 @@ public class BattleManager : MonoBehaviour
 
     public void EndBattle()
     {
-        
+        if (Player.Equipments.Contains(1))
+        {
+            Player.ModifyHealth(Player.curHealth + 3);
+        }
+        data.playerinfo.money = Player.money;
+        data.playerinfo.MaxHealth = Player.MaxHealth;
+        data.playerinfo.curHealth = Player.curHealth ;
+        data.playerinfo.MaxCost = Player.MaxCost;
+        data.playerinfo.Material = Player.Material;
+        data.playerinfo.Equipments = Player.Equipments;
     }
     public bool CheckPosIsValid(Vector2Int v)
     {
@@ -910,5 +953,6 @@ public class BattleManager : MonoBehaviour
     void Update()
     {
         UpdateCards();
+        
     }
 }
