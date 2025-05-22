@@ -136,7 +136,7 @@ public class EnemySkillSystem : MonoBehaviour
             }
             mapManager.ChangeColorByPos(icicleblowuprange, Color.magenta);//记得改回来
         }
-        monstersituasion.text = $"{aiController.name}使用了“{nextskillconfig.skillName}”技能,将要造成{nextskillconfig.damage}点伤害！";
+        monstersituasion.text = $"{aiController.name}使用了“{nextskillconfig.skillName}”技能,将要造成{nextskillconfig.damage}x{nextskillconfig.hittimes}点伤害！";
         //检测玩家是否在范围内
         oldplayerinrange = battleManager.PlayerInRange(actualrangepos);
         nextskillpos = actualrangepos;
