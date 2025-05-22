@@ -1700,7 +1700,6 @@ public class GameConfig : ScriptableObject
     public static readonly List<Commission> CommissionsLower = new List<Commission> { new Commission(0, "大贼龙", 1, 1,70),
         new Commission(1,"眩鸟",1,2,70),
         new Commission(2,"蛮颚龙",1,1,70),
-        new Commission(5,"冰咒龙",1,1,70)
     };
     public static readonly List<Commission> CommissionsHigher = new List<Commission>
     {

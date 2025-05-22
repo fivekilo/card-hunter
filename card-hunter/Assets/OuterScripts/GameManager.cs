@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.UIElements;
-using static UnityEditor.PlayerSettings;
 
 public class GameManager : MonoBehaviour
 {
