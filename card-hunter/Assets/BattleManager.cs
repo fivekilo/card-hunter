@@ -330,7 +330,7 @@ public class BattleManager : MonoBehaviour
                 if (discardPile.Count == 0) break;
                 deck.AddRange(discardPile);
                 discardPile.Clear();
-          //      ShuffleDeck(deck);
+                ShuffleDeck(deck);
             }
             if (hand.Count >= GameConfig.MaxHandCardNum) break;
             Card drawnCard = deck[0];
@@ -427,6 +427,7 @@ public class BattleManager : MonoBehaviour
         //  Action<Vector2Int> callback = OnPositionChanged.Invoke;
         //  StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1, 1) , callback));
         Debug.Log(hand.Count);
+        ShuffleDeck(deck);
         DrawCard(GameConfig.InitialHandCardNum);
         ChangeState(BattleState.PlayerTurn);
     }
