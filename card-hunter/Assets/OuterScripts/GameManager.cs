@@ -48,10 +48,6 @@ public class GameManager : MonoBehaviour
         SM.transform.Find("Background/Start").GetComponent<ConfirmBtn>().Confirm += GameStart;
         SM.transform.Find("Background/Exit").GetComponent<ConfirmBtn>().Confirm += Exit;
     }
-    private void EnterCamp()
-    {
-        Camp = Instantiate(InCamp, Vector3.zero, Quaternion.identity);
-    }
     private void GameStart()//游戏启动
     {
         Destroy(SM);
@@ -60,10 +56,7 @@ public class GameManager : MonoBehaviour
         shareddata.playerinfo.MaxCost = GameConfig.InitialCost;
         shareddata.playerinfo.curCost = GameConfig.InitialCost;
         shareddata.playerinfo.Direction = new(1, 0);
-        Camp=Instantiate(InCamp,Vector3.zero,Quaternion.identity);
-        Camp.transform.Find("Commission").GetComponent<ConfirmBtn>().Confirm += GetCommission;
-        Camp.transform.Find("Shop").GetComponent <ConfirmBtn>().Confirm += OpenCardShop;
-        Camp.transform.Find("Forge").GetComponent<ConfirmBtn>().Confirm += OpenEquipShop;
+        CampEnter();
     }
     private void Save()//存档
     {
@@ -78,9 +71,23 @@ public class GameManager : MonoBehaviour
         //移回镜头
         Camera.transform.position = GameConfig.CameraDefault;
         Destroy(Camp);
-
-        List<Commission> commissions = GameConfig.Commissions;
-        List<Commission> selected = RM.ChooseCommission(commissions, 3);
+        List<Commission> selected;
+        //弱怪池
+        if (PlayerProgress <= 4)
+        {
+            List<Commission> commissions = GameConfig.CommissionsLower;
+            selected = RM.ChooseCommission(commissions, 2);
+        }
+        else if (PlayerProgress <= 8)//强怪池
+        {
+            List<Commission> commissions = GameConfig.CommissionsHigher;
+            selected = RM.ChooseCommission(commissions, 1);
+        }
+        else//BOSS
+        {
+            List<Commission> commissions = GameConfig.CommissionsBoss;
+            selected = RM.ChooseCommission(commissions, 1);
+        }
         CB = Instantiate(Commissionboard,Vector3.zero,Quaternion.identity);
         CB.GetComponent<CommissionBoard>().Init(selected);
         //摄像头移动防止误触背景
@@ -269,7 +276,8 @@ public class GameManager : MonoBehaviour
         }
         if (choice.equipment > 0)
         {
-            //添加装备
+            //添加素材
+            shareddata.playerinfo.Material[choice.equipment - 1] += 1;
         }
         
     }
@@ -280,21 +288,30 @@ public class GameManager : MonoBehaviour
         HideScene();
         SceneManager.LoadScene("SampleScene", LoadSceneMode.Additive);
         yield return new WaitUntil(()=>shareddata.Complete);//调用战斗,返回战斗结果
+        //击败Boss,退出游戏
+        if (c.monster == "冰咒龙")
+        {
+            Exit();
+        }
         shareddata.Complete = false;
         SceneManager.UnloadSceneAsync("SampleScene");
         ShowScene();
-
+        //结算战斗奖励
         shareddata.playerinfo.money += shareddata.commission.money;
         int idx = GameConfig.Material.FindIndex(m => m == c.monster);
         shareddata.playerinfo.Material[idx] += 1;
 
-        //战斗结束，返回营地。返回函数与营地绑定
-        camp.GetComponent<Camp>().ClickEvent+=BackToCamp;
+        GameObject AW = Instantiate(AddCardWin, Vector3.zero, Quaternion.identity);
+        AW.GetComponent<AddCardWindow>().AddCard(AddCard, GameConfig.normal);
+        //战斗结束，返回营地。添加卡牌后,返回函数与营地绑定
+        AW.GetComponent<AddCardWindow>().confirm+=() => camp.GetComponent<Camp>().ClickEvent += BackToCamp;
     }
     private void CampEnter()
     {
-        Debug.Log("回到营地了");
-        camp.GetComponent<Camp>().ClickEvent += GetCommission;
+        Camp = Instantiate(InCamp, Vector3.zero, Quaternion.identity);
+        Camp.transform.Find("Commission").GetComponent<ConfirmBtn>().Confirm += GetCommission;
+        Camp.transform.Find("Shop").GetComponent<ConfirmBtn>().Confirm += OpenCardShop;
+        Camp.transform.Find("Forge").GetComponent<ConfirmBtn>().Confirm += OpenEquipShop;
     }
     private void CheckDeck()//查看卡组
     {
