@@ -239,7 +239,7 @@ public class GameConfig : ScriptableObject
         null,//4
         null,//5
         new List<int>{0,1,2,3,4,5},//6
-        new List<int>{2,3,4},//7
+        new List<int>{0,1,2,3,4,5},//7
         null,//8
         new List<int>{1,3,5},//9
         null,//10
