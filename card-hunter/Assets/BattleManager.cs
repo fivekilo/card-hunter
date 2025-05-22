@@ -252,23 +252,25 @@ public class BattleManager : MonoBehaviour
         Player.Material = data.playerinfo.Material;
         Player.Equipments = data.playerinfo.Equipments;
 
-        OnBladeGasChange?.Invoke(0);
-        OnBladeLevelChange?.Invoke(0);
-        Player.ModifyHealth(Player.MaxHealth);
-        Player.ModifyCost(Player.MaxCost);
-        //怪物初始化
-        FindAllEnemies();
-        _enemies[0]._currentHealth = 100;
-
         if (Player.Equipments.Contains(4))
         {
             playerBuff.ModifyPower(playerBuff.Power + 1);
         }
 
-        if(Player.Equipments.Contains(7))
+        if (Player.Equipments.Contains(7))
         {
             Player.MaxCost = Player.MaxCost + 1;
         }
+
+        OnBladeGasChange?.Invoke(0);
+        OnBladeLevelChange?.Invoke(0);
+        Player.ModifyHealth(Player.curHealth);
+        Player.ModifyCost(Player.MaxCost);
+        //怪物初始化
+        FindAllEnemies();
+        _enemies[0]._currentHealth = 100;
+
+        
 
         StartCoroutine(WaitBattleComplete());
         InitializeDeck();
