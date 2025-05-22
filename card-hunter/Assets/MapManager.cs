@@ -5,7 +5,6 @@ using System.Linq;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 
 public class MapManager : MonoBehaviour
