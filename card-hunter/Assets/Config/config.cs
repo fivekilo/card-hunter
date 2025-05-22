@@ -1690,18 +1690,25 @@ public class GameConfig : ScriptableObject
     public const int BoardX = 380,BoardY=0;
 
     //RouteRender参数
-    public static IReadOnlyList<string> Destinies = new List<string> { "Camp","Forest", "Desert", "Valcano" };
+    public static IReadOnlyList<string> Destinies = new List<string> { "Camp","Forest", "Desert", "Volcano" };
     public const int RoutePointNum = 2;//路径上的节点
     public const int PointDistance = 1;//节点间距
     public const float MoveDuration = 1;//移动时长
     public static readonly Vector3 CampRestPos = new Vector3(-0.6819376f, -1.417444f, 0);
     //Choice(int id, string text, int modifydeck,bool random, int battle,int money, int health, int HPupper, List<int> cardsID, int equipment)
     //RogueMod
-    public static readonly List<Commission> Commissions = new List<Commission> { new Commission(0, "大贼龙", 1, 1,70),
+    public static readonly List<Commission> CommissionsLower = new List<Commission> { new Commission(0, "大贼龙", 1, 1,70),
         new Commission(1,"眩鸟",1,2,70),
         new Commission(2,"蛮颚龙",1,1,70),
+
+    };
+    public static readonly List<Commission> CommissionsHigher = new List<Commission>
+    {
         new Commission(3,"岩贼龙",1,3,70),
         new Commission(4,"雷狼龙",1,1,70),
+    };
+    public static readonly List<Commission> CommissionsBoss = new List<Commission>
+    {
         new Commission(5,"冰咒龙",1,1,70)
     };
     public static readonly List<Event> Events = new List<Event> {

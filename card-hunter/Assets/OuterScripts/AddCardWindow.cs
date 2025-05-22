@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class AddCardWindow : MonoBehaviour
 {
+    public event Action confirm;
     private int ChosedNum=-1;
     private Action<int> addCard;
     private List<GameObject> Cards=new List<GameObject>();
@@ -41,6 +42,7 @@ public class AddCardWindow : MonoBehaviour
         if (ChosedNum != -1)
         {
             addCard?.Invoke(ChosedNum);
+            confirm?.Invoke();
             //销毁当前窗口
             Destroy(this.gameObject);
         }
