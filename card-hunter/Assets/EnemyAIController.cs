@@ -271,7 +271,7 @@ public class EnemyAIController : MonoBehaviour
             num = num - deltaarmor;
         }
         //特判：冰咒龙的进冰和退冰
-        if (armor==0 && ID ==7 && enemystate==1)
+        if (armor==0 && ID ==7 && enemystate==1&&skillSystem.nextSkillID!=33)
         {
             enemystate = 0;
             StartCoroutine(skillSystem.ExecuteCurrentSkill(-1));

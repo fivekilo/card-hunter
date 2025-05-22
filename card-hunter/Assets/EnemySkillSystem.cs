@@ -83,7 +83,7 @@ public class EnemySkillSystem : MonoBehaviour
             aiController.selfSkills.Add(34);
             //aiController.selfSkills.Add(35);
             //aiController.selfSkills.Add(36);
-            monstersituasion.text = $"冰咒龙触发了“冰之铠甲”技能！";
+            monstersituasion.text = $"冰咒龙触发了“冰之甲”技能，进入极寒之冰形态！注意，当它释放“究极冰暴”时，你将无法攻击到它！";
         }
         // 选择前特判4：冰咒龙的34技能在进冰之后立刻释放
         if (aiController.ID == 7 && currentSkillID==33)
@@ -136,7 +136,8 @@ public class EnemySkillSystem : MonoBehaviour
             }
             mapManager.ChangeColorByPos(icicleblowuprange, Color.magenta);//记得改回来
         }
-        monstersituasion.text = $"{aiController.name}使用了“{nextskillconfig.skillName}”技能,将要造成{nextskillconfig.damage}点伤害！";
+        if(nextSkillID != 33)
+            monstersituasion.text = $"{aiController.name}使用了“{nextskillconfig.skillName}”技能,将要造成{nextskillconfig.damage}x{nextskillconfig.hittimes}点伤害！";
         //检测玩家是否在范围内
         oldplayerinrange = battleManager.PlayerInRange(actualrangepos);
         nextskillpos = actualrangepos;
@@ -275,7 +276,8 @@ public class EnemySkillSystem : MonoBehaviour
 
         //当cut=1时，打断剩余部分
         if (cut ==1) yield break;
-
+        if(aiController.ID==7&&currentSkillID==0)
+            monstersituasion.text = $"冰咒龙退出了极寒之冰形态！";
         //执行地形生成
         if (config.addenvironment != GameConfig.AddEnvironment.None)
             AddContent(config, actualrangepos);

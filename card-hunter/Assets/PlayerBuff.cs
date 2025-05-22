@@ -21,6 +21,7 @@ public class PlayerBuff : MonoBehaviour
     public int RedBladeCrazy = 0;// 红刃狂热 能力 13 不结算
     public int NextDL = 0; //下一次登龙费用减1 14 打出登龙时结算
     public int NextDamage = 0;// 下一次造成伤害的额外值 15 打出伤害时结算
+    public int Freezed = 0;// 冰冻 下回合基础移动费用+1 16
     void Start()
     {
 
@@ -87,6 +88,11 @@ public class PlayerBuff : MonoBehaviour
     public void ModifyNextDamage(int amount)
     {
         NextDamage = Mathf.Clamp(amount, 0, 999);
+    }
+
+    public void ModifyFreezed(int amount)
+    {
+        Freezed = Mathf.Clamp(amount, 0, 999);
     }
     // Update is called once per frame
     void Update()
