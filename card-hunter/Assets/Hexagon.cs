@@ -52,12 +52,17 @@ public class Hexagon : MonoBehaviour
     }
     public void ObstacleAdd()
     {
-        tag = "Obstacle";
+        this.tag = "Obstacle";
         ChangeColor(Color.grey);
+    }
+    public void ObstacleAddIcicle()
+    {
+        this.tag = "Obstacle";
+        ChangeColor(new Color(0f, 0.5f, 1f, 0.5f));//Ç³À¶É«
     }
     public void ObstacleRemove()
     {
-        tag = "Untagged";
+        this.tag = "Untagged";
         ChangeColor(Color.white);
     }
     void Start()

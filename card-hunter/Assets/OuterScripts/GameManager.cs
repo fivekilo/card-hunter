@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
         shareddata.playerinfo.MaxCost = GameConfig.InitialCost;
         shareddata.playerinfo.curCost = GameConfig.InitialCost;
         shareddata.playerinfo.Direction = new(1, 0);
+        shareddata.playerinfo.money = 99;
         CampEnter();
     }
     private void Save()//´æµµ
@@ -366,6 +367,8 @@ public class GameManager : MonoBehaviour
         else
         {
             shareddata.playerinfo.Equipments.Add(id);
+            column c=GameConfig.CardColumnNormal.Find((c) => c.ID == id);
+            CardsInShop.Remove(c);
         }
     }
     private void ExitShop()
