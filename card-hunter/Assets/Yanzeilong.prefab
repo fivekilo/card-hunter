@@ -63,7 +63,7 @@ MonoBehaviour:
   havechangedskill: 0
   direction: 0
   skillSystem: {fileID: 0}
-  selfSkills: 01000000030000000500000013000000
+  selfSkills: 01000000030000000600000013000000
   enemystate: 0
   isdead: 0
   TurnCount: 0
