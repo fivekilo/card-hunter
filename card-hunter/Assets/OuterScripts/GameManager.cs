@@ -74,15 +74,15 @@ public class GameManager : MonoBehaviour
         Destroy(Camp);
         List<Commission> selected;
         //弱怪池
-        if (PlayerProgress <= 4)
+        if (PlayerProgress < 4)
         {
             List<Commission> commissions = GameConfig.CommissionsLower;
             selected = RM.ChooseCommission(commissions, 2);
         }
-        else if (PlayerProgress <= 8)//强怪池
+        else if (PlayerProgress < 8)//强怪池
         {
             List<Commission> commissions = GameConfig.CommissionsHigher;
-            selected = RM.ChooseCommission(commissions, 1);
+            selected = RM.ChooseCommission(commissions, 2);
         }
         else//BOSS
         {
@@ -168,6 +168,10 @@ public class GameManager : MonoBehaviour
     private IEnumerator EventChoose(Event e)//展示随机事件窗口
     {
         GameObject EW = Instantiate(EventWin, Vector3.zero, Quaternion.identity);
+        for (int i = 0; i < AbleToMove.Count; i++)//回调AbleToMove
+        {
+            AbleToMove[i] = false;
+        }
         yield return StartCoroutine(EW.GetComponent<EventData>().EventInit(e, Chosed));
         yield return new WaitUntil(() =>
         {
@@ -178,10 +182,7 @@ public class GameManager : MonoBehaviour
             }
             return res;
         });//等待AbleToMove(加卡或删卡窗口)
-        for(int i = 0; i < AbleToMove.Count; i++)//回调AbleToMove
-        {
-            AbleToMove[i] = false;
-        }
+
     }
     private void HideScene()
     {
@@ -269,7 +270,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if(shareddata.playerinfo.curHealth< shareddata.playerinfo.MaxHealth)
+                if(shareddata.playerinfo.curHealth> shareddata.playerinfo.MaxHealth)
                 {
                     shareddata.playerinfo.curHealth = shareddata.playerinfo.MaxHealth;
                 }
@@ -366,7 +367,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            shareddata.playerinfo.Equipments.Add(id);
+            shareddata.playerinfo.Equipments.Add(id+1);
             column c=GameConfig.CardColumnNormal.Find((c) => c.ID == id);
             CardsInShop.Remove(c);
         }
