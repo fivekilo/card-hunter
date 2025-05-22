@@ -19,7 +19,7 @@ public class AudioManager : MonoBehaviour
     
     void Awake()
     {
-        if(Instance == null)
+     /*   if(Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
@@ -27,7 +27,7 @@ public class AudioManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }
+        }*/
     }
     
     public void PlayCardPlaySound(int cardNum)
