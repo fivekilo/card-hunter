@@ -15,6 +15,6 @@ public class HP : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GetComponent<TextMeshProUGUI>().text = "HP:" + sharedData.playerinfo.MaxHealth.ToString()+" /"+sharedData.playerinfo.curHealth;
+        GetComponent<TextMeshProUGUI>().text = "HP:" + sharedData.playerinfo.curHealth.ToString()+" /"+sharedData.playerinfo.MaxHealth;
     }
 }
