@@ -1762,7 +1762,7 @@ public class GameConfig : ScriptableObject
                 new Event(10,"蜂蜜采集","桃毛兽王的领地有很多蜂蜜，趁它不在，你可以试着采集一些。","3",
             new List<Choice>{
                 new Choice(1,"[略微采集]：回复15血”",0,false,0,0,15,0,new List<int>(),0),
-                new Choice(2,"[大肆采集]：回满血但扣除7点血量上限",0,false,0,0,0,-7,new List<int>(),0),
+                new Choice(2,"[大肆采集]：回满血但扣除7点血量上限",0,false,0,0,999,-7,new List<int>(),0),
             }),
                 new Event(11,"森狸人的捕猎技巧","","3",
             new List<Choice>{
