@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using UnityEngine.AI; // 添加LINQ命名空间以查找只读表的技能
+using UnityEngine.AI;
+using TMPro; // 添加LINQ命名空间以查找只读表的技能
 
 public class EnemySkillSystem : MonoBehaviour
 {
     public EnemyAIController aiController;
     private MapManager mapManager;
     private BattleManager battleManager;
+    public TextMeshProUGUI monstersituasion;
 
     //技能相关信息
     public int currentSkillID;
@@ -30,6 +32,14 @@ public class EnemySkillSystem : MonoBehaviour
         aiController = GetComponent<EnemyAIController>();
         battleManager = GetComponentInParent<BattleManager>();
         mapManager = battleManager.mapmanager;
+        monstersituasion = FindObjectOfTypeWithName<TextMeshProUGUI>("Monster indicator");
+    }
+    // 精确查找（带缓存优化）
+    public static T FindObjectOfTypeWithName<T>(string name, bool includeInactive = false) where T : Component
+    {
+        // 优先尝试快速查找
+        T[] candidates = Object.FindObjectsOfType<T>(includeInactive);
+        return candidates.FirstOrDefault(obj => obj.name == name);
     }
 
     public void SelectNextSkill(int certainskill)
@@ -50,7 +60,7 @@ public class EnemySkillSystem : MonoBehaviour
             aiController.selfSkills.Add(5);
             aiController.selfSkills.Add(6);
             //在这里不能remove，因为技能只是选了还没放出来呢。只能加不能删
-            Debug.Log("大贼龙触发了“进食”技能！");
+            monstersituasion.text = $"大贼龙触发了“进食”技能！" ;
         }
         // 选择前特判2：岩贼龙的两次19技能转阶段
         if (aiController.ID == 5 && (aiController.TurnCount==5-1 || aiController.TurnCount==10-1))
@@ -62,7 +72,7 @@ public class EnemySkillSystem : MonoBehaviour
                 aiController.selfSkills.Add(20);
                 aiController.selfSkills.Add(21);
             }
-            Debug.Log("岩贼龙触发了“吞食岩石”技能！");
+            monstersituasion.text =$"岩贼龙触发了“吞食岩石”技能！" ;
         }
         // 选择前特判3：冰咒龙的33技能
         if (aiController.ID == 7 && aiController.FrozenTurnCount ==5-1)
@@ -73,7 +83,7 @@ public class EnemySkillSystem : MonoBehaviour
             aiController.selfSkills.Add(34);
             //aiController.selfSkills.Add(35);
             //aiController.selfSkills.Add(36);
-            Debug.Log("冰咒龙触发了“冰之铠甲”技能！");
+            monstersituasion.text = $"冰咒龙触发了“冰之铠甲”技能！";
         }
         // 选择前特判4：冰咒龙的34技能在进冰之后立刻释放
         if (aiController.ID == 7 && currentSkillID==33)
@@ -126,7 +136,7 @@ public class EnemySkillSystem : MonoBehaviour
             }
             mapManager.ChangeColorByPos(icicleblowuprange, Color.magenta);//记得改回来
         }
-
+        monstersituasion.text = $"{aiController.name}使用了“{nextskillconfig.skillName}”技能,将要造成{nextskillconfig.damage}点伤害！";
         //检测玩家是否在范围内
         oldplayerinrange = battleManager.PlayerInRange(actualrangepos);
         nextskillpos = actualrangepos;

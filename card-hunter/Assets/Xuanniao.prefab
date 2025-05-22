@@ -401,6 +401,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aiController: {fileID: 0}
+  monstersituasion: {fileID: 0}
   currentSkillID: 0
   nextSkillID: 0
   availableSkills: 
@@ -409,6 +410,8 @@ MonoBehaviour:
   skill4selected: 0
   turncount: 0
   oldplayerinrange: 0
+  iciclerange: []
+  icicleblowuprange: []
 --- !u!114 &1837556784242032145
 MonoBehaviour:
   m_ObjectHideFlags: 0
