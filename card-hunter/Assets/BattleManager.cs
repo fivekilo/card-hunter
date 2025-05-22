@@ -259,7 +259,7 @@ public class BattleManager : MonoBehaviour
 
         if (Player.Equipments.Contains(7))
         {
-            Player.MaxCost = Player.MaxCost + 1;
+            Player.MaxCost = 4;
         }
 
         OnBladeGasChange?.Invoke(0);
@@ -522,6 +522,10 @@ public class BattleManager : MonoBehaviour
                 break;
             case GameConfig.Content.NaiLiBug:
                 playerBuff.ModifyExCost(playerBuff.ExCost + 2);
+                mapmanager.GetHexagon(Pos).GetComponent<Hexagon>().ContentRemove();
+                break;
+            case GameConfig.Content.Lava:
+                Player.ModifyHealth(Player.curHealth - 3);
                 mapmanager.GetHexagon(Pos).GetComponent<Hexagon>().ContentRemove();
                 break;
         }
