@@ -157,19 +157,22 @@ public class BattleManager : MonoBehaviour
         GameObject battlecomplete=Instantiate(BattleComplete, Vector3.zero, Quaternion.identity);
         battlecomplete.transform.SetParent(transform);
         Button button = battlecomplete.GetComponentInChildren<Button>();
+        if (Player.curHealth == 0)
+        {
+            data.result = false;
+            battlecomplete.GetComponentInChildren<TextMeshProUGUI>().text = "战斗结束了！你输了！";
+        }
+        else if (_enemies[0]._currentHealth == 0)
+        {
+            data.result = true;
+            battlecomplete.GetComponentInChildren<TextMeshProUGUI>().text = "战斗结束了！你赢了！";
+        }
         button.onClick.AddListener(() =>
         {
             EndBattle();
             data.Complete = true;
         });
-        if (Player.curHealth == 0)
-        {
-            battlecomplete.GetComponentInChildren<TextMeshProUGUI>().text = "战斗结束了！你输了！";
-        }
-        else if (_enemies[0]._currentHealth == 0)
-        {
-            battlecomplete.GetComponentInChildren<TextMeshProUGUI>().text = "战斗结束了！你赢了！";
-        }
+        
     }
 
     public Vector2Int GenerateSpawn()
@@ -532,7 +535,8 @@ public class BattleManager : MonoBehaviour
                 mapmanager.GetHexagon(Pos).GetComponent<Hexagon>().ContentRemove();
                 break;
             case GameConfig.Content.Lava:
-                Player.ModifyHealth(Player.curHealth - 3);
+                Player.ModifyHealth(Player.curHealth -  Math.Max(3 - Player.Defence , 0));
+                Player.ModifyDefence(Math.Max(Player.Defence - 3, 0));
                 mapmanager.GetHexagon(Pos).GetComponent<Hexagon>().ContentRemove();
                 break;
         }
