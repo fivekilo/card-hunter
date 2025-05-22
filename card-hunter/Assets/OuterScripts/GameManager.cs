@@ -257,10 +257,6 @@ public class GameManager : MonoBehaviour
         {
             shareddata.playerinfo.money += choice.money;
         }
-        if (choice.health != 0)
-        {
-            shareddata.playerinfo.curHealth += choice.health;
-        }
         if (choice.HPupper != 0)
         {
             shareddata.playerinfo.MaxHealth += choice.HPupper;
@@ -270,12 +266,22 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if(shareddata.playerinfo.curHealth> shareddata.playerinfo.MaxHealth)
+                if (shareddata.playerinfo.curHealth > shareddata.playerinfo.MaxHealth)
                 {
                     shareddata.playerinfo.curHealth = shareddata.playerinfo.MaxHealth;
                 }
             }
         }
+        if (choice.health != 0)
+        {
+            if(choice.health+ shareddata.playerinfo.curHealth> shareddata.playerinfo.MaxHealth)
+            {
+                shareddata.playerinfo.curHealth = shareddata.playerinfo.MaxHealth;
+            }
+            else
+            shareddata.playerinfo.curHealth += choice.health;
+        }
+
         if (choice.equipment > 0)
         {
             //лМ╪скь╡д

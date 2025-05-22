@@ -8,5 +8,5 @@ public class SharedData : ScriptableObject
     public PlayerInfo playerinfo;
     public Commission commission;
     public bool Complete=false;
-
+    public bool result = false;
 }
