@@ -239,7 +239,7 @@ public class GameConfig : ScriptableObject
         null,//4
         null,//5
         new List<int>{0,1,2,3,4,5},//6
-        new List<int>{2,3,4},//7
+        new List<int>{0,1,2,3,4,5},//7
         null,//8
         new List<int>{1,3,5},//9
         null,//10
@@ -1737,7 +1737,7 @@ public class GameConfig : ScriptableObject
                 new Event(5,"来自陌生人的邀请","“嘿，那边的猎人！”远方几个友善的猎人正朝你招手，今晚他们的营地准备大摆宴席，邀请你加入。在宴会上，几个猎人又邀请你一起喝酒。","3",
             new List<Choice>{
                 new Choice(1,"[小酌一杯]：回复20点血量",0,false,0,0,20,0,new List<int>(),0),
-                new Choice(2,"[大醉方休]：删一张牌",-1,false,0,0,0,0,new List<int>{},1),
+                new Choice(2,"[大醉方休]：删一张牌",-1,false,0,0,0,0,new List<int>{},0),
             }),
                 new Event(6,"风言风语","“你知道吗，有人在森林发现了冰呪龙的踪迹！”“真的假的，那可是未知的古龙啊”早上村里人的闲聊吸引了你的注意。尽管你不太相信，但前去一探也可能会有所收获。","3",
             new List<Choice>{
