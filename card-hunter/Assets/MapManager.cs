@@ -445,6 +445,18 @@ public class MapManager : MonoBehaviour
         hexagon.ContentChange(content);
     }
 
+    //怪物主动生成和移除障碍物
+    public void AddMonsterObstacles(Vector2Int pos)
+    {
+        //在这里还要检测是不是墙体
+        if (isObstacle(pos)) return;
+        map.GetHex(pos).GetComponent<Hexagon>().ObstacleAddIcicle();
+    }
+    public void RemoveMonsterObstacles(Vector2Int pos)
+    {
+        map.GetHex(pos).GetComponent<Hexagon>().ObstacleRemove();
+    }
+
     // Start is called before the first frame update
     void Start()
     {

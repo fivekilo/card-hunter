@@ -1658,7 +1658,8 @@ public class GameConfig : ScriptableObject
         {
             skillID = 36,
             skillName = "寒冬嘶吼",
-            damage =0,
+            range = new List<Vector2Int>(),//需要特判检测范围
+            damage =12,
             hittimes = 0,
             moveType = MoveType.None,
             moveDistance = 0,

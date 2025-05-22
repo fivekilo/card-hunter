@@ -278,8 +278,8 @@ public class EnemyAIController : MonoBehaviour
             skillSystem.nextSkillID = 0;
             FrozenTurnCount = -1;//保证是每5回合进入一次
             bool isRemoved1=selfSkills.Remove(34);
-            //selfSkills.Remove(35);
-            //selfSkills.Remove(36);
+            bool isRemoved2 = selfSkills.Remove(35);
+            bool isRemoved3 = selfSkills.Remove(36);
             Debug.Log("冰咒龙退出极寒之冰形态了！");
         }
 
