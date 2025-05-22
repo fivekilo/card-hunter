@@ -973,6 +973,8 @@ public class BattleManager : MonoBehaviour
             playerBuff.CantMove++;
         else if  (debuff == GameConfig.EnemyDebuff.Numbness)
             playerBuff.Numbness++;
+        else if (debuff == GameConfig.EnemyDebuff.Freezed)
+            playerBuff.Freezed+=2;
     }
 
     public void EndBattle()

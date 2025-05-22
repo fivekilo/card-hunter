@@ -1604,7 +1604,7 @@ public class GameConfig : ScriptableObject
         new EnemySkillConfig
         {
             skillID = 33,
-            skillName = "冰之铠甲",
+            skillName = "冰之甲",
             range = new List<Vector2Int>(),
             damage =0,
             hittimes = 0,
@@ -1626,8 +1626,8 @@ public class GameConfig : ScriptableObject
                 new Vector2Int(-1,2),new Vector2Int(0,2),new Vector2Int(-1,-1),new Vector2Int(1,-1),
                 new Vector2Int(2,-1),new Vector2Int(0,-2),new Vector2Int(1,-2),new Vector2Int(2,-2),
                 new Vector2Int(3,0),new Vector2Int(0,3),new Vector2Int(0,-3),new Vector2Int(-3,0),new Vector2Int(-3,3),new Vector2Int(3,-3)},
-            damage =20,
-            hittimes = 0,
+            damage =25,
+            hittimes = 1,
             moveType = MoveType.None,
             moveDistance = 0,
             getbuff = EnemyBuff.None,
@@ -1644,7 +1644,7 @@ public class GameConfig : ScriptableObject
             range = new List<Vector2Int>{new Vector2Int(1,0),new Vector2Int(2,0),new Vector2Int(-2,0),
                 new Vector2Int(0,2),new Vector2Int(0,-1),new Vector2Int(0,-2),new Vector2Int(2,-2),new Vector2Int(-1,1),new Vector2Int(-2,2)},
             damage =16,
-            hittimes = 0,
+            hittimes = 1,
             moveType = MoveType.None,
             moveDistance = 0,
             getbuff = EnemyBuff.None,
@@ -1660,7 +1660,7 @@ public class GameConfig : ScriptableObject
             skillName = "寒冬嘶吼",
             range = new List<Vector2Int>(),//需要特判检测范围
             damage =12,
-            hittimes = 0,
+            hittimes = 1,
             moveType = MoveType.None,
             moveDistance = 0,
             getbuff = EnemyBuff.None,
@@ -1700,7 +1700,7 @@ public class GameConfig : ScriptableObject
     public static readonly List<Commission> CommissionsLower = new List<Commission> { new Commission(0, "大贼龙", 1, 1,70),
         new Commission(1,"眩鸟",1,2,70),
         new Commission(2,"蛮颚龙",1,1,70),
-
+        new Commission(5,"冰咒龙",1,1,70)
     };
     public static readonly List<Commission> CommissionsHigher = new List<Commission>
     {
