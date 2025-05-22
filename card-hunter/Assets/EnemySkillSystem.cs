@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using UnityEngine.AI; // 添加LINQ命名空间以查找只读表的技能
+using UnityEngine.AI;
+using TMPro; // 添加LINQ命名空间以查找只读表的技能
 
 public class EnemySkillSystem : MonoBehaviour
 {
     public EnemyAIController aiController;
     private MapManager mapManager;
     private BattleManager battleManager;
+    public TextMeshProUGUI monstersituasion;
 
     //技能相关信息
     public int currentSkillID;
@@ -22,12 +24,22 @@ public class EnemySkillSystem : MonoBehaviour
     public int skill4selected = 0;//某个技能是否已经被选过
     public int turncount = 0;//回合计数器（待编写）
     public bool oldplayerinrange = false;
+    public List<Vector2Int> iciclerange = new List<Vector2Int>();//冰咒龙冰柱位置
+    public List<Vector2Int> icicleblowuprange = new List<Vector2Int>();//冰咒龙秉烛爆炸范围
 
     void Awake()
     {
         aiController = GetComponent<EnemyAIController>();
         battleManager = GetComponentInParent<BattleManager>();
         mapManager = battleManager.mapmanager;
+        monstersituasion = FindObjectOfTypeWithName<TextMeshProUGUI>("Monster indicator");
+    }
+    // 精确查找（带缓存优化）
+    public static T FindObjectOfTypeWithName<T>(string name, bool includeInactive = false) where T : Component
+    {
+        // 优先尝试快速查找
+        T[] candidates = Object.FindObjectsOfType<T>(includeInactive);
+        return candidates.FirstOrDefault(obj => obj.name == name);
     }
 
     public void SelectNextSkill(int certainskill)
@@ -48,7 +60,7 @@ public class EnemySkillSystem : MonoBehaviour
             aiController.selfSkills.Add(5);
             aiController.selfSkills.Add(6);
             //在这里不能remove，因为技能只是选了还没放出来呢。只能加不能删
-            Debug.Log("大贼龙触发了“进食”技能！");
+            monstersituasion.text = $"大贼龙触发了“进食”技能！" ;
         }
         // 选择前特判2：岩贼龙的两次19技能转阶段
         if (aiController.ID == 5 && (aiController.TurnCount==5-1 || aiController.TurnCount==10-1))
@@ -60,7 +72,7 @@ public class EnemySkillSystem : MonoBehaviour
                 aiController.selfSkills.Add(20);
                 aiController.selfSkills.Add(21);
             }
-            Debug.Log("岩贼龙触发了“吞食岩石”技能！");
+            monstersituasion.text =$"岩贼龙触发了“吞食岩石”技能！" ;
         }
         // 选择前特判3：冰咒龙的33技能
         if (aiController.ID == 7 && aiController.FrozenTurnCount ==5-1)
@@ -71,12 +83,18 @@ public class EnemySkillSystem : MonoBehaviour
             aiController.selfSkills.Add(34);
             //aiController.selfSkills.Add(35);
             //aiController.selfSkills.Add(36);
-            Debug.Log("冰咒龙触发了“冰之铠甲”技能！");
+            monstersituasion.text = $"冰咒龙触发了“冰之铠甲”技能！";
         }
         // 选择前特判4：冰咒龙的34技能在进冰之后立刻释放
         if (aiController.ID == 7 && currentSkillID==33)
         {
             nextSkillID = 34;
+            skillselected = 1;
+        }
+        // 选择前特判5：冰咒龙的36技能碎冰在35技能之后立刻释放
+        if (aiController.ID == 7 && currentSkillID == 35)
+        {
+            nextSkillID = 36;
             skillselected = 1;
         }
 
@@ -86,8 +104,8 @@ public class EnemySkillSystem : MonoBehaviour
             {
                 nextSkillID = availableSkills[Random.Range(0, availableSkills.Count)];
                 skillselected = 1;
-            } while (nextSkillID == 4 || nextSkillID == 0 || nextSkillID == 19 || nextSkillID == 33);
-            // 特判：大贼龙的4技能,0技能力竭，岩贼龙的19技能,冰咒龙的33技能不能在这里选
+            } while (nextSkillID == 4 || nextSkillID == 0 || nextSkillID == 19 || nextSkillID == 33 || nextSkillID == 36);
+            // 特判：大贼龙的4技能,0技能力竭，岩贼龙的19技能,冰咒龙的33，36技能不能在这里选
         }
 
 
@@ -97,7 +115,28 @@ public class EnemySkillSystem : MonoBehaviour
         int enemydirection = aiController.direction;
         List<Vector2Int> actualrangepos =GetSkillRange(nextskillconfig,enemypos,enemydirection);
         mapManager.ChangeColorByPos(actualrangepos, Color.magenta);//记得改回来
+        //特判：冰咒龙的碎冰技能展示
+        if(aiController.ID==7&&nextSkillID==36)
+        {
+            foreach(Vector2Int pos in iciclerange)
+            {
 
+                Vector2Int sidepos = pos + new Vector2Int(1, 0);
+                if (battleManager.CheckPosIsValid(sidepos) && battleManager.mapmanager.isObstacle(sidepos)&&(icicleblowuprange.Find(a=>a==sidepos)!=null)) icicleblowuprange.Add(sidepos);
+                sidepos = pos + new Vector2Int(0, 1);
+                if (battleManager.CheckPosIsValid(sidepos) && battleManager.mapmanager.isObstacle(sidepos) && (icicleblowuprange.Find(a => a == sidepos) != null)) icicleblowuprange.Add(sidepos);
+                sidepos = pos + new Vector2Int(-1, 0);
+                if (battleManager.CheckPosIsValid(sidepos) && battleManager.mapmanager.isObstacle(sidepos) && (icicleblowuprange.Find(a => a == sidepos) != null)) icicleblowuprange.Add(sidepos);
+                sidepos = pos + new Vector2Int(0, -1);
+                if (battleManager.CheckPosIsValid(sidepos) && battleManager.mapmanager.isObstacle(sidepos) && (icicleblowuprange.Find(a => a == sidepos) != null)) icicleblowuprange.Add(sidepos);
+                sidepos = pos + new Vector2Int(1, 1);
+                if (battleManager.CheckPosIsValid(sidepos) && battleManager.mapmanager.isObstacle(sidepos) && (icicleblowuprange.Find(a => a == sidepos) != null)) icicleblowuprange.Add(sidepos);
+                sidepos = pos + new Vector2Int(-1, -1);
+                if (battleManager.CheckPosIsValid(sidepos) && battleManager.mapmanager.isObstacle(sidepos) && (icicleblowuprange.Find(a => a == sidepos) != null)) icicleblowuprange.Add(sidepos);
+            }
+            mapManager.ChangeColorByPos(icicleblowuprange, Color.magenta);//记得改回来
+        }
+        monstersituasion.text = $"{aiController.name}使用了“{nextskillconfig.skillName}”技能,将要造成{nextskillconfig.damage}点伤害！";
         //检测玩家是否在范围内
         oldplayerinrange = battleManager.PlayerInRange(actualrangepos);
         nextskillpos = actualrangepos;
@@ -200,7 +239,7 @@ public class EnemySkillSystem : MonoBehaviour
                     someskillID = availableSkills[Random.Range(0, availableSkills.Count)];
                     specialchoose = false;
                 }
-            } while (someskillID == 4 || someskillID == 0 || someskillID == 19 || someskillID == 33);
+            } while (someskillID == 4 || someskillID == 0 || someskillID == 19 || someskillID == 33 || someskillID == 36);
             //获取技能范围并展示
             GameConfig.EnemySkillConfig someskillconfig = GameConfig.EnemySkills.FirstOrDefault(s => s.skillID == someskillID);
             Vector2Int newenemypos = aiController._currentGridPos;
@@ -237,6 +276,9 @@ public class EnemySkillSystem : MonoBehaviour
         //当cut=1时，打断剩余部分
         if (cut ==1) yield break;
 
+        //执行地形生成
+        if (config.addenvironment != GameConfig.AddEnvironment.None)
+            AddContent(config, actualrangepos);
         // 执行移动
         if (config.moveType!=GameConfig.MoveType.None)
             yield return HandleSkillMovement(config);
@@ -244,9 +286,6 @@ public class EnemySkillSystem : MonoBehaviour
         if(config.HPchange!=0)      yield return Heal(config);
         yield return ApplySkill(config, actualrangepos);
         if (config.armor != 0)   yield return AddArmor(config);
-        //执行地形生成
-        if(config.addenvironment!= GameConfig.AddEnvironment.None)
-            AddContent(config, actualrangepos);
     }
 
     //添加地图要素
@@ -255,13 +294,34 @@ public class EnemySkillSystem : MonoBehaviour
         GameConfig.Content newcontent = new GameConfig.Content();
         if (config.addenvironment == GameConfig.AddEnvironment.Lava) newcontent = GameConfig.Content.Lava;
         if (config.addenvironment == GameConfig.AddEnvironment.ElectricBall) newcontent = GameConfig.Content.ElectricBall;
-        if (config.addenvironment == GameConfig.AddEnvironment.Icicle) newcontent = GameConfig.Content.Icicle;
-        foreach (Vector2Int pos in actualrangepos)
+        //冰柱现已改为换色障碍物
+        if (config.addenvironment == GameConfig.AddEnvironment.Icicle)
         {
-            if(!checkPosValid(pos)) continue;
-            mapManager.AddMonsterContent(pos,newcontent);
+            foreach (Vector2Int pos in actualrangepos)
+            {
+                if (!checkPosValid(pos)) continue;
+                mapManager.AddMonsterObstacles(pos);
+                iciclerange.Add(pos);
+            }
+        }
+        else
+        {
+            foreach (Vector2Int pos in actualrangepos)
+            {
+                if (!checkPosValid(pos)) continue;
+                mapManager.AddMonsterContent(pos, newcontent);
+            }
         }
 
+        //特判：36技能寒冬嘶吼碎冰
+        if (currentSkillID == 36)
+        {
+            foreach (Vector2Int pos in iciclerange)
+            {
+                mapManager.RemoveMonsterObstacles(pos);
+            }
+            iciclerange = new List<Vector2Int>();
+        }
     }
 
     private IEnumerator HandleSkillMovement(GameConfig.EnemySkillConfig config)
@@ -299,6 +359,9 @@ public class EnemySkillSystem : MonoBehaviour
 
     private IEnumerator ApplySkill(GameConfig.EnemySkillConfig config, List<Vector2Int> actualrangepos)
     {
+        //特判：36技能用选定的爆炸范围
+        if(currentSkillID==36)actualrangepos = icicleblowuprange;
+
         List<PlayerInfo> players = battleManager.GetTargetsInRange(actualrangepos);
         foreach (PlayerInfo player in players)
         {

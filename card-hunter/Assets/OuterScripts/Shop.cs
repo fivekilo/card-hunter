@@ -66,7 +66,7 @@ public class Shop : MonoBehaviour
 
     private void ClickHandle(column column,int num)
     {
-        if (sharedData.playerinfo.money >= column.Money&&column.IsCard)//Âò¿¨
+        if (column.IsCard && sharedData.playerinfo.money >= column.Money)//Âò¿¨
         {
             Purchase?.Invoke(column.ID, column.IsCard);
             sharedData.playerinfo.money -= column.Money;
@@ -79,7 +79,8 @@ public class Shop : MonoBehaviour
                 Cols[i].GetComponent<ColumnWin>().num--;
             }
         }
-        if(sharedData.playerinfo.money >= column.Money && sharedData.playerinfo.Material[column.ID] > 0 && !column.IsCard)
+
+        if(!column.IsCard && sharedData.playerinfo.money >= column.Money && sharedData.playerinfo.Material[column.ID] > 0)
         {
             Purchase?.Invoke(column.ID, column.IsCard);
             sharedData.playerinfo.money -= column.Money;

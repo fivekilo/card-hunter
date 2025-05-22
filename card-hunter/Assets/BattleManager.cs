@@ -252,23 +252,25 @@ public class BattleManager : MonoBehaviour
         Player.Material = data.playerinfo.Material;
         Player.Equipments = data.playerinfo.Equipments;
 
-        OnBladeGasChange?.Invoke(0);
-        OnBladeLevelChange?.Invoke(0);
-        Player.ModifyHealth(Player.MaxHealth);
-        Player.ModifyCost(Player.MaxCost);
-        //怪物初始化
-        FindAllEnemies();
-        _enemies[0]._currentHealth = 100;
-
         if (Player.Equipments.Contains(4))
         {
             playerBuff.ModifyPower(playerBuff.Power + 1);
         }
 
-        if(Player.Equipments.Contains(7))
+        if (Player.Equipments.Contains(7))
         {
-            Player.MaxCost = Player.MaxCost + 1;
+            Player.MaxCost = 4;
         }
+
+        OnBladeGasChange?.Invoke(0);
+        OnBladeLevelChange?.Invoke(0);
+        Player.ModifyHealth(Player.curHealth);
+        Player.ModifyCost(Player.MaxCost);
+        //怪物初始化
+        FindAllEnemies();
+        _enemies[0]._currentHealth = 100;
+
+        
 
         StartCoroutine(WaitBattleComplete());
         InitializeDeck();
@@ -328,7 +330,7 @@ public class BattleManager : MonoBehaviour
                 if (discardPile.Count == 0) break;
                 deck.AddRange(discardPile);
                 discardPile.Clear();
-          //      ShuffleDeck(deck);
+                ShuffleDeck(deck);
             }
             if (hand.Count >= GameConfig.MaxHandCardNum) break;
             Card drawnCard = deck[0];
@@ -425,6 +427,7 @@ public class BattleManager : MonoBehaviour
         //  Action<Vector2Int> callback = OnPositionChanged.Invoke;
         //  StartCoroutine(mapmanager.MoveCommand(GetAdjacent(new List<int> { 0, 1, 2, 3, 4, 5 }), Player.PlayerGridPos, new Vector2Int(1, 1) , callback));
         Debug.Log(hand.Count);
+        ShuffleDeck(deck);
         DrawCard(GameConfig.InitialHandCardNum);
         ChangeState(BattleState.PlayerTurn);
     }
@@ -520,6 +523,10 @@ public class BattleManager : MonoBehaviour
                 break;
             case GameConfig.Content.NaiLiBug:
                 playerBuff.ModifyExCost(playerBuff.ExCost + 2);
+                mapmanager.GetHexagon(Pos).GetComponent<Hexagon>().ContentRemove();
+                break;
+            case GameConfig.Content.Lava:
+                Player.ModifyHealth(Player.curHealth - 3);
                 mapmanager.GetHexagon(Pos).GetComponent<Hexagon>().ContentRemove();
                 break;
         }
