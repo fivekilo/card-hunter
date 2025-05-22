@@ -1228,8 +1228,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u602A\u7269\u884C\u4E3A\u6307\u793A\u5668"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: af863550343d28c409b6179cc4682da9, type: 2}
-  m_sharedMaterial: {fileID: -7297169366253243498, guid: af863550343d28c409b6179cc4682da9, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 89d80cd4e814a5143b1c55cee196595d, type: 2}
+  m_sharedMaterial: {fileID: -1516178833065318054, guid: 89d80cd4e814a5143b1c55cee196595d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2233,7 +2233,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Hex: {fileID: 2644310219022200402, guid: 5184b9cca886f1348bf858d9764074e6, type: 3}
   ClickedPos: {x: 0, y: 0}
-  shareddata: {fileID: 11400000, guid: 564b0fb8ae3b947448d1292a6fd07d65, type: 2}
   audioManager: {fileID: 1289596913}
 --- !u!4 &1151624065
 Transform:
