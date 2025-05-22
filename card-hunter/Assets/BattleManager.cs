@@ -455,6 +455,11 @@ public class BattleManager : MonoBehaviour
             }
         }
 
+        if(playerBuff.Freezed > 0)
+        {
+            playerBuff.ModifyFreezed(playerBuff.Freezed + 1);
+        }
+
         if(playerBuff.DL > 0)
         {
             playerBuff.ModifyDL(playerBuff.DL - 1);
@@ -487,6 +492,7 @@ public class BattleManager : MonoBehaviour
     {
         if (currentState != BattleState.PlayerTurn || playerBuff.CantMove > 0) return;
         int MoveCost = Player.Situation + 1;
+        if (playerBuff.Freezed > 0) MoveCost++;
         if (Player.curCost < MoveCost) return;
         Debug.Log("移动指令被触发了");
         Player.ModifyCost(Player.curCost - MoveCost);
@@ -794,7 +800,7 @@ public class BattleManager : MonoBehaviour
                 BladeLevelBuff = 1.3f;
                 break;
             case 3:
-                BladeLevelBuff = (playerBuff.RedBladeCrazy > 0 ? 2.1f : 1.6f);
+                BladeLevelBuff = (playerBuff.RedBladeCrazy > 0 ? 2.0f : 1.5f);
                 break;
         }
         int res = 1;
