@@ -89,6 +89,11 @@ public class PlayerBuff : MonoBehaviour
     {
         NextDamage = Mathf.Clamp(amount, 0, 999);
     }
+
+    public void ModifyFreezed(int amount)
+    {
+        Freezed = Mathf.Clamp(amount, 0, 999);
+    }
     // Update is called once per frame
     void Update()
     {
